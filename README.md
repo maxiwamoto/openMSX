@@ -4,9 +4,12 @@
 public fork also lets Windows developers rebuild an inserted ROM and return
 to a saved test point with updated graphics or text.
 
-The features are available in this fork's `master` branch. The source is public;
-there is no packaged Windows download yet. These changes are proposed upstream,
-and the Flash persistence format is still experimental.
+**[Download the Windows x64 build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.09.24)**
+for this fork. Extract the ZIP and run **Start-openMSX.cmd**; it uses a separate
+profile beside the executable. [Setup and shortcuts](doc/fork-windows-download.md).
+
+The source is available in this fork's `master` branch. These changes are proposed
+upstream, and the Flash persistence format is still experimental.
 
 ## What problem does this solve?
 
@@ -55,8 +58,9 @@ This is selective storage, not compression of the game ROM.
 
 ## Trying it and keeping existing saves
 
-[Build this fork](doc/manual/compile.html) and use a **separate openMSX profile**
-for testing. Load the game
+[Download the Windows build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.09.24)
+and use its **Start-openMSX.cmd** launcher for a separate test profile. Other
+platforms can [build from source](doc/manual/compile.html). Load the game
 with the appropriate mapperâ€”`ASCII16-X` for an ASCII16-X cartridgeâ€”then save
 inside the game. Close and reopen it to check persistence. After replacing the
 ROM at the same path, reopen/reload the cartridge to run the new build.
@@ -107,13 +111,13 @@ Console equivalents are `reload_rom` and `loadstate_dev [name]`. See
 
 ## Testing and upstream review
 
-Local Windows x64 testing passed 26 Flash persistence sessions, four ROM
+Local Windows x64 testing passed 30 Flash persistence sessions (including legacy saves), four ROM
 replacement cases, three reload/reset cases and four development-restore cases.
 These cover programming/erase from RAM, restart, changed ROMs, malformed saves,
 state restoration, actual decoding of updated graphics, and rejection of
 unsuitable states without overwriting newer persistent saves. The tests use
-synthetic ROMs and isolated profiles. No game ROMs, firmware or personal saves
-are distributed in this repository.
+synthetic ROMs and isolated profiles. No game ROMs, commercial firmware or personal saves
+are distributed. The Windows package includes freely redistributable C-BIOS.
 
 - [PR #2205: Windows ROM replacement and reload/reset](https://github.com/openMSX/openMSX/pull/2205)
 - [Draft PR #2206: Flash persistence and development state restore](https://github.com/openMSX/openMSX/pull/2206)
