@@ -41,3 +41,6 @@ if {$tcl_platform(os) eq "Darwin"} { ;# Mac
 
 # Developer shortcut: re-read the inserted ROM, then reset the MSX.
 bind_default CTRL+SHIFT+R reload_rom
+
+# Restore gameplay state with current ROM assets (development only).
+bind_default CTRL+SHIFT+F7 loadstate_dev
