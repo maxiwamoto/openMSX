@@ -83,7 +83,9 @@ Validated on Windows x64 Release with Visual Studio v145. Tests use locally
 supplied firmware and generated ROMs; firmware and save artifacts are not
 included. The baseline reproduces whole-image masking. Regression coverage
 includes RAM-executed programming/erase, old save fixtures and malformed files.
-Non-Windows hosts and all other AmdFlash cartridges still need wider testing.
+Yamanooto also passed the Windows persistence and ROM-reload suites; see
+[Yamanooto validation](yamanooto-validation.md) for coverage and limitations.
+Non-Windows hosts and the remaining AmdFlash cartridges still need wider testing.
 
 See [development restore](development-state-restore.md) for the optional
 state-loading workflow that refreshes untouched Flash from current ROM assets.

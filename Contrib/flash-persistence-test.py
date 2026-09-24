@@ -95,6 +95,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--openmsx', type=executable_path, default=ROOT/'derived/x64-VC-Release/install/openmsx.exe')
     parser.add_argument('--firmware-dir', type=Path, required=True)
+    parser.add_argument('--mapper', choices=('ASCII16-X', 'Yamanooto'), default='ASCII16-X')
     parser.add_argument('--baseline', action='store_true', help='Confirm the old whole-image persistence bug')
     parser.add_argument('--ram-routines', type=Path, help='Assembled flash-persistence-ram.asm, loaded at C200h')
     parser.add_argument('--legacy-fixtures', type=Path, help='Artifact directory from a --baseline run')
@@ -121,10 +122,10 @@ def main():
         plan.write_text('set ::actions [list ' + ' '.join('[list '+' '.join(map(atom,a))+']' for a in actions) + ']\n')
         env = dict(os.environ, OPENMSX_HOME=str(profile), OPENMSX_USER_DATA=str(user),
                    OPENMSX_SYSTEM_DATA=str(ROOT/'share'), SDL_VIDEODRIVER='dummy', SDL_AUDIODRIVER='dummy',
-                   FLASH_PLAN=str(plan), FLASH_RESULT=str(result),
+                   FLASH_PLAN=str(plan), FLASH_RESULT=str(result), FLASH_MAPPER=args.mapper,
                    FLASH_RAM_ROUTINES=str(args.ram_routines.resolve()) if args.ram_routines else '')
         process = subprocess.run([str(args.openmsx.resolve()), '-machine','Philips_NMS_8250',
-                    '-cart',str(rom),'-romtype','ASCII16-X','-script',str(Path(__file__).with_suffix('.tcl'))],
+                    '-cart',str(rom),'-romtype',args.mapper,'-script',str(Path(__file__).with_suffix('.tcl'))],
                     shell=False, env=env, capture_output=True, text=True, timeout=60,
                     creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
         (out/f'{count:02d}-{name}.json').write_text(json.dumps({'returncode': process.returncode, 'stdout': process.stdout, 'stderr': process.stderr},indent=2))

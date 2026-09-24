@@ -6,12 +6,26 @@ set mute on
 set power on
 source $::env(FLASH_PLAN)
 proc finish {message} {
+    if {$message ne "OK"} {store_machine [machine] "$::env(FLASH_RESULT).oms"}
     set f [open $::env(FLASH_RESULT) w]
     puts $f $message
     close $f
     exit
 }
 proc map_flash {address} {
+    if {$::env(FLASH_MAPPER) eq "Yamanooto"} {
+        # Keep bank 0 mapped at 4000h for unlock commands. Access the save
+        # through an independent 8 KiB window, including banks above 2 MiB.
+        set bank [expr {$address >> 13}]
+        debug write memory 0x7fff 1
+        debug write memory 0x7ffe 0
+        debug write memory 0x7ffd 0
+        debug write memory 0x5000 0
+        debug write memory 0x7ffe [expr {($bank >> 8) << 6}]
+        debug write memory 0x9000 [expr {$bank & 255}]
+        debug write memory 0x7fff 0x11
+        return [expr {0x8000 | ($address & 0x1fff)}]
+    }
     set bank [expr {$address >> 14}]
     debug write memory [expr {0x6000 | ($bank & 0xf00)}] [expr {$bank & 255}]
     return [expr {0x4000 | ($address & 0x3fff)}]
@@ -33,8 +47,19 @@ proc ram_call {entry} {
     debug write_block memory 0xfdfe [binary format H* 80c1]
     reg SP 0xfdfe
     # Page 1: bank 0 for unlock addresses. Page 2: bank 8 (physical 020000).
-    debug write memory 0x6000 0
-    debug write memory 0x7000 8
+    if {$::env(FLASH_MAPPER) eq "Yamanooto"} {
+        # Same RAM routines and physical save sector, using four 8 KiB banks.
+        debug write memory 0x7fff 1
+        debug write memory 0x7ffe 0
+        debug write memory 0x7ffd 0
+        foreach {register bank} {0x5000 0 0x7000 1 0x9000 16 0xb000 17} {
+            debug write memory $register $bank
+        }
+        debug write memory 0x7fff 0x11
+    } else {
+        debug write memory 0x6000 0
+        debug write memory 0x7000 8
+    }
     reg PC $entry
 }
 proc step {} {
@@ -62,7 +87,7 @@ proc step {} {
                 debug write memory 0x4aaa 0xaa
                 debug write memory 0x4555 0x55
                 debug write memory $cpu 0x30
-                set delay 1.0
+                set delay 2.0
             }
             ram-program - ram-program-pending {
                 set bytes {}
@@ -71,11 +96,22 @@ proc step {} {
                 reg HL 0xc800
                 reg DE 0x8100
                 reg BC 256
-                ram_call 0xc200
-                set delay [expr {[lindex $action 0] eq "ram-program" ? 1.0 : 0.0001}]
+                if {[lindex $action 0] eq "ram-program-pending"} {
+                    # Capture during the actual first program operation, not at
+                    # a guessed CPU offset that differs between Flash chips.
+                    set ::pending_watch [debug set_watchpoint write_mem 0x8100 {1} {
+                        debug remove_watchpoint $::pending_watch
+                        after time 0.000002 step
+                    }]
+                    ram_call 0xc200
+                    set delay -1
+                } else {
+                    ram_call 0xc200
+                    set delay 1.0
+                }
             }
             wait {set delay [lindex $action 1]}
-            ram-erase {ram_call 0xc203; set delay 1.0}
+            ram-erase {ram_call 0xc203; set delay 2.0}
             ram-status {
                 lassign $action op status expected
                 debug write memory 0xc900 $status
@@ -111,7 +147,7 @@ proc step {} {
             }
             default {error "Unknown action: $action"}
         }
-        after time $delay step
+        if {$delay >= 0} {after time $delay step}
     } problem]} {finish "FAIL: $problem
 $::errorInfo"}
 }
