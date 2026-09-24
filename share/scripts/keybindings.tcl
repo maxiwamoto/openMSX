@@ -39,8 +39,9 @@ if {$tcl_platform(os) eq "Darwin"} { ;# Mac
 	bind_default -msx "keyb META+CTRL+V" type_clipboard
 }
 
-# Developer shortcut: re-read the inserted ROM, then reset the MSX.
-bind_default CTRL+SHIFT+R reload_rom
+# Fork developer shortcut: reload ROM/floppy files and power-cycle the MSX.
+# F12 uses no MSX keyboard modifiers; mute remains available in the menu/console.
+bind_default F12 dev_hard_reset
 
 # Restore gameplay state with current ROM assets (development only).
 bind_default CTRL+SHIFT+F7 loadstate_dev

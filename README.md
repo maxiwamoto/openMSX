@@ -4,7 +4,7 @@
 public fork also lets Windows developers rebuild an inserted ROM and return
 to a saved test point with updated graphics or text.
 
-**[Download the Windows x64 build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.09.24.2)**
+**[Download the Windows x64 build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.09.24.3)**
 for this fork. Extract the ZIP and run **Start-openMSX.cmd**; it uses a separate
 profile beside the executable. [Setup and shortcuts](doc/fork-windows-download.md).
 
@@ -58,7 +58,7 @@ This is selective storage, not compression of the game ROM.
 
 ## Trying it and keeping existing saves
 
-[Download the Windows build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.09.24.2)
+[Download the Windows build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.09.24.3)
 and use its **Start-openMSX.cmd** launcher for a separate test profile. Other
 platforms can [build from source](doc/manual/compile.html). Load the game
 with the appropriate mapperâ€”`ASCII16-X` for an ASCII16-X cartridgeâ€”then save
@@ -92,8 +92,13 @@ explicitly reload or restore.
 | --- | --- | --- |
 | Save a test point | **Alt+F8** | Save the current emulator state |
 | Refresh ordinary ROM/disk assets without reset | Console: **`reload_media`** | Save/restore the machine while re-reading supported file-backed media |
-| Reload ROM and restart | **Ctrl+Shift+R** | Read the current ROM file and reset |
+| Hard reset with current media | **F12** | Reopen ROM cartridges and floppy images, then power on |
 | Restore with updated ROM assets | **Ctrl+Shift+F7** | Restore the test point and refresh untouched ASCII16-X Flash from the current ROM |
+
+F12 replaces this fork's earlier Ctrl+Shift+R shortcut and the stock F12 mute binding.
+Use the audio menu or `toggle mute` in the console for mute. Saved custom bindings
+take precedence; see [hard reset and media reload](doc/development-hard-reset.md).
+The [462-case Windows file-mapping report](https://github.com/maxiwamoto/openMSX/releases/download/rom-dev-2026.09.24.3/windows-mapping-462-cases.zip) includes searchable HTML, raw results and reproduction scripts.
 
 For a graphics/text change: save **before the game unpacks the asset**, rebuild
 the ROM while the old version remains running, then press **Ctrl+Shift+F7**.

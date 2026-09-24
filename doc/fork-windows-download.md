@@ -29,11 +29,17 @@ together. The Visual C++ runtime DLL is included; Windows supplies the Universal
 
 - Console **`reload_media`** (open the console with F10): refresh supported ordinary ROM/disk assets without resetting CPU/RAM.
 - **Alt+F8:** save a test point.
-- **Ctrl+Shift+R:** reload the ROM from disk and reset.
+- **F12:** power off, reload inserted ROM cartridges and floppy images, and power on.
+  This replaces the old Ctrl+Shift+R shortcut and the stock F12 mute action.
+  Use the audio menu or console `toggle mute` for mute.
 - **Ctrl+Shift+F7:** restore the test point using current ROM assets, preserving saved
   RAM/VRAM and game-written Flash (ASCII16-X only). Save before asset unpacking; layouts must be compatible.
 
-Ordinary reset keeps the loaded ROM snapshot. Ordinary state loading is unchanged.
+Saved custom bindings take precedence. For an existing profile, run
+`bind F12 dev_hard_reset`, `unbind CTRL+SHIFT+R`, then `save_settings` in the console.
+See [hard reset details](doc/development-hard-reset.md) for scope and limits.
+
+Ordinary reset and plain off/on keep the loaded ROM snapshot. Ordinary state loading is unchanged.
 For disk translation work, use uncompressed DSK files and in-place edits. A state
 saved before reading an asset can read the updated disk when restored. Compressed
 DSK files can retain stale cached data. Mounted writable DSKs can still block

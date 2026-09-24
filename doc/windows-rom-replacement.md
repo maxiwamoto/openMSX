@@ -12,7 +12,7 @@ This is Wouter's save/restore proposal. It also permits the translation workflow
 
 ## Existing development commands
 
-For compatibility with the published release, Ctrl+Shift+R / `reload_rom` still reloads a selected cartridge and resets. `reload_rom carta` / `reload_rom cartb` retain mapper and IPS configuration. This remains useful for Flash cartridges because a simple save/restore preserves their old Flash contents.
+F12 / `dev_hard_reset` now reloads ROM cartridges and file-backed floppy images during a power cycle; see [scope and validation](development-hard-reset.md). The conflicting Ctrl+Shift+R default was removed. The console command `reload_rom` still reloads a selected cartridge and resets. `reload_rom carta` / `reload_rom cartb` retain mapper and IPS configuration. This remains useful for Flash cartridges because a simple save/restore preserves their old Flash contents.
 
 In the combined fork, Ctrl+Shift+F7 / `loadstate_dev` remains the separate ASCII16-X workflow for refreshing untouched Flash sectors in an older state. The no-reset media command does not replace Flash persistence or this special development restore.
 

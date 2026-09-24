@@ -40,7 +40,8 @@ def main():
         emu = Emulator(args.openmsx, folder, args.firmware_dir, rom, mapper, ips)
         events = []
         try:
-            assert 'reload_rom' in emu.command('bind CTRL+SHIFT+R'), 'Hotkey not active'
+            assert 'dev_hard_reset' in emu.command('bind F12'), 'Hard-reset hotkey not active'
+            assert emu.command('catch {bind CTRL+SHIFT+R}') == '1', 'Old shortcut still active'
             emu.expect(marker_before, original, bytes(old_view))
             old_media = emu.command(MEDIA_CARTA)
             # Bad/missing build outputs must leave the existing cartridge inserted.

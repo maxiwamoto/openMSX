@@ -1452,7 +1452,7 @@ default key mapping.
   <tr> <td>F9</td>         <td>Cmd+T (Fastforward)</td>   <td>Toggle <a class="external" href="commands.html#fastforward">fastforward</a> mode (normal vs fastforward speed)</td> </tr>
   <tr> <td>F10</td>        <td>Cmd+L (consoLe)</td>    <td>Toggle <a class="external" href="commands.html#console">console</a> display</td> </tr>
   <tr> <td>F11 or ALT+Enter</td> <td>Cmd+F (Full)</td> <td>Toggle <a class="external" href="commands.html#fullscreen">full screen</a> mode</td> </tr>
-  <tr> <td>F12</td>        <td>Cmd+U (mUte)</td>       <td>Toggle <a class="external" href="commands.html#mute">audio mute</a></td> </tr>
+  <tr> <td>F12</td>        <td>F12</td>       <td>Development hard reset: reload ROM/floppy files and power-cycle (this fork)</td> </tr>
   <tr> <td>ALT+F7</td>     <td>Cmd+R (Restore)</td>    <td>Quick <a class="external" href="commands.html#savestate">loadstate</a> (from 'quicksave' slot)</td> </tr>
   <tr> <td>ALT+F8</td>     <td>Cmd+S (Save)</td>       <td>Quick <a class="external" href="commands.html#savestate">savestate</a> (to 'quicksave' slot)</td> </tr>
   <tr> <td>CTRL+Win+C</td>     <td>Cmd+C (Copy)</td>       <td>Copy screen's text content to clipboard</td> </tr>
@@ -2115,7 +2115,7 @@ devices). Volume 0 means no sound, volume 100 is maximum.
 There is also a <code><a class="external"
 href="commands.html#mute">mute</a></code> setting, to disable all sound from
 openMSX at once. It can be on (muted) or off (sound is audible). By default,
-mute is bound to the F12 key.
+this fork uses F12 for development hard reset; use the audio menu or the console command <code>toggle mute</code> for mute.
 </p>
 
 <p>

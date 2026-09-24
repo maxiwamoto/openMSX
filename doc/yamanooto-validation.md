@@ -16,7 +16,7 @@ replacement. The same 30 sessions also passed again for ASCII16-X.
 
 Windows host-file overwrite, truncation, replacement, rename and deletion all
 passed with Yamanooto inserted. The running cartridge keeps its loaded snapshot.
-`reload_rom` (Ctrl+Shift+R) loads the updated ROM, retains the Yamanooto mapper,
+`reload_rom` (console command) loads the updated ROM, retains the Yamanooto mapper,
 and resets the machine; ordinary reset keeps the current snapshot. Slot B and
 invalid-file handling also passed. Existing ASCII16, ASCII16-X, gzip and IPS
 replacement tests and the existing reload cases remained green.
