@@ -9,8 +9,12 @@ This public fork combines ROM-development improvements proposed to upstream:
 * Ctrl+Shift+F7: restore a saved test point with current ASCII16-X ROM assets.
   Save before unpacking graphics/text (Alt+F8), rebuild, then restore.
 
+Upstream pull requests:
+* Windows ROM replacement/reload: https://github.com/openMSX/openMSX/pull/2205
+* Flash persistence/development restore (draft): https://github.com/openMSX/openMSX/pull/2206
+
 See doc/windows-rom-replacement.md, doc/flash-persistence.md and
- doc/development-state-restore.md for behavior, testing and compatibility.
+doc/development-state-restore.md for behavior, testing and compatibility.
 The Flash persistence format and developer helper API are experimental and
 remain subject to upstream review. Use a separate profile while evaluating.
 No game ROMs, firmware, personal profiles or save-state files are included.
