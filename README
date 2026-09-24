@@ -1,3 +1,25 @@
+Development fork: maxiwamoto/openMSX
+===================================
+
+This public fork combines ROM-development improvements proposed to upstream:
+
+* Rebuild/replace an inserted ROM on Windows without a sharing violation.
+* Ctrl+Shift+R: reload the ROM from disk and reset.
+* Preserve guest-written Flash sectors while reading updated game ROM content.
+* Ctrl+Shift+F7: restore a saved test point with current ASCII16-X ROM assets.
+  Save before unpacking graphics/text (Alt+F8), rebuild, then restore.
+
+See doc/windows-rom-replacement.md, doc/flash-persistence.md and
+ doc/development-state-restore.md for behavior, testing and compatibility.
+The Flash persistence format and developer helper API are experimental and
+remain subject to upstream review. Use a separate profile while evaluating.
+No game ROMs, firmware, personal profiles or save-state files are included.
+
+The Flash work builds on Laurens Holst (Grauw)'s design in upstream PR #1629.
+Upstream project: https://github.com/openMSX/openMSX
+
+The original openMSX README follows.
+
 ----------------------------------------------------------------------------
 openMSX - the MSX emulator that aims for perfection
 ----------------------------------------------------------------------------
