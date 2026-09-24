@@ -2,7 +2,7 @@
 
 This is an experimental build of maxiwamoto/openMSX, not an official openMSX release.
 It includes sector-based Flash persistence, Windows ROM replacement, reload/reset,
-and development save-state restore. The Flash format is proposed upstream and may change.
+no-reset media refresh, and development save-state restore. The Flash format is proposed upstream and may change.
 
 ## Start here
 
@@ -27,13 +27,21 @@ together. The Visual C++ runtime DLL is included; Windows supplies the Universal
 
 ## Developer shortcuts
 
+- Console **`reload_media`** (open the console with F10): refresh supported ordinary ROM/disk assets without resetting CPU/RAM.
 - **Alt+F8:** save a test point.
 - **Ctrl+Shift+R:** reload the ROM from disk and reset.
 - **Ctrl+Shift+F7:** restore the test point using current ROM assets, preserving saved
-  RAM/VRAM and game-written Flash. Save before asset unpacking; layouts must be compatible.
+  RAM/VRAM and game-written Flash (ASCII16-X only). Save before asset unpacking; layouts must be compatible.
 
 Ordinary reset keeps the loaded ROM snapshot. Ordinary state loading is unchanged.
-Read doc/flash-persistence.md and doc/development-state-restore.md for exact behavior.
+For disk translation work, use uncompressed DSK files and in-place edits. A state
+saved before reading an asset can read the updated disk when restored. Compressed
+DSK files can retain stale cached data. Mounted writable DSKs can still block
+replacement/rename; eject before those operations. Changed disks may become
+write-protected on state restore. `reload_media` alone does not refresh Flash
+contents embedded in a state.
+
+Read doc/windows-rom-replacement.md, doc/flash-persistence.md and doc/development-state-restore.md for exact behavior.
 
 ## Source and verification
 

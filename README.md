@@ -1,10 +1,10 @@
-# openMSX: Flash saves and ROM development
+# openMSX: Flash saves and ROM/disk development
 
-**Update an ASCII16-X game ROM while keeping its in-game Flash saves.** This
+**Update an ASCII16-X or Yamanooto game ROM while keeping its in-game Flash saves.** This
 public fork also lets Windows developers rebuild an inserted ROM and return
 to a saved test point with updated graphics or text.
 
-**[Download the Windows x64 build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.09.24)**
+**[Download the Windows x64 build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.09.24.2)**
 for this fork. Extract the ZIP and run **Start-openMSX.cmd**; it uses a separate
 profile beside the executable. [Setup and shortcuts](doc/fork-windows-download.md).
 
@@ -58,7 +58,7 @@ This is selective storage, not compression of the game ROM.
 
 ## Trying it and keeping existing saves
 
-[Download the Windows build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.09.24)
+[Download the Windows build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.09.24.2)
 and use its **Start-openMSX.cmd** launcher for a separate test profile. Other
 platforms can [build from source](doc/manual/compile.html). Load the game
 with the appropriate mapperâ€”`ASCII16-X` for an ASCII16-X cartridgeâ€”then save
@@ -78,8 +78,8 @@ or newer Flash state metadata, so do not share one profile between old and new
 builds. If both `.SRAM` and `.SRAM.sparse` exist, the sparse file takes precedence.
 
 The changes use the shared AmdFlash implementation, but automated validation
-has focused on **ASCII16-X on Windows**. Other Flash cartridges and platforms
-still need broader testing. See the [Flash persistence documentation](doc/flash-persistence.md)
+covers **ASCII16-X and Yamanooto on Windows**, with 30 Flash sessions for each.
+Other Flash cartridges and platforms still need broader testing. See the [Flash persistence documentation](doc/flash-persistence.md)
 for sector geometry, file format, legacy compatibility and test commands.
 
 ## Faster graphics and translation testing
@@ -91,6 +91,7 @@ explicitly reload or restore.
 | Action | Default Windows shortcut | Result |
 | --- | --- | --- |
 | Save a test point | **Alt+F8** | Save the current emulator state |
+| Refresh ordinary ROM/disk assets without reset | Console: **`reload_media`** | Save/restore the machine while re-reading supported file-backed media |
 | Reload ROM and restart | **Ctrl+Shift+R** | Read the current ROM file and reset |
 | Restore with updated ROM assets | **Ctrl+Shift+F7** | Restore the test point and refresh untouched ASCII16-X Flash from the current ROM |
 
@@ -105,21 +106,32 @@ remain as saved, and code/bank/RAM layouts must stay compatible. States saved
 during a Flash command, or old Flash states without sector history, may be
 rejected. Normal Reset and normal save-state loading retain their usual behavior.
 
+For uncompressed disk translation work, save before an asset is read, edit the
+`.dsk` in place, then restore the state. Alternatively, `reload_media` refreshes
+supported media without resetting CPU/RAM. This follows Wouter's save/restore
+proposal in PR #2205. Compressed `.dsk.gz` images can retain stale cache data;
+use uncompressed disks for this workflow. Mounted writable disks can still
+block host file replacement/rename. Flash state contents need the separate
+`loadstate_dev` workflow, currently supported for ASCII16-X only.
+
 Console equivalents are `reload_rom` and `loadstate_dev [name]`. See
 [Windows ROM replacement](doc/windows-rom-replacement.md) and
 [development state restore](doc/development-state-restore.md) for details.
 
 ## Testing and upstream review
 
-Local Windows x64 testing passed 30 Flash persistence sessions (including legacy saves), four ROM
-replacement cases, three reload/reset cases and four development-restore cases.
+Local Windows x64 testing passed 60 Flash persistence sessions (30 per mapper, including legacy saves), five ROM
+replacement cases and four reload/reset cases. No-reset refresh passed for raw/gzip ROMs
+and ordinary disks, including restoring an earlier state before reading an updated disk asset.
+The compressed-disk cache limitation is explicitly reproduced, not counted as a passing refresh.
+The existing development-restore suite covers four cases.
 These cover programming/erase from RAM, restart, changed ROMs, malformed saves,
 state restoration, actual decoding of updated graphics, and rejection of
 unsuitable states without overwriting newer persistent saves. The tests use
 synthetic ROMs and isolated profiles. No game ROMs, commercial firmware or personal saves
 are distributed. The Windows package includes freely redistributable C-BIOS.
 
-- [PR #2205: Windows ROM replacement and reload/reset](https://github.com/openMSX/openMSX/pull/2205)
+- [PR #2205: Windows buffered reads and no-reset media refresh](https://github.com/openMSX/openMSX/pull/2205)
 - [Draft PR #2206: Flash persistence and development state restore](https://github.com/openMSX/openMSX/pull/2206)
 
 The Flash work builds on **Laurens Holst (Grauw)'s** sector-persistence design
