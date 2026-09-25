@@ -122,3 +122,42 @@ music format and tuning data; it is not a claim of clean-room provenance.
 The demo, source bundle containing music assets and English game remain local.
 Z80 still has overruns and R800 has occasional late ticks; the original game's
 FM/MIDI service remains lighter. This is not yet an in-game replacement.
+
+## ROM swapping and explicit mapper identification
+
+Loading the older optimized demo through its launcher worked because the launcher
+specified ASCII16. Drag-and-drop guessed Konami SCC instead, producing a corrupted
+display and incorrect playback. Replacing the ROM does not inherit the launcher's
+mapper override. This was reproduced by replacing the cartridge in a running
+FS-A1GT session and inspecting `machine_info media carta`.
+
+The current native demo now includes the eight-byte `ASCII16X` signature at file
+offset 10h, after its normal MSX cartridge header. The BIOS entry points past the
+signature. openMSX recognizes the signature as ASCII16-X without a software
+database entry or explicit mapper override. Bank writes at 6000h/7000h select
+only low banks, so this 256 KiB demo also remains compatible with regular ASCII16.
+
+Validation in clean profiles, without a local ROM database:
+
+- Automatic ASCII16-X detection and all 55 track starts on FS-A1GT/R800.
+- Automatic ASCII16-X detection and all 55 track starts on PHC-70FD2/Z80.
+- Explicit regular ASCII16 compatibility and all 55 track starts on FS-A1GT.
+- No I/O errors in these bounded track-start tests; 660 asset combinations pass.
+- R800 address/data spacing still exceeds the 2.125 us target.
+- Exported assembly rebuilds the new ROM byte for byte.
+
+These startup checks supplement the earlier full register-stream comparisons;
+they do not replace them or claim full-song coverage. The benchmark tables above
+retain the pre-signature ROM identity. The flat sequencer core is unchanged.
+Current ROM: `67244dc7ba59dc5e15302aaf71d0a2890713fb8aa9f97001d8176d43053f3708`.
+The JSON's `header_update` records the new build and checks separately.
+
+Assembly is consistently formatted with uppercase instructions/registers and
+aligned operands, constants and comments. Formatting alone was verified to leave
+both core and cartridge byte-identical; the subsequent header change is separate.
+Generated tables and demo assembly retain that style on rebuild.
+
+Upstream Makoto draft PR: https://github.com/openMSX/openMSX/pull/2209.
+Both reported SonarCloud checks passed on commit `2d2e7d176` after the documented
+operator-cache initialization patch. Hardware clock/IRQ/calibration questions
+remain open; passing static analysis does not establish hardware accuracy.

@@ -2375,5 +2375,61 @@
       }
     ],
     "fade_at": 900
+  },
+  "header_update": {
+    "build": {
+      "rom_sha256": "67244dc7ba59dc5e15302aaf71d0a2890713fb8aa9f97001d8176d43053f3708",
+      "core_bytes": 7438,
+      "state_reserved_bytes": 976,
+      "rom_bytes": 262144,
+      "mapper_signature": "ASCII16X at file offset 0x10",
+      "instruction_set": "Z80 only; demo uses BIOS CHGCPU on turbo R"
+    },
+    "validation": {
+      "rom_sha256": "67244dc7ba59dc5e15302aaf71d0a2890713fb8aa9f97001d8176d43053f3708",
+      "signature_offset": 16,
+      "signature": "ASCII16X",
+      "core_sha256": "3978f00aaca4121ecaec9712412f2b22d802e3d64c1f54d070301c61364fb1cb",
+      "checks": [
+        {
+          "test": "turbor-auto",
+          "mapper": "ASCII16-X",
+          "cpu": "r800",
+          "track_starts_checked": 55,
+          "io_errors": 0
+        },
+        {
+          "test": "z80-auto",
+          "mapper": "ASCII16-X",
+          "cpu": "z80",
+          "track_starts_checked": 55,
+          "io_errors": 0
+        },
+        {
+          "test": "turbor-ascii16",
+          "mapper": "ASCII16",
+          "cpu": "r800",
+          "track_starts_checked": 55,
+          "io_errors": 0
+        }
+      ]
+    },
+    "assets": {
+      "rom_sha256": "67244dc7ba59dc5e15302aaf71d0a2890713fb8aa9f97001d8176d43053f3708",
+      "asset_pairs": 660,
+      "former_buffers_untouched": true,
+      "missing_device_timeout": true
+    },
+    "hardware": {
+      "r800_address_to_data_min_us": 3.352381377830227,
+      "required_at_8mhz_us": 2.125,
+      "writes_checked": 12351,
+      "rom_sha256": "67244dc7ba59dc5e15302aaf71d0a2890713fb8aa9f97001d8176d43053f3708"
+    },
+    "standalone_rebuild": {
+      "rom_sha256": "67244dc7ba59dc5e15302aaf71d0a2890713fb8aa9f97001d8176d43053f3708",
+      "byte_identical": true
+    },
+    "note": "The earlier timing and complete register-stream comparisons retain their original ROM hashes. The ASCII16X header changes the cartridge layout but leaves the flat sequencer binary unchanged."
   }
 }
