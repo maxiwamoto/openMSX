@@ -4,6 +4,12 @@ This is an experimental build of maxiwamoto/openMSX, not an official openMSX rel
 It includes sector-based Flash persistence, Windows ROM replacement, reload/reset,
 no-reset media refresh, and development save-state restore. The Flash format is proposed upstream and may change.
 
+Version **2026.09.24.4** corrects F12 so it really switches MSX power off before
+reloading media and on afterwards. Upgrade the complete `share/` directory as
+well as the executable: the fix is in `share/scripts/dev_hard_reset.tcl`.
+If you installed your own copy of that script in `profile/share/scripts/`, update
+that copy too, because personal scripts override the packaged version.
+
 ## Start here
 
 1. Extract the complete Windows x64 ZIP into a writable folder (Windows 10/11).

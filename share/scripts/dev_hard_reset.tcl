@@ -39,7 +39,8 @@ proc dev_hard_reset {} {
         }
         lappend disks [list $media insert $filename {*}$patches]
     }
-    set power off
+    # openMSX settings are global Tcl variables, not procedure locals.
+    set ::power off
     try {
         # Release all disk references first, including shared decompression caches.
         foreach command $disks {[lindex $command 0] eject}
@@ -50,7 +51,7 @@ proc dev_hard_reset {} {
         foreach command $disks {{*}$command}
     } finally {
         # Do not leave the MSX powered off if an insertion reports an error.
-        set power on
+        set ::power on
     }
     message "Hard reset: reloaded [llength $reloads] ROM cartridge(s), [llength $disks] disk image(s), and powered on."
 }

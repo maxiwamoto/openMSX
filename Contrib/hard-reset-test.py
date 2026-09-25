@@ -24,6 +24,24 @@ def bindings(emu):
     assert emu.command('catch {bind CTRL+SHIFT+R}') == '1'
 
 
+def hard_reset(emu):
+    # A procedure-local "power" variable reloads media but never powers off.
+    # Observe the actual global setting and the state during every media command.
+    emu.command('set ::power_events {}; set ::media_power_events {}')
+    emu.command('proc ::record_power {args} {lappend ::power_events [expr {!!$::power}]}')
+    emu.command('proc ::record_media_power {args} {lappend ::media_power_events [expr {!!$::power}]}')
+    emu.command('trace add variable ::power write ::record_power')
+    emu.command('set ::traced_media {}; foreach media [machine_info media] {if {[string match cart? $media] || [string match disk? $media]} {trace add execution $media enter ::record_media_power; lappend ::traced_media $media}}')
+    try:
+        emu.command('dev_hard_reset')
+        assert emu.command('set ::power_events') == '0 1', 'Global power did not cycle off/on'
+        assert emu.command('expr {1 ni $::media_power_events}') == '1', 'Media changed while power was on'
+        assert running(emu)
+    finally:
+        emu.command('trace remove variable ::power write ::record_power')
+        emu.command('foreach media $::traced_media {trace remove execution $media enter ::record_media_power}')
+
+
 def stamp(path):
     future = time.time() + 3
     os.utime(path, (future, future))
@@ -68,7 +86,7 @@ def main():
             emu.command('set power off; set power on')
             emu.advance(3)
             assert int(emu.command('debug read memory 0xc000')) == (0x33 if patch else 0x11)
-            emu.command('dev_hard_reset')
+            hard_reset(emu)
             emu.advance(3)
             assert int(emu.command('debug read memory 0xc000')) == expected
             assert emu.command('dict get [machine_info media carta] mappertype') == mapper
@@ -79,9 +97,10 @@ def main():
                 for slot in ('carta','cartb'):
                     assert emu.command('dict get [machine_info media '+slot+'] actualSHA1') == expected_hash
                 emu.command('cartb eject')
-            emu.command('carta eject; dev_hard_reset')
+            emu.command('carta eject')
+            hard_reset(emu)
             assert running(emu)
-            reports[name] = ['F12 binding and old shortcut removal','missing/empty source preflight','plain off/on retains old snapshot','hard reset boots updated ROM and preserves mapper/patches','no-ROM power cycle']
+            reports[name] = ['F12 binding and old shortcut removal','global power off/on; media reloaded while off','missing/empty source preflight','plain off/on retains old snapshot','hard reset boots updated ROM and preserves mapper/patches','no-ROM power cycle']
             if compressed: reports[name].append('both cartridges refresh shared compressed source')
             print('PASS',name,flush=True)
         finally:
@@ -122,7 +141,8 @@ def main():
                 with disk.open('r+b') as stream: stream.write(newraw)
             stamp(disk)
             # Disk-only reboot, with two references to the same source/cache.
-            emu.command('carta eject; dev_hard_reset')
+            emu.command('carta eject')
+            hard_reset(emu)
             assert running(emu)
             for drive in ('diska','diskb'):
                 export = folder/('export-'+drive)
@@ -130,7 +150,7 @@ def main():
                 emu.command('diskmanipulator export '+drive+' '+tcl_path(export))
                 assert (export/'asset.bin').read_bytes() == updated
                 assert emu.command('dict get [machine_info media '+drive+'] target').replace('\\','/') == disk.as_posix()
-            reports[name] = ['both drives refresh same source','updated disk asset matches byte-for-byte','disk-only power cycle']
+            reports[name] = ['global power off/on; media reloaded while off','both drives refresh same source','updated disk asset matches byte-for-byte','disk-only power cycle']
             print('PASS',name,flush=True)
         finally:
             emu.close()

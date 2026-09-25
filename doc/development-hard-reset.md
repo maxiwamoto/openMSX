@@ -50,10 +50,14 @@ Seven synthetic-media scenarios passed on Windows:
 - A shared gzip ROM in both cartridge slots: both picked up the new image.
 - Ordinary DSK and gzip DSK in both floppy drives: both exported the updated asset byte-for-byte after a disk-only restart.
 
-The suite also checks the F12 binding, removal of Ctrl+Shift+R, missing/empty ROM preflight, and restart with no ROM inserted. Disk tests enable a second drive in a disposable NMS8250 configuration. Tests execute the bound command rather than injecting physical keyboard events. The previous Flash persistence validation remains separate; these cases do not replace it.
+The suite traces the global `::power` setting and requires actual off/on transitions. It also traces ROM/floppy commands to require that they run while power is off. The suite also checks the F12 binding, removal of Ctrl+Shift+R, missing/empty ROM preflight, and restart with no ROM inserted. Disk tests enable a second drive in a disposable NMS8250 configuration. Tests execute the bound command rather than injecting physical keyboard events. The previous Flash persistence validation remains separate; these cases do not replace it.
 
 ## File-mapping experiment
 
 The separate Windows experiment recorded all **462 cases**, including read-only and copy-on-write mappings, sharing masks, handle lifetime, overwrite/truncation/replacement operations, and buffered-read controls. This was an API experiment on Windows 11 build 26200 / NTFS, not a timing benchmark.
 
 [Download the complete HTML/CSV/JSON report and reproduction scripts](https://github.com/maxiwamoto/openMSX/releases/download/rom-dev-2026.09.24.3/windows-mapping-462-cases.zip).
+
+## Tcl power-setting correction
+
+The initial 2026.09.24.3 command used `set power off/on` inside a Tcl procedure. That created a local variable, so media reloaded without changing the real global power setting. Version 2026.09.24.4 corrects the command to explicitly write `::power`. The earlier reload-only assertions missed this; the global power and media-command traces now cover it.
