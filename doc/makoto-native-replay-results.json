@@ -1,0 +1,2379 @@
+{
+  "date": "2026-09-25",
+  "build": {
+    "rom_sha256": "8dc379c0e109603616a9c212c7edb2b3f71ca63a7a9bf4e73fe0708b4098d45f",
+    "core_bytes": 7438,
+    "state_reserved_bytes": 976,
+    "rom_bytes": 262144,
+    "instruction_set": "Z80 only; demo uses BIOS CHGCPU on turbo R"
+  },
+  "twenty_second_opening": {
+    "baseline-z80": {
+      "rom_sha256": "254fa7cc08c46103f9ed77fad6232dd7e63112357c3e47cf022c19d86209baad",
+      "seconds_per_entry": 20,
+      "variant": "baseline-z80",
+      "results": [
+        {
+          "track": 1,
+          "bank": 12,
+          "cpu": "z80",
+          "ticks": 708,
+          "cpu_percent": 8.68965189709865,
+          "max_tick_ms": 24.912663480971986,
+          "late_ticks": 26
+        },
+        {
+          "track": 2,
+          "bank": 11,
+          "cpu": "z80",
+          "ticks": 4010,
+          "cpu_percent": 58.68345557885242,
+          "max_tick_ms": 34.85163617163778,
+          "late_ticks": 225
+        },
+        {
+          "track": 3,
+          "bank": 11,
+          "cpu": "z80",
+          "ticks": 4602,
+          "cpu_percent": 35.388341255661366,
+          "max_tick_ms": 19.8866056998952,
+          "late_ticks": 117
+        }
+      ],
+      "scope": "Sequencer ticks including chip BUSY/I/O; excludes initial prime tick, asset loading, UI, polling/acknowledgement outside the tick, and game workload."
+    },
+    "z80": {
+      "rom_sha256": "90402357746cef9c987c5af9c8e273f21a3fcc6081816e4ea6cee61c11514f00",
+      "seconds_per_entry": 20,
+      "variant": "z80",
+      "results": [
+        {
+          "track": 1,
+          "bank": 12,
+          "cpu": "z80",
+          "ticks": 708,
+          "cpu_percent": 7.668537481718954,
+          "max_tick_ms": 18.030224511775828,
+          "late_ticks": 10
+        },
+        {
+          "track": 2,
+          "bank": 11,
+          "cpu": "z80",
+          "ticks": 4034,
+          "cpu_percent": 51.27133336778847,
+          "max_tick_ms": 25.147609542550242,
+          "late_ticks": 90
+        },
+        {
+          "track": 3,
+          "bank": 11,
+          "cpu": "z80",
+          "ticks": 4623,
+          "cpu_percent": 32.486783934829404,
+          "max_tick_ms": 14.282262131089851,
+          "late_ticks": 76
+        }
+      ],
+      "scope": "Sequencer ticks including chip BUSY/I/O; excludes initial prime tick, asset loading, UI, polling/acknowledgement outside the tick, and game workload."
+    },
+    "native-z80": {
+      "rom_sha256": "8dc379c0e109603616a9c212c7edb2b3f71ca63a7a9bf4e73fe0708b4098d45f",
+      "seconds_per_entry": 20,
+      "variant": "native-z80",
+      "results": [
+        {
+          "track": 1,
+          "bank": 12,
+          "cpu": "z80",
+          "ticks": 708,
+          "cpu_percent": 5.426707863708469,
+          "max_tick_ms": 14.972573329849581,
+          "late_ticks": 4
+        },
+        {
+          "track": 2,
+          "bank": 11,
+          "cpu": "z80",
+          "ticks": 4046,
+          "cpu_percent": 38.65351741631958,
+          "max_tick_ms": 19.45582469280538,
+          "late_ticks": 33
+        },
+        {
+          "track": 3,
+          "bank": 11,
+          "cpu": "z80",
+          "ticks": 4630,
+          "cpu_percent": 24.75387095287303,
+          "max_tick_ms": 10.415569576579742,
+          "late_ticks": 14
+        }
+      ],
+      "scope": "Sequencer ticks including chip BUSY/I/O; excludes initial prime tick, asset loading, UI, polling/acknowledgement outside the tick, and game workload."
+    },
+    "baseline-r800": {
+      "rom_sha256": "e4473cae31f67d3ef7446443480cade326d144de316f625cfc19a7e9843b3a3f",
+      "seconds_per_entry": 20,
+      "variant": "baseline-r800",
+      "results": [
+        {
+          "track": 1,
+          "bank": 12,
+          "cpu": "r800",
+          "ticks": 708,
+          "cpu_percent": 4.100193600024635,
+          "max_tick_ms": 11.996636444017383,
+          "late_ticks": 2
+        },
+        {
+          "track": 2,
+          "bank": 11,
+          "cpu": "r800",
+          "ticks": 4072,
+          "cpu_percent": 28.550096450806347,
+          "max_tick_ms": 16.346490964636473,
+          "late_ticks": 12
+        },
+        {
+          "track": 3,
+          "bank": 11,
+          "cpu": "r800",
+          "ticks": 4656,
+          "cpu_percent": 17.429123673540836,
+          "max_tick_ms": 9.176864657376882,
+          "late_ticks": 5
+        }
+      ],
+      "scope": "Sequencer ticks including chip BUSY/I/O; excludes initial prime tick, asset loading, UI, polling/acknowledgement outside the tick, and game workload."
+    },
+    "r800": {
+      "rom_sha256": "6579b356979aef8d56c53d4a0332c09ed71d69c10ffc26c11aaa08a6aebee966",
+      "seconds_per_entry": 20,
+      "variant": "r800",
+      "results": [
+        {
+          "track": 1,
+          "bank": 12,
+          "cpu": "r800",
+          "ticks": 708,
+          "cpu_percent": 3.655162876846223,
+          "max_tick_ms": 8.977677330499034,
+          "late_ticks": 3
+        },
+        {
+          "track": 2,
+          "bank": 11,
+          "cpu": "r800",
+          "ticks": 4076,
+          "cpu_percent": 25.04579422803623,
+          "max_tick_ms": 12.08910629703297,
+          "late_ticks": 6
+        },
+        {
+          "track": 3,
+          "bank": 11,
+          "cpu": "r800",
+          "ticks": 4660,
+          "cpu_percent": 16.03495136951686,
+          "max_tick_ms": 6.711467518911718,
+          "late_ticks": 3
+        }
+      ],
+      "scope": "Sequencer ticks including chip BUSY/I/O; excludes initial prime tick, asset loading, UI, polling/acknowledgement outside the tick, and game workload."
+    },
+    "native-r800": {
+      "rom_sha256": "8dc379c0e109603616a9c212c7edb2b3f71ca63a7a9bf4e73fe0708b4098d45f",
+      "seconds_per_entry": 20,
+      "variant": "native-r800",
+      "results": [
+        {
+          "track": 1,
+          "bank": 12,
+          "cpu": "r800",
+          "ticks": 708,
+          "cpu_percent": 2.5455106724454346,
+          "max_tick_ms": 7.521067621723887,
+          "late_ticks": 2
+        },
+        {
+          "track": 2,
+          "bank": 11,
+          "cpu": "r800",
+          "ticks": 4078,
+          "cpu_percent": 18.686959515803387,
+          "max_tick_ms": 9.47969644186486,
+          "late_ticks": 2
+        },
+        {
+          "track": 3,
+          "bank": 11,
+          "cpu": "r800",
+          "ticks": 4662,
+          "cpu_percent": 11.847176107575024,
+          "max_tick_ms": 4.953283168674716,
+          "late_ticks": 1
+        }
+      ],
+      "scope": "Sequencer ticks including chip BUSY/I/O; excludes initial prime tick, asset loading, UI, polling/acknowledgement outside the tick, and game workload."
+    }
+  },
+  "eight_second_all_tracks": {
+    "native-z80": {
+      "rom_sha256": "8dc379c0e109603616a9c212c7edb2b3f71ca63a7a9bf4e73fe0708b4098d45f",
+      "seconds_per_entry": 8,
+      "variant": "native-z80",
+      "results": [
+        {
+          "track": 1,
+          "bank": 12,
+          "cpu": "z80",
+          "ticks": 708,
+          "cpu_percent": 13.566769659272815,
+          "max_tick_ms": 14.972573329853134,
+          "late_ticks": 4
+        },
+        {
+          "track": 2,
+          "bank": 11,
+          "cpu": "z80",
+          "ticks": 1590,
+          "cpu_percent": 35.966400757639065,
+          "max_tick_ms": 19.45582469280538,
+          "late_ticks": 4
+        },
+        {
+          "track": 3,
+          "bank": 11,
+          "cpu": "z80",
+          "ticks": 1818,
+          "cpu_percent": 18.94930780308819,
+          "max_tick_ms": 9.37577261914413,
+          "late_ticks": 3
+        },
+        {
+          "track": 4,
+          "bank": 3,
+          "cpu": "z80",
+          "ticks": 1862,
+          "cpu_percent": 31.11126553793877,
+          "max_tick_ms": 18.729196029106276,
+          "late_ticks": 59
+        },
+        {
+          "track": 5,
+          "bank": 3,
+          "cpu": "z80",
+          "ticks": 1668,
+          "cpu_percent": 25.203126375000107,
+          "max_tick_ms": 18.490059490801514,
+          "late_ticks": 22
+        },
+        {
+          "track": 6,
+          "bank": 2,
+          "cpu": "z80",
+          "ticks": 1818,
+          "cpu_percent": 31.472449710784378,
+          "max_tick_ms": 18.861335728423967,
+          "late_ticks": 37
+        },
+        {
+          "track": 7,
+          "bank": 1,
+          "cpu": "z80",
+          "ticks": 1856,
+          "cpu_percent": 31.944828183469554,
+          "max_tick_ms": 17.901995924063385,
+          "late_ticks": 70
+        },
+        {
+          "track": 8,
+          "bank": 3,
+          "cpu": "z80",
+          "ticks": 1896,
+          "cpu_percent": 38.731259838885634,
+          "max_tick_ms": 19.671494561464442,
+          "late_ticks": 84
+        },
+        {
+          "track": 9,
+          "bank": 5,
+          "cpu": "z80",
+          "ticks": 1702,
+          "cpu_percent": 22.760294953685012,
+          "max_tick_ms": 15.423747990311654,
+          "late_ticks": 18
+        },
+        {
+          "track": 10,
+          "bank": 5,
+          "cpu": "z80",
+          "ticks": 1718,
+          "cpu_percent": 29.13068560390517,
+          "max_tick_ms": 17.554745086314938,
+          "late_ticks": 26
+        },
+        {
+          "track": 11,
+          "bank": 3,
+          "cpu": "z80",
+          "ticks": 1817,
+          "cpu_percent": 24.478013267052745,
+          "max_tick_ms": 16.69932910466798,
+          "late_ticks": 8
+        },
+        {
+          "track": 12,
+          "bank": 5,
+          "cpu": "z80",
+          "ticks": 1722,
+          "cpu_percent": 31.30515540382781,
+          "max_tick_ms": 19.29798340292166,
+          "late_ticks": 5
+        },
+        {
+          "track": 13,
+          "bank": 1,
+          "cpu": "z80",
+          "ticks": 1680,
+          "cpu_percent": 25.584920709196624,
+          "max_tick_ms": 11.531912575478032,
+          "late_ticks": 2
+        },
+        {
+          "track": 14,
+          "bank": 2,
+          "cpu": "z80",
+          "ticks": 1857,
+          "cpu_percent": 33.34650772653056,
+          "max_tick_ms": 14.095366869256054,
+          "late_ticks": 42
+        },
+        {
+          "track": 15,
+          "bank": 5,
+          "cpu": "z80",
+          "ticks": 1673,
+          "cpu_percent": 24.190738627384434,
+          "max_tick_ms": 16.474719552348915,
+          "late_ticks": 37
+        },
+        {
+          "track": 16,
+          "bank": 5,
+          "cpu": "z80",
+          "ticks": 1673,
+          "cpu_percent": 32.94150164336607,
+          "max_tick_ms": 13.586084264886722,
+          "late_ticks": 5
+        },
+        {
+          "track": 17,
+          "bank": 4,
+          "cpu": "z80",
+          "ticks": 1613,
+          "cpu_percent": 22.135323763220782,
+          "max_tick_ms": 14.179176403700922,
+          "late_ticks": 3
+        },
+        {
+          "track": 18,
+          "bank": 4,
+          "cpu": "z80",
+          "ticks": 1676,
+          "cpu_percent": 21.059967118738143,
+          "max_tick_ms": 12.328103152782433,
+          "late_ticks": 11
+        },
+        {
+          "track": 19,
+          "bank": 4,
+          "cpu": "z80",
+          "ticks": 1673,
+          "cpu_percent": 23.634997604451158,
+          "max_tick_ms": 15.413132115952521,
+          "late_ticks": 7
+        },
+        {
+          "track": 20,
+          "bank": 1,
+          "cpu": "z80",
+          "ticks": 1811,
+          "cpu_percent": 30.193781611905024,
+          "max_tick_ms": 18.47916425131757,
+          "late_ticks": 8
+        },
+        {
+          "track": 21,
+          "bank": 5,
+          "cpu": "z80",
+          "ticks": 1670,
+          "cpu_percent": 42.851640362119525,
+          "max_tick_ms": 19.75586282614472,
+          "late_ticks": 23
+        },
+        {
+          "track": 22,
+          "bank": 5,
+          "cpu": "z80",
+          "ticks": 1740,
+          "cpu_percent": 30.824678834880714,
+          "max_tick_ms": 14.576433597028426,
+          "late_ticks": 6
+        },
+        {
+          "track": 23,
+          "bank": 4,
+          "cpu": "z80",
+          "ticks": 1676,
+          "cpu_percent": 27.811188293479816,
+          "max_tick_ms": 14.972573329856687,
+          "late_ticks": 6
+        },
+        {
+          "track": 24,
+          "bank": 4,
+          "cpu": "z80",
+          "ticks": 1789,
+          "cpu_percent": 28.47210329804497,
+          "max_tick_ms": 18.05117689536928,
+          "late_ticks": 26
+        },
+        {
+          "track": 25,
+          "bank": 4,
+          "cpu": "z80",
+          "ticks": 1674,
+          "cpu_percent": 23.950337961943546,
+          "max_tick_ms": 17.120332332723365,
+          "late_ticks": 8
+        },
+        {
+          "track": 26,
+          "bank": 5,
+          "cpu": "z80",
+          "ticks": 1678,
+          "cpu_percent": 34.05625575316762,
+          "max_tick_ms": 17.232637108890003,
+          "late_ticks": 16
+        },
+        {
+          "track": 27,
+          "bank": 2,
+          "cpu": "z80",
+          "ticks": 1816,
+          "cpu_percent": 18.93471795996824,
+          "max_tick_ms": 9.375772619165446,
+          "late_ticks": 3
+        },
+        {
+          "track": 28,
+          "bank": 5,
+          "cpu": "z80",
+          "ticks": 1734,
+          "cpu_percent": 22.72239558379887,
+          "max_tick_ms": 15.143544780130469,
+          "late_ticks": 24
+        },
+        {
+          "track": 29,
+          "bank": 4,
+          "cpu": "z80",
+          "ticks": 1730,
+          "cpu_percent": 34.1804859276877,
+          "max_tick_ms": 17.14072598616667,
+          "late_ticks": 24
+        },
+        {
+          "track": 30,
+          "bank": 6,
+          "cpu": "z80",
+          "ticks": 1853,
+          "cpu_percent": 36.307516039062904,
+          "max_tick_ms": 16.771405304325526,
+          "late_ticks": 49
+        },
+        {
+          "track": 31,
+          "bank": 3,
+          "cpu": "z80",
+          "ticks": 1588,
+          "cpu_percent": 35.92541789530159,
+          "max_tick_ms": 19.455824692840906,
+          "late_ticks": 4
+        },
+        {
+          "track": 32,
+          "bank": 5,
+          "cpu": "z80",
+          "ticks": 1764,
+          "cpu_percent": 31.32892239096776,
+          "max_tick_ms": 16.468294154719842,
+          "late_ticks": 35
+        },
+        {
+          "track": 33,
+          "bank": 5,
+          "cpu": "z80",
+          "ticks": 1691,
+          "cpu_percent": 22.070895183617978,
+          "max_tick_ms": 16.23725920472907,
+          "late_ticks": 14
+        },
+        {
+          "track": 34,
+          "bank": 1,
+          "cpu": "z80",
+          "ticks": 1676,
+          "cpu_percent": 37.89322385945937,
+          "max_tick_ms": 16.65155767000215,
+          "late_ticks": 7
+        },
+        {
+          "track": 35,
+          "bank": 10,
+          "cpu": "z80",
+          "ticks": 812,
+          "cpu_percent": 5.132419064438665,
+          "max_tick_ms": 11.652598305090578,
+          "late_ticks": 1
+        },
+        {
+          "track": 36,
+          "bank": 10,
+          "cpu": "z80",
+          "ticks": 1542,
+          "cpu_percent": 34.88838665249361,
+          "max_tick_ms": 19.061361150647826,
+          "late_ticks": 4
+        },
+        {
+          "track": 37,
+          "bank": 3,
+          "cpu": "z80",
+          "ticks": 1807,
+          "cpu_percent": 34.29973641900759,
+          "max_tick_ms": 18.990402411475316,
+          "late_ticks": 23
+        },
+        {
+          "track": 38,
+          "bank": 7,
+          "cpu": "z80",
+          "ticks": 1817,
+          "cpu_percent": 31.459584947236863,
+          "max_tick_ms": 18.86133572838844,
+          "late_ticks": 38
+        },
+        {
+          "track": 39,
+          "bank": 6,
+          "cpu": "z80",
+          "ticks": 1853,
+          "cpu_percent": 31.89208055772852,
+          "max_tick_ms": 17.901995924034964,
+          "late_ticks": 62
+        },
+        {
+          "track": 40,
+          "bank": 9,
+          "cpu": "z80",
+          "ticks": 1702,
+          "cpu_percent": 22.76029495368519,
+          "max_tick_ms": 15.423747990325865,
+          "late_ticks": 18
+        },
+        {
+          "track": 41,
+          "bank": 9,
+          "cpu": "z80",
+          "ticks": 1715,
+          "cpu_percent": 29.09196210691718,
+          "max_tick_ms": 17.55474508632915,
+          "late_ticks": 26
+        },
+        {
+          "track": 42,
+          "bank": 6,
+          "cpu": "z80",
+          "ticks": 1678,
+          "cpu_percent": 25.550454038142334,
+          "max_tick_ms": 11.531912575435399,
+          "late_ticks": 2
+        },
+        {
+          "track": 43,
+          "bank": 9,
+          "cpu": "z80",
+          "ticks": 1676,
+          "cpu_percent": 32.99843974584462,
+          "max_tick_ms": 13.586084264943565,
+          "late_ticks": 5
+        },
+        {
+          "track": 44,
+          "bank": 8,
+          "cpu": "z80",
+          "ticks": 1612,
+          "cpu_percent": 22.125462174668087,
+          "max_tick_ms": 14.1791764036725,
+          "late_ticks": 3
+        },
+        {
+          "track": 45,
+          "bank": 8,
+          "cpu": "z80",
+          "ticks": 1674,
+          "cpu_percent": 21.0351001314514,
+          "max_tick_ms": 12.32810315275401,
+          "late_ticks": 10
+        },
+        {
+          "track": 46,
+          "bank": 8,
+          "cpu": "z80",
+          "ticks": 1673,
+          "cpu_percent": 23.634997604438723,
+          "max_tick_ms": 15.413132115952521,
+          "late_ticks": 8
+        },
+        {
+          "track": 47,
+          "bank": 6,
+          "cpu": "z80",
+          "ticks": 1810,
+          "cpu_percent": 30.171271767773078,
+          "max_tick_ms": 18.47916425128915,
+          "late_ticks": 7
+        },
+        {
+          "track": 48,
+          "bank": 9,
+          "cpu": "z80",
+          "ticks": 1670,
+          "cpu_percent": 42.85164036211597,
+          "max_tick_ms": 19.7558628261163,
+          "late_ticks": 24
+        },
+        {
+          "track": 49,
+          "bank": 9,
+          "cpu": "z80",
+          "ticks": 1739,
+          "cpu_percent": 30.807857562898278,
+          "max_tick_ms": 14.576433597028426,
+          "late_ticks": 6
+        },
+        {
+          "track": 50,
+          "bank": 8,
+          "cpu": "z80",
+          "ticks": 1674,
+          "cpu_percent": 27.77334479660425,
+          "max_tick_ms": 14.972573329828265,
+          "late_ticks": 7
+        },
+        {
+          "track": 51,
+          "bank": 8,
+          "cpu": "z80",
+          "ticks": 1791,
+          "cpu_percent": 28.500961714384232,
+          "max_tick_ms": 18.05117689536928,
+          "late_ticks": 26
+        },
+        {
+          "track": 52,
+          "bank": 8,
+          "cpu": "z80",
+          "ticks": 1673,
+          "cpu_percent": 23.929850022835808,
+          "max_tick_ms": 17.120332332751786,
+          "late_ticks": 8
+        },
+        {
+          "track": 53,
+          "bank": 7,
+          "cpu": "z80",
+          "ticks": 1818,
+          "cpu_percent": 18.949307803079307,
+          "max_tick_ms": 9.375772619137024,
+          "late_ticks": 3
+        },
+        {
+          "track": 54,
+          "bank": 9,
+          "cpu": "z80",
+          "ticks": 1733,
+          "cpu_percent": 22.713808598577145,
+          "max_tick_ms": 15.143544780130469,
+          "late_ticks": 24
+        },
+        {
+          "track": 55,
+          "bank": 8,
+          "cpu": "z80",
+          "ticks": 1729,
+          "cpu_percent": 34.165372274974004,
+          "max_tick_ms": 17.14072598610983,
+          "late_ticks": 24
+        }
+      ],
+      "scope": "Sequencer ticks including chip BUSY/I/O; excludes initial prime tick, asset loading, UI, polling/acknowledgement outside the tick, and game workload."
+    },
+    "native-r800": {
+      "rom_sha256": "8dc379c0e109603616a9c212c7edb2b3f71ca63a7a9bf4e73fe0708b4098d45f",
+      "seconds_per_entry": 8,
+      "variant": "native-r800",
+      "results": [
+        {
+          "track": 1,
+          "bank": 12,
+          "cpu": "r800",
+          "ticks": 708,
+          "cpu_percent": 6.3637766811135865,
+          "max_tick_ms": 7.521067621723887,
+          "late_ticks": 2
+        },
+        {
+          "track": 2,
+          "bank": 11,
+          "cpu": "r800",
+          "ticks": 1618,
+          "cpu_percent": 17.538025084194018,
+          "max_tick_ms": 9.477740886062236,
+          "late_ticks": 1
+        },
+        {
+          "track": 3,
+          "bank": 11,
+          "cpu": "r800",
+          "ticks": 1849,
+          "cpu_percent": 9.147861320361628,
+          "max_tick_ms": 4.561194229999899,
+          "late_ticks": 0
+        },
+        {
+          "track": 4,
+          "bank": 3,
+          "cpu": "r800",
+          "ticks": 1913,
+          "cpu_percent": 15.153228273424979,
+          "max_tick_ms": 9.095150361289939,
+          "late_ticks": 14
+        },
+        {
+          "track": 5,
+          "bank": 3,
+          "cpu": "r800",
+          "ticks": 1704,
+          "cpu_percent": 12.331656327829776,
+          "max_tick_ms": 8.996115428075768,
+          "late_ticks": 8
+        },
+        {
+          "track": 6,
+          "bank": 2,
+          "cpu": "r800",
+          "ticks": 1862,
+          "cpu_percent": 15.345789408992427,
+          "max_tick_ms": 9.276877368492364,
+          "late_ticks": 8
+        },
+        {
+          "track": 7,
+          "bank": 1,
+          "cpu": "r800",
+          "ticks": 1890,
+          "cpu_percent": 15.496550539246634,
+          "max_tick_ms": 8.747759840986191,
+          "late_ticks": 1
+        },
+        {
+          "track": 8,
+          "bank": 3,
+          "cpu": "r800",
+          "ticks": 1937,
+          "cpu_percent": 18.892202081547715,
+          "max_tick_ms": 9.450363104804183,
+          "late_ticks": 3
+        },
+        {
+          "track": 9,
+          "bank": 5,
+          "cpu": "r800",
+          "ticks": 1732,
+          "cpu_percent": 10.98023806097892,
+          "max_tick_ms": 7.6836581185659725,
+          "late_ticks": 1
+        },
+        {
+          "track": 10,
+          "bank": 5,
+          "cpu": "r800",
+          "ticks": 1753,
+          "cpu_percent": 14.10974020441067,
+          "max_tick_ms": 8.550528069903862,
+          "late_ticks": 4
+        },
+        {
+          "track": 11,
+          "bank": 3,
+          "cpu": "r800",
+          "ticks": 1849,
+          "cpu_percent": 11.848890710965954,
+          "max_tick_ms": 8.304966133962921,
+          "late_ticks": 2
+        },
+        {
+          "track": 12,
+          "bank": 5,
+          "cpu": "r800",
+          "ticks": 1753,
+          "cpu_percent": 15.052683022559776,
+          "max_tick_ms": 9.337499598416343,
+          "late_ticks": 1
+        },
+        {
+          "track": 13,
+          "bank": 1,
+          "cpu": "r800",
+          "ticks": 1708,
+          "cpu_percent": 12.322688707645035,
+          "max_tick_ms": 5.608953093201308,
+          "late_ticks": 1
+        },
+        {
+          "track": 14,
+          "bank": 2,
+          "cpu": "r800",
+          "ticks": 1890,
+          "cpu_percent": 16.087158074560293,
+          "max_tick_ms": 6.886210398249659,
+          "late_ticks": 2
+        },
+        {
+          "track": 15,
+          "bank": 5,
+          "cpu": "r800",
+          "ticks": 1705,
+          "cpu_percent": 11.850491822283615,
+          "max_tick_ms": 7.95575974041185,
+          "late_ticks": 3
+        },
+        {
+          "track": 16,
+          "bank": 5,
+          "cpu": "r800",
+          "ticks": 1704,
+          "cpu_percent": 15.914885830463987,
+          "max_tick_ms": 6.619975443811654,
+          "late_ticks": 1
+        },
+        {
+          "track": 17,
+          "bank": 4,
+          "cpu": "r800",
+          "ticks": 1642,
+          "cpu_percent": 10.562482452376543,
+          "max_tick_ms": 6.891238970297309,
+          "late_ticks": 1
+        },
+        {
+          "track": 18,
+          "bank": 4,
+          "cpu": "r800",
+          "ticks": 1707,
+          "cpu_percent": 10.16183795705814,
+          "max_tick_ms": 6.018781716676358,
+          "late_ticks": 4
+        },
+        {
+          "track": 19,
+          "bank": 4,
+          "cpu": "r800",
+          "ticks": 1705,
+          "cpu_percent": 11.326144454111287,
+          "max_tick_ms": 7.558083499446866,
+          "late_ticks": 1
+        },
+        {
+          "track": 20,
+          "bank": 1,
+          "cpu": "r800",
+          "ticks": 1847,
+          "cpu_percent": 14.58930534467946,
+          "max_tick_ms": 8.910769385494177,
+          "late_ticks": 4
+        },
+        {
+          "track": 21,
+          "bank": 5,
+          "cpu": "r800",
+          "ticks": 1706,
+          "cpu_percent": 20.92336979979912,
+          "max_tick_ms": 9.626223444598736,
+          "late_ticks": 3
+        },
+        {
+          "track": 22,
+          "bank": 5,
+          "cpu": "r800",
+          "ticks": 1773,
+          "cpu_percent": 14.816762675151551,
+          "max_tick_ms": 7.020165970828884,
+          "late_ticks": 1
+        },
+        {
+          "track": 23,
+          "bank": 4,
+          "cpu": "r800",
+          "ticks": 1707,
+          "cpu_percent": 13.333868201122812,
+          "max_tick_ms": 7.519950161253064,
+          "late_ticks": 3
+        },
+        {
+          "track": 24,
+          "bank": 4,
+          "cpu": "r800",
+          "ticks": 1827,
+          "cpu_percent": 13.846836678960983,
+          "max_tick_ms": 8.814388420887553,
+          "late_ticks": 4
+        },
+        {
+          "track": 25,
+          "bank": 4,
+          "cpu": "r800",
+          "ticks": 1705,
+          "cpu_percent": 11.523482733140611,
+          "max_tick_ms": 8.387658207936965,
+          "late_ticks": 2
+        },
+        {
+          "track": 26,
+          "bank": 5,
+          "cpu": "r800",
+          "ticks": 1707,
+          "cpu_percent": 16.51783257368784,
+          "max_tick_ms": 8.494794729500654,
+          "late_ticks": 1
+        },
+        {
+          "track": 27,
+          "bank": 2,
+          "cpu": "r800",
+          "ticks": 1848,
+          "cpu_percent": 9.144604970741455,
+          "max_tick_ms": 4.54554978355759,
+          "late_ticks": 0
+        },
+        {
+          "track": 28,
+          "bank": 5,
+          "cpu": "r800",
+          "ticks": 1771,
+          "cpu_percent": 10.982974093078468,
+          "max_tick_ms": 7.506121588079395,
+          "late_ticks": 1
+        },
+        {
+          "track": 29,
+          "bank": 4,
+          "cpu": "r800",
+          "ticks": 1769,
+          "cpu_percent": 16.58668036020856,
+          "max_tick_ms": 8.435709007699188,
+          "late_ticks": 6
+        },
+        {
+          "track": 30,
+          "bank": 6,
+          "cpu": "r800",
+          "ticks": 1887,
+          "cpu_percent": 17.39177046246283,
+          "max_tick_ms": 8.100470869919718,
+          "late_ticks": 2
+        },
+        {
+          "track": 31,
+          "bank": 3,
+          "cpu": "r800",
+          "ticks": 1617,
+          "cpu_percent": 17.52871349570313,
+          "max_tick_ms": 9.477740886097763,
+          "late_ticks": 1
+        },
+        {
+          "track": 32,
+          "bank": 5,
+          "cpu": "r800",
+          "ticks": 1804,
+          "cpu_percent": 15.190792405181242,
+          "max_tick_ms": 8.053956578294219,
+          "late_ticks": 5
+        },
+        {
+          "track": 33,
+          "bank": 5,
+          "cpu": "r800",
+          "ticks": 1728,
+          "cpu_percent": 10.69221961170399,
+          "max_tick_ms": 8.065410547999363,
+          "late_ticks": 4
+        },
+        {
+          "track": 34,
+          "bank": 1,
+          "cpu": "r800",
+          "ticks": 1706,
+          "cpu_percent": 18.38030566736606,
+          "max_tick_ms": 8.132318492982904,
+          "late_ticks": 1
+        },
+        {
+          "track": 35,
+          "bank": 10,
+          "cpu": "r800",
+          "ticks": 812,
+          "cpu_percent": 2.4290691973483547,
+          "max_tick_ms": 5.909270591700988,
+          "late_ticks": 1
+        },
+        {
+          "track": 36,
+          "bank": 10,
+          "cpu": "r800",
+          "ticks": 1570,
+          "cpu_percent": 17.032087877090873,
+          "max_tick_ms": 9.34588055184804,
+          "late_ticks": 2
+        },
+        {
+          "track": 37,
+          "bank": 3,
+          "cpu": "r800",
+          "ticks": 1850,
+          "cpu_percent": 16.559688452018406,
+          "max_tick_ms": 9.182871007340054,
+          "late_ticks": 8
+        },
+        {
+          "track": 38,
+          "bank": 7,
+          "cpu": "r800",
+          "ticks": 1861,
+          "cpu_percent": 15.338822741425417,
+          "max_tick_ms": 9.27464244756493,
+          "late_ticks": 7
+        },
+        {
+          "track": 39,
+          "bank": 6,
+          "cpu": "r800",
+          "ticks": 1888,
+          "cpu_percent": 15.487109744390182,
+          "max_tick_ms": 8.792178894225344,
+          "late_ticks": 1
+        },
+        {
+          "track": 40,
+          "bank": 9,
+          "cpu": "r800",
+          "ticks": 1733,
+          "cpu_percent": 10.985383617181554,
+          "max_tick_ms": 7.68687081739472,
+          "late_ticks": 1
+        },
+        {
+          "track": 41,
+          "bank": 9,
+          "cpu": "r800",
+          "ticks": 1751,
+          "cpu_percent": 14.096290520166121,
+          "max_tick_ms": 8.580699502260813,
+          "late_ticks": 4
+        },
+        {
+          "track": 42,
+          "bank": 6,
+          "cpu": "r800",
+          "ticks": 1706,
+          "cpu_percent": 12.303793149682463,
+          "max_tick_ms": 5.607695950175184,
+          "late_ticks": 1
+        },
+        {
+          "track": 43,
+          "bank": 9,
+          "cpu": "r800",
+          "ticks": 1706,
+          "cpu_percent": 15.932808848616986,
+          "max_tick_ms": 6.601816711338415,
+          "late_ticks": 1
+        },
+        {
+          "track": 44,
+          "bank": 8,
+          "cpu": "r800",
+          "ticks": 1641,
+          "cpu_percent": 10.559381499608378,
+          "max_tick_ms": 6.891658017991631,
+          "late_ticks": 1
+        },
+        {
+          "track": 45,
+          "bank": 8,
+          "cpu": "r800",
+          "ticks": 1706,
+          "cpu_percent": 10.15511049589577,
+          "max_tick_ms": 6.017245208568056,
+          "late_ticks": 4
+        },
+        {
+          "track": 46,
+          "bank": 8,
+          "cpu": "r800",
+          "ticks": 1704,
+          "cpu_percent": 11.319567151702614,
+          "max_tick_ms": 7.558921594750245,
+          "late_ticks": 1
+        },
+        {
+          "track": 47,
+          "bank": 6,
+          "cpu": "r800",
+          "ticks": 1847,
+          "cpu_percent": 14.586981376110941,
+          "max_tick_ms": 8.911747163381278,
+          "late_ticks": 4
+        },
+        {
+          "track": 48,
+          "bank": 9,
+          "cpu": "r800",
+          "ticks": 1705,
+          "cpu_percent": 20.905675511832555,
+          "max_tick_ms": 9.655417099111219,
+          "late_ticks": 3
+        },
+        {
+          "track": 49,
+          "bank": 9,
+          "cpu": "r800",
+          "ticks": 1772,
+          "cpu_percent": 14.808051721671234,
+          "max_tick_ms": 7.028546924289003,
+          "late_ticks": 1
+        },
+        {
+          "track": 50,
+          "bank": 8,
+          "cpu": "r800",
+          "ticks": 1706,
+          "cpu_percent": 13.323594549014928,
+          "max_tick_ms": 7.521346986834487,
+          "late_ticks": 3
+        },
+        {
+          "track": 51,
+          "bank": 8,
+          "cpu": "r800",
+          "ticks": 1826,
+          "cpu_percent": 13.802173181233712,
+          "max_tick_ms": 8.818020167382201,
+          "late_ticks": 4
+        },
+        {
+          "track": 52,
+          "bank": 8,
+          "cpu": "r800",
+          "ticks": 1704,
+          "cpu_percent": 11.519005907202029,
+          "max_tick_ms": 8.401486781110634,
+          "late_ticks": 2
+        },
+        {
+          "track": 53,
+          "bank": 7,
+          "cpu": "r800",
+          "ticks": 1849,
+          "cpu_percent": 9.149886717450784,
+          "max_tick_ms": 4.565803754417175,
+          "late_ticks": 0
+        },
+        {
+          "track": 54,
+          "bank": 9,
+          "cpu": "r800",
+          "ticks": 1773,
+          "cpu_percent": 10.992622665726515,
+          "max_tick_ms": 7.477486663844957,
+          "late_ticks": 1
+        },
+        {
+          "track": 55,
+          "bank": 8,
+          "cpu": "r800",
+          "ticks": 1767,
+          "cpu_percent": 16.57232623139464,
+          "max_tick_ms": 8.447582025098654,
+          "late_ticks": 6
+        }
+      ],
+      "scope": "Sequencer ticks including chip BUSY/I/O; excludes initial prime tick, asset loading, UI, polling/acknowledgement outside the tick, and game workload."
+    }
+  },
+  "ordered_write_validation": {
+    "native-z80": {
+      "variant": "native-z80",
+      "rom_sha256": "8dc379c0e109603616a9c212c7edb2b3f71ca63a7a9bf4e73fe0708b4098d45f",
+      "results": [
+        {
+          "track": 1,
+          "bank": 12,
+          "matched_writes": 2029,
+          "ticks_generated": 709
+        },
+        {
+          "track": 2,
+          "bank": 11,
+          "matched_writes": 10328,
+          "ticks_generated": 1591
+        },
+        {
+          "track": 3,
+          "bank": 11,
+          "matched_writes": 1388,
+          "ticks_generated": 1816
+        },
+        {
+          "track": 4,
+          "bank": 3,
+          "matched_writes": 5820,
+          "ticks_generated": 1861
+        },
+        {
+          "track": 5,
+          "bank": 3,
+          "matched_writes": 5239,
+          "ticks_generated": 1669
+        },
+        {
+          "track": 6,
+          "bank": 2,
+          "matched_writes": 7153,
+          "ticks_generated": 1819
+        },
+        {
+          "track": 7,
+          "bank": 1,
+          "matched_writes": 6926,
+          "ticks_generated": 1857
+        },
+        {
+          "track": 8,
+          "bank": 3,
+          "matched_writes": 10439,
+          "ticks_generated": 1898
+        },
+        {
+          "track": 9,
+          "bank": 5,
+          "matched_writes": 3683,
+          "ticks_generated": 1702
+        },
+        {
+          "track": 10,
+          "bank": 5,
+          "matched_writes": 5987,
+          "ticks_generated": 1720
+        },
+        {
+          "track": 11,
+          "bank": 3,
+          "matched_writes": 4459,
+          "ticks_generated": 1818
+        },
+        {
+          "track": 12,
+          "bank": 5,
+          "matched_writes": 6112,
+          "ticks_generated": 1723
+        },
+        {
+          "track": 13,
+          "bank": 1,
+          "matched_writes": 4656,
+          "ticks_generated": 1681
+        },
+        {
+          "track": 14,
+          "bank": 2,
+          "matched_writes": 7083,
+          "ticks_generated": 1858
+        },
+        {
+          "track": 15,
+          "bank": 5,
+          "matched_writes": 4360,
+          "ticks_generated": 1673
+        },
+        {
+          "track": 16,
+          "bank": 5,
+          "matched_writes": 7645,
+          "ticks_generated": 1675
+        },
+        {
+          "track": 17,
+          "bank": 4,
+          "matched_writes": 2363,
+          "ticks_generated": 1613
+        },
+        {
+          "track": 18,
+          "bank": 4,
+          "matched_writes": 2740,
+          "ticks_generated": 1677
+        },
+        {
+          "track": 19,
+          "bank": 4,
+          "matched_writes": 2892,
+          "ticks_generated": 1673
+        },
+        {
+          "track": 20,
+          "bank": 1,
+          "matched_writes": 5732,
+          "ticks_generated": 1813
+        },
+        {
+          "track": 21,
+          "bank": 5,
+          "matched_writes": 12448,
+          "ticks_generated": 1671
+        },
+        {
+          "track": 22,
+          "bank": 5,
+          "matched_writes": 5998,
+          "ticks_generated": 1741
+        },
+        {
+          "track": 23,
+          "bank": 4,
+          "matched_writes": 4440,
+          "ticks_generated": 1677
+        },
+        {
+          "track": 24,
+          "bank": 4,
+          "matched_writes": 5872,
+          "ticks_generated": 1790
+        },
+        {
+          "track": 25,
+          "bank": 4,
+          "matched_writes": 3288,
+          "ticks_generated": 1675
+        },
+        {
+          "track": 26,
+          "bank": 5,
+          "matched_writes": 8444,
+          "ticks_generated": 1680
+        },
+        {
+          "track": 27,
+          "bank": 2,
+          "matched_writes": 1388,
+          "ticks_generated": 1816
+        },
+        {
+          "track": 28,
+          "bank": 5,
+          "matched_writes": 3227,
+          "ticks_generated": 1733
+        },
+        {
+          "track": 29,
+          "bank": 4,
+          "matched_writes": 7513,
+          "ticks_generated": 1732
+        },
+        {
+          "track": 30,
+          "bank": 6,
+          "matched_writes": 7531,
+          "ticks_generated": 1854
+        },
+        {
+          "track": 31,
+          "bank": 3,
+          "matched_writes": 10316,
+          "ticks_generated": 1589
+        },
+        {
+          "track": 32,
+          "bank": 5,
+          "matched_writes": 6542,
+          "ticks_generated": 1765
+        },
+        {
+          "track": 33,
+          "bank": 5,
+          "matched_writes": 3092,
+          "ticks_generated": 1692
+        },
+        {
+          "track": 34,
+          "bank": 1,
+          "matched_writes": 11121,
+          "ticks_generated": 1677
+        },
+        {
+          "track": 35,
+          "bank": 10,
+          "matched_writes": 234,
+          "ticks_generated": 813
+        },
+        {
+          "track": 36,
+          "bank": 10,
+          "matched_writes": 10026,
+          "ticks_generated": 1543
+        },
+        {
+          "track": 37,
+          "bank": 3,
+          "matched_writes": 7055,
+          "ticks_generated": 1809
+        },
+        {
+          "track": 38,
+          "bank": 7,
+          "matched_writes": 7151,
+          "ticks_generated": 1818
+        },
+        {
+          "track": 39,
+          "bank": 6,
+          "matched_writes": 6915,
+          "ticks_generated": 1854
+        },
+        {
+          "track": 40,
+          "bank": 9,
+          "matched_writes": 3684,
+          "ticks_generated": 1704
+        },
+        {
+          "track": 41,
+          "bank": 9,
+          "matched_writes": 5979,
+          "ticks_generated": 1716
+        },
+        {
+          "track": 42,
+          "bank": 6,
+          "matched_writes": 4650,
+          "ticks_generated": 1679
+        },
+        {
+          "track": 43,
+          "bank": 9,
+          "matched_writes": 7655,
+          "ticks_generated": 1677
+        },
+        {
+          "track": 44,
+          "bank": 8,
+          "matched_writes": 2363,
+          "ticks_generated": 1613
+        },
+        {
+          "track": 45,
+          "bank": 8,
+          "matched_writes": 2738,
+          "ticks_generated": 1675
+        },
+        {
+          "track": 46,
+          "bank": 8,
+          "matched_writes": 2892,
+          "ticks_generated": 1673
+        },
+        {
+          "track": 47,
+          "bank": 6,
+          "matched_writes": 5724,
+          "ticks_generated": 1811
+        },
+        {
+          "track": 48,
+          "bank": 9,
+          "matched_writes": 12448,
+          "ticks_generated": 1671
+        },
+        {
+          "track": 49,
+          "bank": 9,
+          "matched_writes": 5994,
+          "ticks_generated": 1739
+        },
+        {
+          "track": 50,
+          "bank": 8,
+          "matched_writes": 4434,
+          "ticks_generated": 1676
+        },
+        {
+          "track": 51,
+          "bank": 8,
+          "matched_writes": 5876,
+          "ticks_generated": 1792
+        },
+        {
+          "track": 52,
+          "bank": 8,
+          "matched_writes": 3282,
+          "ticks_generated": 1674
+        },
+        {
+          "track": 53,
+          "bank": 7,
+          "matched_writes": 1388,
+          "ticks_generated": 1816
+        },
+        {
+          "track": 54,
+          "bank": 9,
+          "matched_writes": 3227,
+          "ticks_generated": 1733
+        },
+        {
+          "track": 55,
+          "bank": 8,
+          "matched_writes": 7491,
+          "ticks_generated": 1730
+        }
+      ],
+      "total_matched_writes": 309460,
+      "scope": "Actual emulator CPU instruction execution and Makoto writes, first eight seconds per entry; musical writes exact, timer/SSG GPIO writes excluded."
+    },
+    "native-r800": {
+      "variant": "native-r800",
+      "rom_sha256": "8dc379c0e109603616a9c212c7edb2b3f71ca63a7a9bf4e73fe0708b4098d45f",
+      "results": [
+        {
+          "track": 1,
+          "bank": 12,
+          "matched_writes": 2029,
+          "ticks_generated": 709
+        },
+        {
+          "track": 2,
+          "bank": 11,
+          "matched_writes": 10503,
+          "ticks_generated": 1619
+        },
+        {
+          "track": 3,
+          "bank": 11,
+          "matched_writes": 1411,
+          "ticks_generated": 1848
+        },
+        {
+          "track": 4,
+          "bank": 3,
+          "matched_writes": 5944,
+          "ticks_generated": 1913
+        },
+        {
+          "track": 5,
+          "bank": 3,
+          "matched_writes": 5347,
+          "ticks_generated": 1705
+        },
+        {
+          "track": 6,
+          "bank": 2,
+          "matched_writes": 7336,
+          "ticks_generated": 1863
+        },
+        {
+          "track": 7,
+          "bank": 1,
+          "matched_writes": 7057,
+          "ticks_generated": 1891
+        },
+        {
+          "track": 8,
+          "bank": 3,
+          "matched_writes": 10662,
+          "ticks_generated": 1938
+        },
+        {
+          "track": 9,
+          "bank": 5,
+          "matched_writes": 3737,
+          "ticks_generated": 1732
+        },
+        {
+          "track": 10,
+          "bank": 5,
+          "matched_writes": 6095,
+          "ticks_generated": 1754
+        },
+        {
+          "track": 11,
+          "bank": 3,
+          "matched_writes": 4539,
+          "ticks_generated": 1850
+        },
+        {
+          "track": 12,
+          "bank": 5,
+          "matched_writes": 6214,
+          "ticks_generated": 1754
+        },
+        {
+          "track": 13,
+          "bank": 1,
+          "matched_writes": 4737,
+          "ticks_generated": 1709
+        },
+        {
+          "track": 14,
+          "bank": 2,
+          "matched_writes": 7186,
+          "ticks_generated": 1891
+        },
+        {
+          "track": 15,
+          "bank": 5,
+          "matched_writes": 4568,
+          "ticks_generated": 1706
+        },
+        {
+          "track": 16,
+          "bank": 5,
+          "matched_writes": 7782,
+          "ticks_generated": 1705
+        },
+        {
+          "track": 17,
+          "bank": 4,
+          "matched_writes": 2400,
+          "ticks_generated": 1640
+        },
+        {
+          "track": 18,
+          "bank": 4,
+          "matched_writes": 2785,
+          "ticks_generated": 1708
+        },
+        {
+          "track": 19,
+          "bank": 4,
+          "matched_writes": 2944,
+          "ticks_generated": 1705
+        },
+        {
+          "track": 20,
+          "bank": 1,
+          "matched_writes": 5881,
+          "ticks_generated": 1849
+        },
+        {
+          "track": 21,
+          "bank": 5,
+          "matched_writes": 12716,
+          "ticks_generated": 1707
+        },
+        {
+          "track": 22,
+          "bank": 5,
+          "matched_writes": 6092,
+          "ticks_generated": 1774
+        },
+        {
+          "track": 23,
+          "bank": 4,
+          "matched_writes": 4546,
+          "ticks_generated": 1708
+        },
+        {
+          "track": 24,
+          "bank": 4,
+          "matched_writes": 5992,
+          "ticks_generated": 1828
+        },
+        {
+          "track": 25,
+          "bank": 4,
+          "matched_writes": 3367,
+          "ticks_generated": 1706
+        },
+        {
+          "track": 26,
+          "bank": 5,
+          "matched_writes": 8585,
+          "ticks_generated": 1709
+        },
+        {
+          "track": 27,
+          "bank": 2,
+          "matched_writes": 1411,
+          "ticks_generated": 1848
+        },
+        {
+          "track": 28,
+          "bank": 5,
+          "matched_writes": 3264,
+          "ticks_generated": 1769
+        },
+        {
+          "track": 29,
+          "bank": 4,
+          "matched_writes": 7703,
+          "ticks_generated": 1769
+        },
+        {
+          "track": 30,
+          "bank": 6,
+          "matched_writes": 7621,
+          "ticks_generated": 1888
+        },
+        {
+          "track": 31,
+          "bank": 3,
+          "matched_writes": 10497,
+          "ticks_generated": 1618
+        },
+        {
+          "track": 32,
+          "bank": 5,
+          "matched_writes": 6665,
+          "ticks_generated": 1805
+        },
+        {
+          "track": 33,
+          "bank": 5,
+          "matched_writes": 3142,
+          "ticks_generated": 1727
+        },
+        {
+          "track": 34,
+          "bank": 1,
+          "matched_writes": 11304,
+          "ticks_generated": 1707
+        },
+        {
+          "track": 35,
+          "bank": 10,
+          "matched_writes": 234,
+          "ticks_generated": 813
+        },
+        {
+          "track": 36,
+          "bank": 10,
+          "matched_writes": 10201,
+          "ticks_generated": 1571
+        },
+        {
+          "track": 37,
+          "bank": 3,
+          "matched_writes": 7193,
+          "ticks_generated": 1851
+        },
+        {
+          "track": 38,
+          "bank": 7,
+          "matched_writes": 7334,
+          "ticks_generated": 1862
+        },
+        {
+          "track": 39,
+          "bank": 6,
+          "matched_writes": 7053,
+          "ticks_generated": 1889
+        },
+        {
+          "track": 40,
+          "bank": 9,
+          "matched_writes": 3738,
+          "ticks_generated": 1734
+        },
+        {
+          "track": 41,
+          "bank": 9,
+          "matched_writes": 6089,
+          "ticks_generated": 1752
+        },
+        {
+          "track": 42,
+          "bank": 6,
+          "matched_writes": 4729,
+          "ticks_generated": 1707
+        },
+        {
+          "track": 43,
+          "bank": 9,
+          "matched_writes": 7794,
+          "ticks_generated": 1708
+        },
+        {
+          "track": 44,
+          "bank": 8,
+          "matched_writes": 2400,
+          "ticks_generated": 1640
+        },
+        {
+          "track": 45,
+          "bank": 8,
+          "matched_writes": 2784,
+          "ticks_generated": 1707
+        },
+        {
+          "track": 46,
+          "bank": 8,
+          "matched_writes": 2944,
+          "ticks_generated": 1705
+        },
+        {
+          "track": 47,
+          "bank": 6,
+          "matched_writes": 5879,
+          "ticks_generated": 1848
+        },
+        {
+          "track": 48,
+          "bank": 9,
+          "matched_writes": 12708,
+          "ticks_generated": 1706
+        },
+        {
+          "track": 49,
+          "bank": 9,
+          "matched_writes": 6090,
+          "ticks_generated": 1773
+        },
+        {
+          "track": 50,
+          "bank": 8,
+          "matched_writes": 4542,
+          "ticks_generated": 1707
+        },
+        {
+          "track": 51,
+          "bank": 8,
+          "matched_writes": 5948,
+          "ticks_generated": 1828
+        },
+        {
+          "track": 52,
+          "bank": 8,
+          "matched_writes": 3365,
+          "ticks_generated": 1705
+        },
+        {
+          "track": 53,
+          "bank": 7,
+          "matched_writes": 1411,
+          "ticks_generated": 1848
+        },
+        {
+          "track": 54,
+          "bank": 9,
+          "matched_writes": 3266,
+          "ticks_generated": 1773
+        },
+        {
+          "track": 55,
+          "bank": 8,
+          "matched_writes": 7697,
+          "ticks_generated": 1768
+        }
+      ],
+      "total_matched_writes": 315461,
+      "scope": "Actual emulator CPU instruction execution and Makoto writes, first eight seconds per entry; musical writes exact, timer/SSG GPIO writes excluded."
+    }
+  },
+  "controls": {
+    "core_sha256": "3978f00aaca4121ecaec9712412f2b22d802e3d64c1f54d070301c61364fb1cb",
+    "stop_restart": true,
+    "tempo_cases": 255,
+    "random_cases": 5000,
+    "temporary_restore": true,
+    "ssg_effect_restore": true,
+    "rom_write_guard": true
+  },
+  "assets": {
+    "rom_sha256": "8dc379c0e109603616a9c212c7edb2b3f71ca63a7a9bf4e73fe0708b4098d45f",
+    "asset_pairs": 660,
+    "former_buffers_untouched": true,
+    "missing_device_timeout": true
+  },
+  "hardware": {
+    "r800_address_to_data_min_us": 3.3523813787184054,
+    "required_at_8mhz_us": 2.125,
+    "writes_checked": 12351,
+    "rom_sha256": "8dc379c0e109603616a9c212c7edb2b3f71ca63a7a9bf4e73fe0708b4098d45f"
+  },
+  "standalone_rebuild": {
+    "rom_sha256": "8dc379c0e109603616a9c212c7edb2b3f71ca63a7a9bf4e73fe0708b4098d45f",
+    "byte_identical": true
+  },
+  "software_differential": {
+    "core_sha256": "3978f00aaca4121ecaec9712412f2b22d802e3d64c1f54d070301c61364fb1cb",
+    "results": [
+      {
+        "track": 1,
+        "bank": 12,
+        "ticks": 1200,
+        "writes": 1927,
+        "average_tick_cycles": 3100.2833333333333,
+        "max_tick_cycles": 29292
+      },
+      {
+        "track": 2,
+        "bank": 11,
+        "ticks": 1200,
+        "writes": 8379,
+        "average_tick_cycles": 5064.004166666667,
+        "max_tick_cycles": 41921
+      },
+      {
+        "track": 3,
+        "bank": 11,
+        "ticks": 1200,
+        "writes": 1407,
+        "average_tick_cycles": 2753.135,
+        "max_tick_cycles": 21784
+      },
+      {
+        "track": 4,
+        "bank": 3,
+        "ticks": 1200,
+        "writes": 4151,
+        "average_tick_cycles": 3842.365,
+        "max_tick_cycles": 40302
+      },
+      {
+        "track": 5,
+        "bank": 3,
+        "ticks": 1200,
+        "writes": 4244,
+        "average_tick_cycles": 3607.5333333333333,
+        "max_tick_cycles": 39698
+      },
+      {
+        "track": 6,
+        "bank": 2,
+        "ticks": 1200,
+        "writes": 5253,
+        "average_tick_cycles": 4070.3191666666667,
+        "max_tick_cycles": 39959
+      },
+      {
+        "track": 7,
+        "bank": 1,
+        "ticks": 1200,
+        "writes": 4697,
+        "average_tick_cycles": 3953.2616666666668,
+        "max_tick_cycles": 37821
+      },
+      {
+        "track": 8,
+        "bank": 3,
+        "ticks": 1200,
+        "writes": 7107,
+        "average_tick_cycles": 4618.4775,
+        "max_tick_cycles": 43361
+      },
+      {
+        "track": 9,
+        "bank": 5,
+        "ticks": 1200,
+        "writes": 3416,
+        "average_tick_cycles": 3344.3733333333334,
+        "max_tick_cycles": 30454
+      },
+      {
+        "track": 10,
+        "bank": 5,
+        "ticks": 1200,
+        "writes": 4624,
+        "average_tick_cycles": 4015.1541666666667,
+        "max_tick_cycles": 37009
+      },
+      {
+        "track": 11,
+        "bank": 3,
+        "ticks": 1200,
+        "writes": 3591,
+        "average_tick_cycles": 3333.19,
+        "max_tick_cycles": 33793
+      },
+      {
+        "track": 12,
+        "bank": 5,
+        "ticks": 1200,
+        "writes": 4875,
+        "average_tick_cycles": 4382.1725,
+        "max_tick_cycles": 41838
+      },
+      {
+        "track": 13,
+        "bank": 1,
+        "ticks": 1200,
+        "writes": 3676,
+        "average_tick_cycles": 3646.9766666666665,
+        "max_tick_cycles": 24769
+      },
+      {
+        "track": 14,
+        "bank": 2,
+        "ticks": 1200,
+        "writes": 5029,
+        "average_tick_cycles": 4220.8775,
+        "max_tick_cycles": 31036
+      },
+      {
+        "track": 15,
+        "bank": 5,
+        "ticks": 1200,
+        "writes": 3159,
+        "average_tick_cycles": 3397.9266666666667,
+        "max_tick_cycles": 35170
+      },
+      {
+        "track": 16,
+        "bank": 5,
+        "ticks": 1200,
+        "writes": 6213,
+        "average_tick_cycles": 4633.403333333334,
+        "max_tick_cycles": 29695
+      },
+      {
+        "track": 17,
+        "bank": 4,
+        "ticks": 1200,
+        "writes": 2182,
+        "average_tick_cycles": 3483.865,
+        "max_tick_cycles": 31317
+      },
+      {
+        "track": 18,
+        "bank": 4,
+        "ticks": 1200,
+        "writes": 2463,
+        "average_tick_cycles": 3154.1725,
+        "max_tick_cycles": 26558
+      },
+      {
+        "track": 19,
+        "bank": 4,
+        "ticks": 1200,
+        "writes": 2518,
+        "average_tick_cycles": 3533.8258333333333,
+        "max_tick_cycles": 31463
+      },
+      {
+        "track": 20,
+        "bank": 1,
+        "ticks": 1200,
+        "writes": 4183,
+        "average_tick_cycles": 3972.04,
+        "max_tick_cycles": 40271
+      },
+      {
+        "track": 21,
+        "bank": 5,
+        "ticks": 1200,
+        "writes": 9522,
+        "average_tick_cycles": 5712.33,
+        "max_tick_cycles": 42719
+      },
+      {
+        "track": 22,
+        "bank": 5,
+        "ticks": 1200,
+        "writes": 4707,
+        "average_tick_cycles": 4281.655833333333,
+        "max_tick_cycles": 32597
+      },
+      {
+        "track": 23,
+        "bank": 4,
+        "ticks": 1200,
+        "writes": 3470,
+        "average_tick_cycles": 4166.55,
+        "max_tick_cycles": 29292
+      },
+      {
+        "track": 24,
+        "bank": 4,
+        "ticks": 1200,
+        "writes": 4546,
+        "average_tick_cycles": 3839.675,
+        "max_tick_cycles": 38130
+      },
+      {
+        "track": 25,
+        "bank": 4,
+        "ticks": 1200,
+        "writes": 2490,
+        "average_tick_cycles": 3320.255,
+        "max_tick_cycles": 35900
+      },
+      {
+        "track": 26,
+        "bank": 5,
+        "ticks": 1200,
+        "writes": 6627,
+        "average_tick_cycles": 4685.185833333333,
+        "max_tick_cycles": 35660
+      },
+      {
+        "track": 27,
+        "bank": 2,
+        "ticks": 1200,
+        "writes": 1407,
+        "average_tick_cycles": 2753.135,
+        "max_tick_cycles": 21784
+      },
+      {
+        "track": 28,
+        "bank": 5,
+        "ticks": 1200,
+        "writes": 2666,
+        "average_tick_cycles": 3251.818333333333,
+        "max_tick_cycles": 30154
+      },
+      {
+        "track": 29,
+        "bank": 4,
+        "ticks": 1200,
+        "writes": 5458,
+        "average_tick_cycles": 4568.679166666667,
+        "max_tick_cycles": 34688
+      },
+      {
+        "track": 30,
+        "bank": 6,
+        "ticks": 1200,
+        "writes": 5262,
+        "average_tick_cycles": 4593.3983333333335,
+        "max_tick_cycles": 36138
+      },
+      {
+        "track": 31,
+        "bank": 3,
+        "ticks": 1200,
+        "writes": 8379,
+        "average_tick_cycles": 5064.004166666667,
+        "max_tick_cycles": 41921
+      },
+      {
+        "track": 32,
+        "bank": 5,
+        "ticks": 1200,
+        "writes": 5232,
+        "average_tick_cycles": 4262.286666666667,
+        "max_tick_cycles": 38069
+      },
+      {
+        "track": 33,
+        "bank": 5,
+        "ticks": 1200,
+        "writes": 2830,
+        "average_tick_cycles": 3306.3416666666667,
+        "max_tick_cycles": 32464
+      },
+      {
+        "track": 34,
+        "bank": 1,
+        "ticks": 1200,
+        "writes": 8418,
+        "average_tick_cycles": 5002.700833333333,
+        "max_tick_cycles": 35145
+      },
+      {
+        "track": 35,
+        "bank": 10,
+        "ticks": 1200,
+        "writes": 132,
+        "average_tick_cycles": 1428.9908333333333,
+        "max_tick_cycles": 20601
+      },
+      {
+        "track": 36,
+        "bank": 10,
+        "ticks": 1200,
+        "writes": 8379,
+        "average_tick_cycles": 5063.008333333333,
+        "max_tick_cycles": 40651
+      },
+      {
+        "track": 37,
+        "bank": 3,
+        "ticks": 1200,
+        "writes": 5183,
+        "average_tick_cycles": 4483.248333333333,
+        "max_tick_cycles": 41317
+      },
+      {
+        "track": 38,
+        "bank": 7,
+        "ticks": 1200,
+        "writes": 5253,
+        "average_tick_cycles": 4070.3191666666667,
+        "max_tick_cycles": 39959
+      },
+      {
+        "track": 39,
+        "bank": 6,
+        "ticks": 1200,
+        "writes": 4697,
+        "average_tick_cycles": 3953.2616666666668,
+        "max_tick_cycles": 37821
+      },
+      {
+        "track": 40,
+        "bank": 9,
+        "ticks": 1200,
+        "writes": 3416,
+        "average_tick_cycles": 3344.3733333333334,
+        "max_tick_cycles": 30454
+      },
+      {
+        "track": 41,
+        "bank": 9,
+        "ticks": 1200,
+        "writes": 4624,
+        "average_tick_cycles": 4015.1541666666667,
+        "max_tick_cycles": 37009
+      },
+      {
+        "track": 42,
+        "bank": 6,
+        "ticks": 1200,
+        "writes": 3676,
+        "average_tick_cycles": 3646.9766666666665,
+        "max_tick_cycles": 24769
+      },
+      {
+        "track": 43,
+        "bank": 9,
+        "ticks": 1200,
+        "writes": 6213,
+        "average_tick_cycles": 4633.403333333334,
+        "max_tick_cycles": 29695
+      },
+      {
+        "track": 44,
+        "bank": 8,
+        "ticks": 1200,
+        "writes": 2182,
+        "average_tick_cycles": 3483.865,
+        "max_tick_cycles": 31317
+      },
+      {
+        "track": 45,
+        "bank": 8,
+        "ticks": 1200,
+        "writes": 2463,
+        "average_tick_cycles": 3154.1725,
+        "max_tick_cycles": 26558
+      },
+      {
+        "track": 46,
+        "bank": 8,
+        "ticks": 1200,
+        "writes": 2518,
+        "average_tick_cycles": 3533.8258333333333,
+        "max_tick_cycles": 31463
+      },
+      {
+        "track": 47,
+        "bank": 6,
+        "ticks": 1200,
+        "writes": 4183,
+        "average_tick_cycles": 3972.04,
+        "max_tick_cycles": 40271
+      },
+      {
+        "track": 48,
+        "bank": 9,
+        "ticks": 1200,
+        "writes": 9522,
+        "average_tick_cycles": 5712.33,
+        "max_tick_cycles": 42719
+      },
+      {
+        "track": 49,
+        "bank": 9,
+        "ticks": 1200,
+        "writes": 4707,
+        "average_tick_cycles": 4281.655833333333,
+        "max_tick_cycles": 32597
+      },
+      {
+        "track": 50,
+        "bank": 8,
+        "ticks": 1200,
+        "writes": 3470,
+        "average_tick_cycles": 4166.55,
+        "max_tick_cycles": 29292
+      },
+      {
+        "track": 51,
+        "bank": 8,
+        "ticks": 1200,
+        "writes": 4546,
+        "average_tick_cycles": 3839.675,
+        "max_tick_cycles": 38130
+      },
+      {
+        "track": 52,
+        "bank": 8,
+        "ticks": 1200,
+        "writes": 2490,
+        "average_tick_cycles": 3320.255,
+        "max_tick_cycles": 35900
+      },
+      {
+        "track": 53,
+        "bank": 7,
+        "ticks": 1200,
+        "writes": 1407,
+        "average_tick_cycles": 2753.135,
+        "max_tick_cycles": 21784
+      },
+      {
+        "track": 54,
+        "bank": 9,
+        "ticks": 1200,
+        "writes": 2666,
+        "average_tick_cycles": 3251.818333333333,
+        "max_tick_cycles": 30154
+      },
+      {
+        "track": 55,
+        "bank": 8,
+        "ticks": 1200,
+        "writes": 5458,
+        "average_tick_cycles": 4568.679166666667,
+        "max_tick_cycles": 34688
+      }
+    ],
+    "fade_at": 900
+  }
+}

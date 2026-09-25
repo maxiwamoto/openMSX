@@ -64,8 +64,8 @@ prevent an exact musical comparison. These are game CPU-budget references.
 
 Theme A has about 200 sequencer calls/second versus about 60 measured original
 MSX FM service calls/second. Tables alone cannot remove translated register/state
-overhead or chip I/O. Next work is a Z80-native sequencer, no R800-only instructions,
-profiled and reference-checked before replacement.
+overhead or chip I/O. A subsequent handwritten Z80 implementation is measured below; game integration
+remains separate.
 
 ## Validation
 
@@ -85,3 +85,40 @@ profiled and reference-checked before replacement.
 
 These are bounded tests, not full-length coverage of every song or proof of
 hardware accuracy. The copyrighted music assets and demos remain local.
+
+## Handwritten standard-Z80 rewrite
+
+A new local implementation replaces translated x86 register bookkeeping with
+native channel/command/envelope/output/modulation routines. It uses only standard
+Z80 instructions; the same ROM runs on both CPUs, with the demo selecting R800
+ROM mode via the BIOS on a turbo R. Code, lookup tables and assets stay in ROM.
+Replay state reserves 976 bytes (including five alignment bytes), plus 32 bytes
+for demo state and the stack/BIOS workspace. No self-modifying code is used.
+
+| CPU / track | Previous optimized CPU | Native CPU | Late counter before / after |
+|---|---:|---:|---:|
+| Z80 / Theme A | 51.27% | 38.65% | 90 / 33 |
+| Z80 / Theme B | 32.49% | 24.75% | 76 / 14 |
+| R800 / Theme A | 25.05% | 18.69% | 6 / 2 |
+| R800 / Theme B | 16.03% | 11.85% | 3 / 1 |
+
+Same 20-second measurement scope and late-counter limitations as above. The core
+uses direct Z80 state access, ROM tables for tempo/instrument offsets/gate/PRNG,
+and an unrolled unsigned-remainder routine. This is compatible with the original
+music format and tuning data; it is not a claim of clean-room provenance.
+
+- All 55 entries pass 1,200 ticks against original x86 writes and normalized state,
+  with fade at tick 900. Stop/restart, temporary music, SSG effect restoration,
+  all 255 tempos, 5,000 seeded random cases and ROM-write guards pass.
+- Final ROM tests in openMSX match 309,460 Z80 and 315,461 R800 ordered musical
+  writes over the 55 eight-second excerpts on each CPU. Timer/GPIO exclusions and
+  mixer masking remain the same. These are not full-length song tests.
+- All 660 song/bank combinations, unused former asset buffers and missing-device
+  timeout pass. Standalone ASM rebuild matches the final demo byte for byte.
+- Minimum R800 address-to-data spacing remains 3.352 us over 12,351 writes,
+  above the 2.125 us target at nominal 8 MHz.
+
+[Native rewrite numeric results and hashes](makoto-native-replay-results.json).
+The demo, source bundle containing music assets and English game remain local.
+Z80 still has overruns and R800 has occasional late ticks; the original game's
+FM/MIDI service remains lighter. This is not yet an in-game replacement.
