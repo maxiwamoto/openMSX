@@ -37,6 +37,9 @@ namespace VDPAccessSlots {
 	enum class Delta : int;
 	class Calculator;
 }
+namespace VDPCmdCache {
+	enum class CachePenalty : int;
+}
 
 /** Unified implementation of MSX Video Display Processors (VDPs).
   * MSX1 VDP is Texas Instruments TMS9918A or TMS9928A.
@@ -67,14 +70,30 @@ class VDP final : public MSXDevice, private VideoSystemChangeListener
                 , private Observer<Setting>
 {
 public:
+	static constexpr int CLK_MUL = 4;
+
 	/** Number of VDP clock ticks per second.
 	  */
-	static constexpr int TICKS_PER_SECOND = 3579545 * 6; // 21.5MHz;
+	static constexpr int TICKS_PER_SECOND = 3579545 * 6 * CLK_MUL; // 85.9MHz;
 	using VDPClock = Clock<TICKS_PER_SECOND>;
 
 	/** Number of VDP clock ticks per line.
 	  */
-	static constexpr int TICKS_PER_LINE = 1368;
+	static constexpr int TICKS_PER_LINE = 1368 * CLK_MUL;
+
+	static constexpr int TICKS_DIV_DLCLK = 4 * CLK_MUL;
+	static constexpr int TICKS_DIV_DHCLK = 2 * CLK_MUL;
+	static constexpr int TICKS_HSYNC_PERIOD = 100 * CLK_MUL;
+	static constexpr int TICKS_LEFT_ERASE_PERIOD = 102 * CLK_MUL;
+	static constexpr int TICKS_LEFT_BORDER_PERIOD = 56 * CLK_MUL;
+	static constexpr int TICKS_RIGHT_BORDER_PERIOD = 59 * CLK_MUL;
+	static constexpr int TICKS_RIGHT_ERASE_PERIOD = 27 * CLK_MUL;
+	static constexpr int TICKS_DISP_TEXT = 960 * CLK_MUL;
+	static constexpr int TICKS_DISP_BMP = 1024 * CLK_MUL;
+	static constexpr int TICKS_HDISP_PERIOD = TICKS_DISP_BMP;
+	static constexpr int TICKS_BL_LATCH = 144 * CLK_MUL;
+	static constexpr int TICKS_DELAY_400 = 400 * CLK_MUL;
+	static constexpr int TICKS_DELAY_27 = CLK_MUL == 1 ? 27 : 112;
 
 	// Number of lines per frame.
 	static constexpr int PAL_LINES = 313;
@@ -107,6 +126,74 @@ public:
 	 */
 	[[nodiscard]] PostProcessor* getPostProcessor() const;
 
+	[[nodiscard]] bool useHS() const {
+		return compatibleMemoryTiming ? isHS() : hasHS();
+	}
+
+	[[nodiscard]] bool isHS() const {
+		return hasHS() & ((controlRegs[20] & 0x01) != 0);
+	}
+
+	[[nodiscard]] bool isSVNS() const {
+		return hasSVNS() & ((controlRegs[20] & 0x02) != 0);
+	}
+
+	[[nodiscard]] bool isILNS() const {
+		return hasILNS() & ((controlRegs[20] & 0x04) != 0);
+	}
+
+	[[nodiscard]] bool isSP3() const {
+		return hasSP3() & ((controlRegs[20] & 0x08) != 0);
+	}
+
+	[[nodiscard]] bool isEPAL() const {
+		return hasEPAL() & ((controlRegs[20] & 0x10) != 0);
+	}
+
+	[[nodiscard]] bool isECOM() const {
+		return hasV58() ? !isV58() : (hasECOM() & ((controlRegs[20] & 0x20) != 0));
+	}
+
+	[[nodiscard]] bool isEVR() const {
+		return hasV58() ? !isV58() : (hasEVR() & ((controlRegs[20] & 0x40) != 0));
+	}
+
+	[[nodiscard]] bool isS16() const {
+		return hasS16() & ((controlRegs[20] & 0x80) != 0);
+	}
+
+	[[nodiscard]] bool isFIL() const {
+		return hasFIL() & ((controlRegs[21] & 0x40) != 0);
+	}
+
+	[[nodiscard]] bool isSPS() const {
+		return hasSPS() & ((controlRegs[25] & 0x80) != 0);
+	}
+
+	[[nodiscard]] bool isFID() const {
+		return hasV58() ? !isV58() : (hasFID() & ((controlRegs[21] & 0x01) == 0));
+	}
+
+	[[nodiscard]] bool isV58() const {
+		return hasV58() & ((controlRegs[21] & 0x01) != 0);
+	}
+
+	[[nodiscard]] bool isV9968_Old() const {
+		return (version & VM_V9968_OLD) != 0;
+	}
+
+	[[nodiscard]] bool isV9968_New() const {
+		return (version & VM_V9968_NEW) != 0;
+	}
+
+	[[nodiscard]] bool canEVR() const {
+		return hasEVR() || hasV58();
+	}
+
+	[[nodiscard]] bool canECOM() const {
+		return hasECOM() || hasV58();
+	}
+
 	/** Is this an MSX1 VDP?
 	  * @return True if this is an MSX1 VDP
 	  *   False otherwise.
@@ -120,6 +207,14 @@ public:
 	  */
 	[[nodiscard]] bool isVDPwithPALonly() const {
 		return (version & VM_PAL) != 0;
+	}
+
+	[[nodiscard]] constexpr bool isPlanar(DisplayMode mode, bool sp3Bit) const {
+		return mode.isPlanar() & !sp3Bit;
+	}
+
+	[[nodiscard]] constexpr bool isPlanar() const {
+		return isPlanar(displayMode, isSP3());
 	}
 
 	/** Is this a VDP that lacks mirroring?
@@ -148,6 +243,58 @@ public:
 	  */
 	[[nodiscard]] bool hasYJK() const {
 		return (version & VM_YJK) != 0;
+	}
+
+	[[nodiscard]] bool hasHS() const {
+		return (version & VM_V9968) != 0;
+	}
+
+	[[nodiscard]] bool hasSVNS() const {
+		return (version & VM_V9968) != 0;
+	}
+
+	[[nodiscard]] bool hasILNS() const {
+		return (version & VM_V9968) != 0;
+	}
+
+	[[nodiscard]] bool hasSP3() const {
+		return (version & VM_V9968) != 0;
+	}
+
+	[[nodiscard]] bool hasEPAL() const {
+		return (version & VM_V9968) != 0;
+	}
+
+	[[nodiscard]] bool hasECOM() const {
+		return (version & VM_V9968_OLD) != 0;
+	}
+
+	[[nodiscard]] bool hasEVR() const {
+		return (version & VM_V9968_OLD) != 0;
+	}
+
+	[[nodiscard]] bool hasS16() const {
+		return (version & VM_V9968) != 0;
+	}
+
+	[[nodiscard]] bool hasFIL() const {
+		return (version & VM_V9968) != 0;
+	}
+
+	[[nodiscard]] bool hasSPS() const {
+		return (version & VM_V9968) != 0;
+	}
+
+	[[nodiscard]] bool hasISR() const {
+		return (version & VM_V9968) != 0;
+	}
+
+	[[nodiscard]] bool hasFID() const {
+		return (version & VM_V9968_OLD) != 0;
+	}
+
+	[[nodiscard]] bool hasV58() const {
+		return (version & VM_V9968_NEW) != 0;
 	}
 
 	/** Get the (fixed) palette for this MSX1 VDP.
@@ -248,6 +395,13 @@ public:
 		return controlRegs[12] & 0x0F;
 	}
 
+	/** Gets the current back color for drawing font.
+	  * @return Color index [0..15].
+	  */
+	[[nodiscard]] uint8_t getFontBackgroundColor() const {
+		return controlRegs[12] & 0xFF;
+	}
+
 	/** Gets the current blink state.
 	  * @return True iff alternate colors / page should be displayed.
 	  */
@@ -284,6 +438,10 @@ public:
 		return vramPointer;
 	}
 
+	[[nodiscard]] int getSpsTopPlane() const {
+		return spsTopPlane;
+	}
+
 	/** Gets a palette entry.
 	  * @param index The index [0..15] in the palette.
 	  * @return Color value in the format of the palette registers:
@@ -292,7 +450,7 @@ public:
 	[[nodiscard]] uint16_t getPalette(unsigned index) const {
 		return palette[index];
 	}
-	[[nodiscard]] std::span<const uint16_t, 16> getPalette() const {
+	[[nodiscard]] std::span<const uint16_t, 256> getPalette() const {
 		return palette;
 	}
 
@@ -331,7 +489,7 @@ public:
 	  */
 	[[nodiscard]] bool spritesEnabled() const {
 		return displayEnabled &&
-		       (displayMode.getSpriteMode(isMSX1VDP()) != 0) &&
+		       (displayMode.getSpriteMode(isMSX1VDP(), isSP3()) != 0) &&
 		       spriteEnabled;
 	}
 
@@ -339,7 +497,7 @@ public:
 	  * mode 1 or 2. Is a tiny bit faster.
 	  */
 	[[nodiscard]] bool spritesEnabledFast() const {
-		assert(displayMode.getSpriteMode(isMSX1VDP()) != 0);
+		assert(displayMode.getSpriteMode(isMSX1VDP(), isSP3()) != 0);
 		return displayEnabled && spriteEnabled;
 	}
 
@@ -659,9 +817,9 @@ public:
 		// The text mode (40*6 = 240) pixels are not centered in the 256
 		// pixels of the other modes. And it's different between TMSxxx
 		// and V99x8. See https://github.com/openMSX/openMSX/issues/708
-		return 100 + 102 + 56
-			+ (horizontalAdjust - 7) * 4
-			+ (displayMode.isTextMode() ? (isMSX1VDP() ? 6 : 9) : 0) * 4;
+		return VDP::TICKS_HSYNC_PERIOD + VDP::TICKS_LEFT_ERASE_PERIOD + VDP::TICKS_LEFT_BORDER_PERIOD
+			+ (horizontalAdjust - 7) * VDP::TICKS_DIV_DLCLK
+			+ (displayMode.isTextMode() ? (isMSX1VDP() ? 6 : 9) : 0) * VDP::TICKS_DIV_DLCLK;
 	}
 
 	/** Gets the number of VDP clock ticks between start of line and the end
@@ -670,7 +828,7 @@ public:
 	  * are not actually border pixels (sprites appear in front of them).
 	  */
 	[[nodiscard]] int getLeftBorder() const {
-		return getLeftSprites() + (isBorderMasked() ? 8 * 4 : 0);
+		return getLeftSprites() + (isBorderMasked() ? 8 * VDP::TICKS_DIV_DLCLK : 0);
 	}
 
 	/** Gets the number of VDP clock ticks between start of line and the start
@@ -678,7 +836,7 @@ public:
 	  */
 	[[nodiscard]] int getRightBorder() const {
 		return getLeftSprites()
-			+ (displayMode.isTextMode() ? 960 : 1024);
+			+ (displayMode.isTextMode() ? VDP::TICKS_DISP_TEXT : VDP::TICKS_DISP_BMP);
 	}
 
 	/** Gets the number of VDP clock ticks between start of line and the time
@@ -687,7 +845,7 @@ public:
 	  * but disregards border mask.
 	  */
 	[[nodiscard]] int getLeftBackground() const {
-		return getLeftSprites() + getHorizontalScrollLow() * 4;
+		return getLeftSprites() + getHorizontalScrollLow() * VDP::TICKS_DIV_DLCLK;
 	}
 
 	/** Should only be used by SpriteChecker. Returns the current value
@@ -730,6 +888,8 @@ public:
 	/** Get the earliest access slot that is at least 'delta' cycles in
 	  * the future. */
 	[[nodiscard]] EmuTime getAccessSlot(EmuTime time, VDPAccessSlots::Delta delta) const;
+	[[nodiscard]] EmuTime getAccessSlot(EmuTime time, int delay, int wait, VDPCmdCache::CachePenalty penalty) const;
+	[[nodiscard]] EmuTime getCpuAccessSlot(EmuTime time) const;
 
 	/** Same as getAccessSlot(), but it can be _much_ faster for repeated
 	  * calls, e.g. in the implementation of VDP commands. However it does
@@ -767,7 +927,7 @@ public:
 			// - worst case the LMMM takes 120+64 cycles to fully process one pixel
 			// - the largest gap between access slots is 70 cycles
 			// - but if we're unlucky the CPU steals that slot
-			int LARGEST_STALL = 184 + 2 * 70;
+			int LARGEST_STALL = (184 + 2 * 70) * CLK_MUL;
 
 			t = now + VDPClock::duration(LARGEST_STALL);
 		}
@@ -791,7 +951,7 @@ public:
 	 */
 	[[nodiscard]] gl::ivec2 getMSXPos(EmuTime time) const {
 		auto ticks = getTicksThisFrame(time);
-		return {((ticks % VDP::TICKS_PER_LINE) - getLeftSprites()) / 2,
+		return {((ticks % VDP::TICKS_PER_LINE) - getLeftSprites()) / TICKS_DIV_DHCLK,
 		         (ticks / VDP::TICKS_PER_LINE) - getLineZero()};
 	}
 
@@ -819,9 +979,12 @@ private:
 	static constexpr unsigned VM_TOSHIBA_PALETTE  =  32; // set-> has Toshiba palette
 	static constexpr unsigned VM_YJK              =  64; // set-> has YJK (MSX2+)
 	static constexpr unsigned VM_YM2220_PALETTE   = 128; // set-> has YM2220 palette
+	static constexpr unsigned VM_V9968_OLD        = 256;
+	static constexpr unsigned VM_V9968_NEW        = 512;
+	static constexpr unsigned VM_V9968            = (512 | 256);
 
 	/** VDP version: the VDP model being emulated. */
-	enum VdpVersion : uint8_t {
+	enum VdpVersion : uint16_t {
 		/** MSX1 VDP, NTSC version.
 		  * TMS9918A has NTSC encoding built in,
 		  * while TMS9928A has color difference output;
@@ -860,6 +1023,12 @@ private:
 
 		/** MSX2+ and turbo R VDP. */
 		V9958      = VM_YJK,
+
+		/** MSX2+ and turbo R VDP. */
+		V9968_OLD  = VM_YJK | VM_V9968_OLD,
+
+		/** MSX2+ and turbo R VDP. */
+		V9968_NEW  = VM_YJK | VM_V9968_NEW,
 	};
 
 	struct SyncBase : public Schedulable {
@@ -1019,11 +1188,11 @@ private:
 		/** Length of horizontal blank (HR=1) in text mode, measured in VDP
 		  * ticks.
 		  */
-		static constexpr int HBLANK_LEN_TXT = 404;
+		static constexpr int HBLANK_LEN_TXT = 404 * VDP::CLK_MUL;
 		/** Length of horizontal blank (HR=1) in graphics mode, measured in VDP
 		  * ticks.
 		  */
-		static constexpr int HBLANK_LEN_GFX = 312;
+		static constexpr int HBLANK_LEN_GFX = 312 * VDP::CLK_MUL;
 		return (ticksThisFrame + TICKS_PER_LINE - getRightBorder()) % TICKS_PER_LINE
 		     < (displayMode.isTextMode() ? HBLANK_LEN_TXT : HBLANK_LEN_GFX);
 	}
@@ -1129,10 +1298,25 @@ private:
 	/** Display mode has changed.
 	  * Update displayMode's value and inform the Renderer.
 	  */
-	void updateDisplayMode(DisplayMode newMode, bool cmdBit, EmuTime time);
+	void updateDisplayMode(DisplayMode newMode, bool cmdBit, bool sp3Bit, EmuTime time);
+
+	/** EVR has changed.
+	  */
+	void updateAddressMask(bool evr);
 
 	// Observer<Setting>
 	void update(const Setting& setting) noexcept override;
+
+	/** update chip version value
+	  */
+	void updateChipVersion(bool v9968) {
+		statusReg1 &= ~(0x1F << 1);
+		statusReg1 |= v9968 ? (0x03 << 1) : (0x02 << 1);
+	}
+
+	/** update EVR
+	  */
+	void updateEVRMode(bool evr, EmuTime time);
 
 private:
 	Display& display;
@@ -1270,6 +1454,9 @@ private:
 	  */
 	OptionalIRQHelper irqHorizontal;
 
+	/** Manages vdp command end interrupt request.
+	  */
+	OptionalIRQHelper irqCommandEnd;
 	/** Time of last set display line counter reset sync point.
 	  * Before it, in the top border, the counter still belongs to the
 	  * previous frame.
@@ -1370,7 +1557,7 @@ private:
 
 	/** V9938 palette.
 	  */
-	std::array<uint16_t, 16> palette;
+	std::array<uint16_t, 256> palette;
 
 	/** Is the current scan position inside the display area?
 	  */
@@ -1434,6 +1621,10 @@ private:
 	/** Does the data latch have palette data (port #9A) stored?
 	  */
 	bool paletteDataStored;
+	uint8_t paletteDataPointer;
+	uint8_t paletteLatchR;
+	uint8_t paletteLatchG;
+	uint8_t paletteLatchB;
 
 	/** VRAM is read as soon as VRAM pointer changes.
 	  * TODO: Is this actually what happens?
@@ -1508,8 +1699,11 @@ private:
 	/** Cached CPU reference */
 	MSXCPU& cpu;
 	const uint8_t fixedVDPIOdelayCycles;
+
+	int spsTopPlane;
+	bool compatibleMemoryTiming;	// Use V9968 timing only in HS mode;
 };
-SERIALIZE_CLASS_VERSION(VDP, 14);
+SERIALIZE_CLASS_VERSION(VDP, 15);
 
 } // namespace openmsx
 

@@ -47,9 +47,13 @@ VDPVRAM::LogicalVRAMDebuggable::LogicalVRAMDebuggable(const VDP& vdp_)
 unsigned VDPVRAM::LogicalVRAMDebuggable::transform(unsigned address)
 {
 	const auto& vram = OUTER(VDPVRAM, logicalVRAMDebug);
-	return vram.vdp.getDisplayMode().isPlanar()
-	     ? ((address << 16) | (address >> 1)) & 0x1FFFF
-	     : address;
+	if (!vram.vdp.isPlanar()) {
+		return address;
+	} else if (vram.vdp.canEVR()) {
+		return ((address & 0x20000) | ((address << 16) & 0x10000) | ((address >> 1) & 0x0FFFF)) & 0x3FFFF;
+	} else {
+		return ((address << 16) | (address >> 1)) & 0x1FFFF;
+	}
 }
 
 uint8_t VDPVRAM::LogicalVRAMDebuggable::read(unsigned address, EmuTime time)
@@ -110,6 +114,7 @@ VDPVRAM::VDPVRAM(VDP& vdp_, unsigned size, EmuTime time)
 	, physicalVRAMDebug(vdp, size)
 	, actualSize(size)
 	, vrMode(vdp.getVRMode())
+	, evrMode(vdp.isEVR())
 	, cmdReadWindow(data)
 	, cmdWriteWindow(data)
 	, nameTable(data)
@@ -125,7 +130,8 @@ VDPVRAM::VDPVRAM(VDP& vdp_, unsigned size, EmuTime time)
 	// Whole VRAM is cacheable.
 	// Because this window has no observer, any EmuTime can be passed.
 	// TODO: Move this to cache registration.
-	bitmapCacheWindow.setMask(0x1FFFF, ~0u << 17, EmuTime::zero());
+	bitmapCacheWindow.setMask(vdp.canEVR() ? 0x3FFFF : 0x1FFFF,
+							  vdp.canEVR() ? (~0u << 18) : (~0u << 17), EmuTime::zero());
 }
 
 void VDPVRAM::clear()
@@ -141,12 +147,12 @@ void VDPVRAM::clear()
 	}
 }
 
-void VDPVRAM::updateDisplayMode(DisplayMode mode, bool cmdBit, EmuTime time)
+void VDPVRAM::updateDisplayMode(DisplayMode mode, bool cmdBit, bool sp3Bit, EmuTime time)
 {
 	assert(vdp.isInsideFrame(time));
 	cmdEngine->updateDisplayMode(mode, cmdBit, time);
 	renderer->updateDisplayMode(mode, time);
-	spriteChecker->updateDisplayMode(mode, time);
+	spriteChecker->updateDisplayMode(mode, sp3Bit, time);
 }
 
 void VDPVRAM::updateDisplayEnabled(bool enabled, EmuTime time)
@@ -174,6 +180,10 @@ void VDPVRAM::setSizeMask(EmuTime time)
 		// VR = 0: 16K address space, CAS0/1 is determined by A14
 		: (std::min(std::bit_ceil(actualSize), 0x4000u) - 1) | (1u << 14)
 		) | (1u << 17); // CASX (expansion RAM) is always relevant
+
+	if (evrMode) {
+		newSizeMask = 0x3FFFF;
+	}
 
 	cmdReadWindow.setSizeMask(newSizeMask, time);
 	cmdWriteWindow.setSizeMask(newSizeMask, time);
@@ -218,6 +228,17 @@ void VDPVRAM::updateVRMode(bool newVRmode, EmuTime time)
 	}
 }
 
+void VDPVRAM::updateEVRMode(bool newEVRMode, EmuTime time)
+{
+	if (evrMode == newEVRMode) {
+		// The swapping below may only happen when the mode is
+		// actually changed. So this test is not only an optimization.
+		return;
+	}
+	evrMode = newEVRMode;
+	setSizeMask(time);
+}
+
 void VDPVRAM::setRenderer(Renderer* newRenderer, EmuTime time)
 {
 	renderer = newRenderer;
@@ -225,7 +246,8 @@ void VDPVRAM::setRenderer(Renderer* newRenderer, EmuTime time)
 	bitmapVisibleWindow.resetObserver();
 	// Set up bitmapVisibleWindow to full VRAM.
 	// TODO: Have VDP/Renderer set the actual range.
-	bitmapVisibleWindow.setMask(0x1FFFF, ~0u << 17, time);
+	bitmapVisibleWindow.setMask(vdp.canEVR() ? 0x3FFFF : 0x1FFFF,
+	                            vdp.canEVR() ? (~0u << 18) : (~0u << 17), time);
 	// TODO: If it is a good idea to send an initial sync,
 	//       then call setObserver before setMask.
 	bitmapVisibleWindow.setObserver(renderer);

@@ -250,12 +250,13 @@ public:
 		assert((size & 1) == 0);
 		unsigned endIndex = index + size - 1;
 		unsigned areaBits = Math::floodRight(index ^ endIndex);
-		areaBits = ((areaBits << 16) | (areaBits >> 1)) & 0x1FFFF & sizeMask;
+		areaBits = ((areaBits & 0x20000) | ((areaBits << 16) & 0x10000) | ((areaBits >> 1) & 0x0FFFF)) & sizeMask;
 		(void)areaBits;
 		assert((areaBits & effectiveBaseMask) == areaBits);
 		assert((areaBits & ~indexMask)        == areaBits);
 		assert(isEnabled());
-		unsigned addr = effectiveBaseMask & (indexMask | (index >> 1));
+		index = (index & 0x20000) | ((index >> 1) & 0xFFFF);
+		unsigned addr = effectiveBaseMask & (indexMask | index);
 		const uint8_t* ptr0 = &data[addr | 0x00000];
 		const uint8_t* ptr1 = &data[addr | 0x10000];
 		return {std::span<const uint8_t, size / 2>{ptr0, size / 2},
@@ -515,7 +516,7 @@ public:
 	  * @param cmdBit Are VDP commands allowed in non-bitmap mode.
 	  * @param time The moment in emulated time this change occurs.
 	  */
-	void updateDisplayMode(DisplayMode mode, bool cmdBit, EmuTime time);
+	void updateDisplayMode(DisplayMode mode, bool cmdBit, bool sp3Bit, EmuTime time);
 
 	/** Used by the VDP to signal display enabled changes.
 	  * Both the regular border start/end and forced blanking by clearing
@@ -536,6 +537,12 @@ public:
 	  * @param time The moment in emulated time this change occurs.
 	  */
 	void updateVRMode(bool mode, EmuTime time);
+
+	/**
+	  *
+	  *
+	  */
+	void updateEVRMode(bool mode, EmuTime time);
 
 	void setRenderer(Renderer* renderer, EmuTime time);
 
@@ -686,7 +693,11 @@ private:
 	  */
 	bool vrMode;
 
-public:
+	/** Corresponds to the EVR bit (bit 6 in VDP register 20).
+	  */
+	bool evrMode;
+
+	public:
 	VRAMWindow cmdReadWindow;
 	VRAMWindow cmdWriteWindow;
 	VRAMWindow nameTable;

@@ -16,7 +16,7 @@ namespace openmsx {
 class ImGuiBitmapViewer final : public ImGuiPart
 {
 public:
-	enum ScrnMode : int { SCR5, SCR6, SCR7, SCR8, SCR11, SCR12, OTHER }; // must be in sync with VDPCmdEngine 'scrnMode'
+	enum ScrnMode : int { SCR5, SCR6, SCR7, SCR7NP, SCR8, SCR8NP, SCR11, SCR11NP, SCR12, SCR12NP, OTHER };
 
 public:
 	ImGuiBitmapViewer(ImGuiManager& manager_, size_t index);
@@ -27,8 +27,8 @@ public:
 	void paint(MSXMotherBoard* motherBoard) override;
 
 private:
-	void renderBitmap(std::span<const uint8_t> vram, std::span<const uint32_t, 16> palette16,
-	                  int mode, int lines, int page, uint32_t* output) const;
+	void renderBitmap(std::span<const uint8_t> vram, std::span<const uint32_t, 256> palette16,
+	                  bool isEPAL, int mode, int lines, int page, uint32_t* output) const;
 
 public:
 	bool show = true;

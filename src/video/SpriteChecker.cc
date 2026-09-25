@@ -105,7 +105,7 @@ inline void SpriteChecker::checkSprites1(int minLine, int maxLine)
 	// Calculate display line.
 	// This is the line sprites are checked at; the line they are displayed
 	// at is one lower.
-	int displayDelta = vdp.getVerticalScroll() - vdp.getLineZero();
+	int displayDelta = (vdp.isSVNS() ? 0 : vdp.getVerticalScroll()) - vdp.getLineZero();
 
 	// Get sprites for this line and detect 5th sprite if any.
 	bool limitSprites = limitSpritesSetting.getBoolean();
@@ -116,11 +116,12 @@ inline void SpriteChecker::checkSprites1(int minLine, int maxLine)
 	uint8_t patternIndexMask = size == 16 ? 0xFC : 0xFF;
 	int fifthSpriteNum  = -1;  // no 5th sprite detected yet
 	int fifthSpriteLine = 999; // larger than any possible valid line
+	int maxVisible = vdp.isS16() ? 16 : 4;
 
-	int sprite = 0;
-	for (/**/; sprite < 32; ++sprite) {
+	int sprite = vdp.isSPS() ? (vdp.getSpsTopPlane() & 31) : 0;
+	for (int count = 0; count < 32; ++count, sprite = vdp.isSPS() ? ((sprite + SPS_NEXT_PLANE) & 31) : (sprite + 1)) {
 		int y = attributePtr[4 * sprite + 0];
-		if (y == 208) break;
+		if (y == 208 && !vdp.isSPS()) break;
 
 		for (int line = minLine; line < maxLine; ++line) { // 'line' changes in loop
 			// Calculate line number within the sprite.
@@ -133,7 +134,7 @@ inline void SpriteChecker::checkSprites1(int minLine, int maxLine)
 			}
 
 			auto visibleIndex = spriteCount[line];
-			if (visibleIndex == 4) {
+			if (visibleIndex == maxVisible) {
 				// Find earliest line where this condition occurs.
 				if (line < fifthSpriteLine) {
 					fifthSpriteLine = line;
@@ -150,6 +151,9 @@ inline void SpriteChecker::checkSprites1(int minLine, int maxLine)
 			uint8_t colorAttrib = attributePtr[4 * sprite + 3];
 			if (colorAttrib & 0x80) sip.x -= 32;
 			sip.colorAttrib = colorAttrib;
+
+			// In SpriteMode1, set the palette set number to 0.
+			sip.paletteSet = 0x00;
 
 			spriteCount[line] = visibleIndex + 1;
 		}
@@ -198,7 +202,7 @@ inline void SpriteChecker::checkSprites1(int minLine, int maxLine)
 	bool can0collide = vdp.canSpriteColor0Collide();
 	for (auto line : xrange(minLine, maxLine)) {
 		int minXCollision = 999;
-		for (int i = std::min<int>(4, spriteCount[line]); --i >= 1; /**/) {
+		for (int i = std::min<int>(maxVisible, spriteCount[line]); --i >= 1; /**/) {
 			auto color1 = spriteBuffer[line][i].colorAttrib & 0xf;
 			if (!can0collide && (color1 == 0)) continue;
 			int x_i = spriteBuffer[line][i].x;
@@ -267,7 +271,7 @@ inline void SpriteChecker::checkSprites2(int minLine, int maxLine)
 	// Calculate display line.
 	// This is the line sprites are checked at; the line they are displayed
 	// at is one lower.
-	int displayDelta = vdp.getVerticalScroll() - vdp.getLineZero();
+	int displayDelta = (vdp.isSVNS() ? 0 : vdp.getVerticalScroll()) - vdp.getLineZero();
 
 	// Get sprites for this line and detect 5th sprite if any.
 	bool limitSprites = limitSpritesSetting.getBoolean();
@@ -277,17 +281,20 @@ inline void SpriteChecker::checkSprites2(int minLine, int maxLine)
 	int patternIndexMask = (size == 16) ? 0xFC : 0xFF;
 	int ninthSpriteNum  = -1;  // no 9th sprite detected yet
 	int ninthSpriteLine = 999; // larger than any possible valid line
+	int maxVisible = vdp.isS16() ? 16 : 8;
 
 	// Because it gave a measurable performance boost, we duplicated the
 	// code for planar and non-planar modes.
-	int sprite = 0;
+	bool isEPAL = vdp.isEPAL();
+	int sprite = vdp.isSPS() ? (vdp.getSpsTopPlane() & 31) : 0;
 	if (planar) {
+		uint8_t currentPaletteSet = 0x00;
 		auto [attributePtr0, attributePtr1] =
 			vram.spriteAttribTable.getReadAreaPlanar<32 * 4>(512);
 		// TODO: Verify CC implementation.
-		for (/**/; sprite < 32; ++sprite) {
+		for (int count = 0; count < 32; ++count, sprite = vdp.isSPS() ? ((sprite + SPS_NEXT_PLANE) & 31) : (sprite + 1)) {
 			int y = attributePtr0[2 * sprite + 0];
-			if (y == 216) break;
+			if (y == 216 && !vdp.isSPS()) break;
 
 			for (int line = minLine; line < maxLine; ++line) { // 'line' changes in loop
 				// Calculate line number within the sprite.
@@ -300,7 +307,7 @@ inline void SpriteChecker::checkSprites2(int minLine, int maxLine)
 				}
 
 				auto visibleIndex = spriteCount[line];
-				if (visibleIndex == 8) {
+				if (visibleIndex == maxVisible) {
 					// Find earliest line where this condition occurs.
 					if (line < ninthSpriteLine) {
 						ninthSpriteLine = line;
@@ -321,18 +328,23 @@ inline void SpriteChecker::checkSprites2(int minLine, int maxLine)
 				if (colorAttrib & 0x80) sip.x -= 32;
 				sip.colorAttrib = colorAttrib;
 
+				// Set the pallet-set number in EPAL mode
+				if ((colorAttrib & 0x40) == 0x00) currentPaletteSet = (attributePtr1[2 * sprite + 1] << 4) & 0xF0;
+				sip.paletteSet = isEPAL ? currentPaletteSet : 0x00;
+
 				// set sentinel (see below)
 				spriteBuffer[line][visibleIndex + 1].colorAttrib = 0;
 				spriteCount[line] = visibleIndex + 1;
 			}
 		}
 	} else {
+		uint8_t currentPaletteSet = 0x00;
 		auto attributePtr0 =
 			vram.spriteAttribTable.getReadArea<32 * 4>(512);
 		// TODO: Verify CC implementation.
-		for (/**/; sprite < 32; ++sprite) {
+		for (int count = 0; count < 32; ++count, sprite = vdp.isSPS() ? ((sprite + SPS_NEXT_PLANE) & 31) : (sprite + 1)) {
 			int y = attributePtr0[4 * sprite + 0];
-			if (y == 216) break;
+			if (y == 216 && !vdp.isSPS()) break;
 
 			for (int line = minLine; line < maxLine; ++line) { // 'line' changes in loop
 				// Calculate line number within the sprite.
@@ -345,7 +357,7 @@ inline void SpriteChecker::checkSprites2(int minLine, int maxLine)
 				}
 
 				auto visibleIndex = spriteCount[line];
-				if (visibleIndex == 8) {
+				if (visibleIndex == maxVisible) {
 					// Find earliest line where this condition occurs.
 					if (line < ninthSpriteLine) {
 						ninthSpriteLine = line;
@@ -370,6 +382,10 @@ inline void SpriteChecker::checkSprites2(int minLine, int maxLine)
 				sip.x = attributePtr0[4 * sprite + 1];
 				if (colorAttrib & 0x80) sip.x -= 32;
 				sip.colorAttrib = colorAttrib;
+
+				// Set the pallet-set number in EPAL mode
+				if ((colorAttrib & 0x40) == 0x00) currentPaletteSet = (attributePtr0[4 * sprite + 3] << 4) & 0xF0;
+				sip.paletteSet = isEPAL ? currentPaletteSet : 0x00;
 
 				// Set sentinel. Sentinel is actually only
 				// needed for sprites with CC=1.
@@ -432,7 +448,7 @@ inline void SpriteChecker::checkSprites2(int minLine, int maxLine)
 	for (auto line : xrange(minLine, maxLine)) {
 		int minXCollision = 999; // no collision
 		std::span<SpriteInfo, 32 + 1> visibleSprites = spriteBuffer[line];
-		for (int i = std::min<int>(8, spriteCount[line]); --i >= 1; /**/) {
+		for (int i = std::min<int>(maxVisible, spriteCount[line]); --i >= 1; /**/) {
 			auto colorAttrib1 = visibleSprites[i].colorAttrib;
 			if (!can0collide && ((colorAttrib1 & 0xf) == 0)) continue;
 			// If CC or IC is set, this sprite cannot collide.
@@ -476,6 +492,177 @@ inline void SpriteChecker::checkSprites2(int minLine, int maxLine)
 			collisionX = minXCollision + 12;
 			collisionY = line - vdp.getLineZero() + 8;
 			return; // don't check lines with higher Y-coord
+		}
+	}
+}
+
+void SpriteChecker::updateSprites3(int limit)
+{
+	if (vdp.spritesEnabledFast()) {
+		if (vdp.isDisplayEnabled()) {
+			// in display area
+			checkSprites3(currentLine, limit);
+		} else {
+			// in border, only check last line of top border
+			int l0 = vdp.getLineZero() - 1;
+			if ((currentLine <= l0) && (l0 < limit)) {
+				checkSprites3(l0, l0 + 1);
+			}
+		}
+	}
+	currentLine = limit;
+}
+
+inline void SpriteChecker::checkSprites3(int minLine, int maxLine)
+{
+	int displayDelta = (vdp.isSVNS() ? 0 : vdp.getVerticalScroll()) - vdp.getLineZero();
+
+	// Get sprites for this line and detect 17th sprite if any.
+	bool limitSprites = limitSpritesSetting.getBoolean();
+	int size = vdp.getSpriteSize();
+	auto attributePtr = vram.spriteAttribTable.getReadArea<64 * 8>(0);
+	uint8_t patternIndexMask = size == 16 ? 0xFC : 0xFF;
+	int fifthSpriteNum  = -1;  // no 5th sprite detected yet
+	int fifthSpriteLine = 999; // larger than any possible valid line
+	int maxVisible = 16;
+
+	int sprite = vdp.isSPS() ? (vdp.getSpsTopPlane() & 63) : 0;
+	for (int count = 0; count < 64; ++count, sprite = vdp.isSPS() ? ((sprite + SPS_NEXT_PLANE) & 63) : (sprite + 1)) {
+		int y = attributePtr[8 * sprite + 0] | ((attributePtr[8 * sprite + 1] & 0x03) << 8);
+		y |= (y & 0x200) ? ~0x1FF : 0x000;
+
+		if (y == 216 && !vdp.isSPS()) break;
+
+		int x = attributePtr[8 * sprite + 4] | ((attributePtr[8 * sprite + 5] & 0x03) << 8);
+		x |= (x & 0x200) ? ~0x1FF : 0x000;
+		int mgx = attributePtr[8 * sprite + 6];
+		if (mgx == 0) mgx = 256;
+		int mgy = attributePtr[8 * sprite + 2];
+		if (mgy == 0) mgy = 256;
+
+		uint8_t sz = (attributePtr[8 * sprite + 1] >> 6) & 0x03;	// size
+		uint8_t pts = (attributePtr[8 * sprite + 5] >> 4) & 0x07;	// pattern set
+		uint8_t px = attributePtr[8 * sprite + 7] & 0x0F;			// pattern x
+		uint8_t py = (attributePtr[8 * sprite + 7] >> 4) & 0x0F;	// pattern y
+		bool rvy = (attributePtr[8 * sprite + 3] & 0x20) != 0;
+		bool rvx = (attributePtr[8 * sprite + 3] & 0x10) != 0;
+		uint8_t ps = attributePtr[8 * sprite + 3] & 0x0F;
+		uint8_t tp = (attributePtr[8 * sprite + 3] >> 6) & 0x03;
+
+		for (int line = minLine; line < maxLine; ++line) { // 'line' changes in loop
+			// Calculate line number within the sprite.
+			int displayLine = line + displayDelta;
+			int spriteLine = displayLine - y;
+			if (spriteLine >= mgy) {
+				break;
+			}
+			if (spriteLine < 0) {
+				line -= spriteLine;
+				line--;
+				continue;
+			}
+
+			auto visibleIndex = spriteCount[line];
+			if (visibleIndex == maxVisible) {
+				// Find earliest line where this condition occurs.
+				if (line < fifthSpriteLine) {
+					fifthSpriteLine = line;
+					fifthSpriteNum = sprite;
+				}
+				if (limitSprites) continue;
+			}
+
+			SpriteInfo& sip = spriteBuffer[line][visibleIndex];
+
+			// pattern
+			if (rvy) {
+				spriteLine = (mgy - spriteLine) - 1;
+			}
+			unsigned srcY = (16 << sz) * spriteLine / mgy;
+			unsigned row = ((pts << 8) | (py << 4)) + srcY;
+			unsigned offset = vdp.getSpritePatternTableBase() + ((row << 7) | (px << 3));
+			auto patternPtr = vram.spritePatternTable.getReadArea<8>(offset);
+			if (rvx) {
+				sip.pattern = (swapNibble(patternPtr[7]) << 24)
+							| (swapNibble(patternPtr[6]) << 16)
+							| (swapNibble(patternPtr[5]) <<  8)
+							| (swapNibble(patternPtr[4]) <<  0);
+				sip.pattern2 = (swapNibble(patternPtr[3]) << 24)
+							| (swapNibble(patternPtr[2]) << 16)
+							| (swapNibble(patternPtr[1]) <<  8)
+							| (swapNibble(patternPtr[0]) <<  0);
+			} else {
+				sip.pattern = (patternPtr[0] << 24)
+							| (patternPtr[1] << 16)
+							| (patternPtr[2] <<  8)
+							| (patternPtr[3] <<  0);
+				sip.pattern2 = (patternPtr[4] << 24)
+							| (patternPtr[5] << 16)
+							| (patternPtr[6] <<  8)
+							| (patternPtr[7] <<  0);
+			}
+
+			sip.x = x;
+			sip.mgx = mgx;
+			sip.paletteSet = ps;
+			sip.transparent = tp;
+			spriteCount[line] = visibleIndex + 1;
+		}
+	}
+
+	// Update status register.
+	uint8_t status = vdp.getStatusReg0();
+	if (fifthSpriteNum != -1) {
+		// Five sprites on a line.
+		// According to TMS9918.pdf 5th sprite detection is only
+		// active when F flag is zero.
+		if ((status & 0xC0) == 0) {
+			status = uint8_t(0x40 | (status & 0x20) | (fifthSpriteNum & 0x1F));
+		}
+	}
+	if (~status & 0x40) {
+		// No 5th sprite detected, store number of latest sprite processed.
+		status = (status & 0x20) | (uint8_t(std::min(sprite, 63)) & 0x1F);
+	}
+	vdp.setSpriteStatus(status);
+
+	// collision
+	if (vdp.getStatusReg0() & 0x20) return;
+	std::array<uint8_t, 256> col_buffer;
+	for (auto line : xrange(minLine, maxLine)) {
+		std::ranges::fill(col_buffer, 0);
+		int count = std::min<int>(maxVisible, spriteCount[line]);
+		for (int i = 0; i < count; i++) {
+			int dst_x = spriteBuffer[line][i].x;
+			int width = spriteBuffer[line][i].mgx;
+			if (dst_x >= 256) continue;
+			if (dst_x + width <= 0) continue;
+
+			int ofs_x = 0;
+			if (dst_x < 0) {
+				width += dst_x;
+				ofs_x += dst_x;
+				dst_x = 0;
+			}
+
+			uint64_t pattern = ((uint64_t)spriteBuffer[line][i].pattern << 32) | spriteBuffer[line][i].pattern2;
+			while (ofs_x < width) {
+				int pat_x = ofs_x * 16 / width;
+				uint8_t color = (pattern >> (60 - pat_x * 4)) & 0x0F;
+
+				if (color) {
+					if (col_buffer[dst_x]) {
+						vdp.setSpriteStatus(vdp.getStatusReg0() | 0x20);
+						collisionX = dst_x + 12;
+						collisionY = line - vdp.getLineZero() + 8;
+						return;
+					}
+					col_buffer[dst_x] = 1;
+				}
+
+				if (++dst_x >= 256) break;
+				ofs_x++;
+			}
 		}
 	}
 }

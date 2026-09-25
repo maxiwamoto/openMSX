@@ -38,7 +38,8 @@ public:
 	  *   are immediately picked up by convertLine.
 	  *   Used when YJK filter is active.
 	  */
-	BitmapConverter(std::span<const Pixel, 16 * 2> palette16,
+	BitmapConverter(std::span<const Pixel, 256>    palette16,
+	                std::span<const Pixel, 16>     palette16odd,
 	                std::span<const Pixel, 256>    palette256,
 	                std::span<const Pixel, 32768>  palette32768);
 
@@ -65,6 +66,16 @@ public:
 	                       std::span<const uint8_t, 128> vramPtr0,
 	                       std::span<const uint8_t, 128> vramPtr1);
 
+	/** Convert a line of V9938 VRAM to 256 or 512 host pixels.
+	  * Call this method in non-planar 256byte/line display modes (Graphic6 and Graphic7).
+	  * @param buf Buffer where host pixels will be written to.
+	  *            Depending on the screen mode, the buffer must contain at
+	  *            least 256 or 512 pixels, but more is allowed (the extra
+	  *            pixels aren't touched).
+	  * @param vramPtr Pointer to VRAM contents.
+	  */
+	void convertLineNonPlanar(std::span<Pixel> buf, std::span<const uint8_t, 256> vramPtr);
+
 	/** Select the display mode to use for scanline conversion.
 	  * @param mode_ The new display mode.
 	  */
@@ -78,6 +89,11 @@ public:
 	void palette16Changed()
 	{
 		dPaletteValid = false;
+	}
+
+	void setEPAL(bool enable)
+	{
+		enableEPAL = enable;
 	}
 
 private:
@@ -101,14 +117,25 @@ private:
 	                    std::span<const uint8_t, 128> vramPtr1) const;
 	void renderBogus(   std::span<Pixel, 256> buf) const;
 
+	void renderGraphic6_NonPlanar(	std::span<Pixel, 512> buf,
+	                     std::span<const uint8_t, 256> vramPtr0) const;
+	void renderGraphic7_NonPlanar(	std::span<Pixel, 256> buf,
+	                     std::span<const uint8_t, 256> vramPtr0) const;
+	void renderYJK_NonPlanar(		std::span<Pixel, 256> buf,
+	                     std::span<const uint8_t, 256> vramPtr0) const;
+	void renderYAE_NonPlanar(		std::span<Pixel, 256> buf,
+	                     std::span<const uint8_t, 256> vramPtr0) const;
+
 private:
-	std::span<const Pixel, 16 * 2> palette16;
+	std::span<const Pixel, 256>    palette16;
+	std::span<const Pixel, 16>     palette16odd;
 	std::span<const Pixel, 256>    palette256;
 	std::span<const Pixel, 32768>  palette32768;
 
 	std::array<DPixel, 16 * 16> dPalette;
 	DisplayMode mode;
 	bool dPaletteValid = false;
+	bool enableEPAL = false;
 };
 
 } // namespace openmsx

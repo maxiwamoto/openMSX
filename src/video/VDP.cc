@@ -65,7 +65,7 @@ static uint8_t getDelayCycles(const XMLElement& devices)
 /** The delay between openMSX's port-#98 access timestamp -- the start of T2 of
   * the Z80's I/O machine cycle -- and the moment the V9938 registers the CPU's
   * VRAM request. Measured to 28.9 +- 0.2 cycles, so it could also be 28. */
-static constexpr int CPU_REQUEST_DELAY = 29;
+static constexpr int CPU_REQUEST_DELAY = 29 * VDP::CLK_MUL;
 
 /** How far after openMSX's port-#98 read timestamp a pending VRAM read may
   * still have its access slot and be seen by that IN. The Z80 samples the data
@@ -75,7 +75,7 @@ static constexpr int CPU_REQUEST_DELAY = 29;
   * estimate, not a measurement; the case that matters -- the BIOS's INIR scroll
   * in TEXT2, 138 cycles per byte, where the slot table has gaps of up to 100
   * cycles -- needs 6. */
-static constexpr int CPU_READ_SAMPLE_DELAY = 9;
+static constexpr int CPU_READ_SAMPLE_DELAY = 9 * VDP::CLK_MUL;
 
 /** A CPU VRAM request that would have been granted a 'tight' slot costs the
   * command engine that slot anyway, to a dummy read, if it arrives this many
@@ -85,11 +85,11 @@ static constexpr int CPU_READ_SAMPLE_DELAY = 9;
   * 'displayStartSyncTime', and back 162 cycles into the line after it, which is
   * (202 - 162) cycles before 'vScanSyncTime'. (Both those sync points are at
   * cycle 202 of their line, where VR flips.) */
-static constexpr int SLOT_TABLE_START_LEAD = VDP::TICKS_PER_LINE + 202 - 162;
-static constexpr int SLOT_TABLE_END_LEAD = 202 - 162;
+static constexpr int SLOT_TABLE_START_LEAD = VDP::TICKS_PER_LINE + (202 - 162) * VDP::CLK_MUL;
+static constexpr int SLOT_TABLE_END_LEAD = (202 - 162) * VDP::CLK_MUL;
 
-static constexpr int DUMMY_WINDOW_LO = 18;
-static constexpr int DUMMY_WINDOW_HI = 22;
+static constexpr int DUMMY_WINDOW_LO = 18 * VDP::CLK_MUL;
+static constexpr int DUMMY_WINDOW_HI = 22 * VDP::CLK_MUL;
 
 VDP::VDP(const DeviceConfig& config)
 	: MSXDevice(config)
@@ -128,6 +128,7 @@ VDP::VDP(const DeviceConfig& config)
 	, frameStartTime(getCurrentTime())
 	, irqVertical  (getMotherBoard(), getName() + ".IRQvertical",   config)
 	, irqHorizontal(getMotherBoard(), getName() + ".IRQhorizontal", config)
+	, irqCommandEnd(getMotherBoard(), getName() + ".IRQCommandEnd", config)
 	, lineCountResetSyncTime(getCurrentTime())
 	, displayStartSyncTime(getCurrentTime())
 	, slotTableStartSyncTime(getCurrentTime())
@@ -180,6 +181,9 @@ VDP::VDP(const DeviceConfig& config)
 	else if (versionString == "TMS9129") version = TMS9129;
 	else if (versionString == "V9938") version = V9938;
 	else if (versionString == "V9958") version = V9958;
+	else if (versionString == "V9968") version = V9968_NEW;
+	else if (versionString == "V9968_OLD") version = V9968_OLD;
+	else if (versionString == "V9968_NEW") version = V9968_NEW;
 	else if (versionString == "YM2220PAL") version = YM2220PAL;
 	else if (versionString == "YM2220NTSC") version = YM2220NTSC;
 	else throw MSXException("Unknown VDP version \"", versionString, '"');
@@ -214,24 +218,74 @@ VDP::VDP(const DeviceConfig& config)
 	};
 	controlRegMask = isMSX1VDP() ? 0x07 : 0x3F;
 	controlValueMasks = isMSX1VDP() ? VALUE_MASKS_MSX1 : VALUE_MASKS_MSX2;
-	if (version == V9958) {
+	if (version == V9958 || version == V9968_OLD || version == V9968_NEW) {
 		// Enable V9958-specific control registers.
 		controlValueMasks[25] = 0x7F;
 		controlValueMasks[26] = 0x3F;
 		controlValueMasks[27] = 0x07;
+	}
+	if (hasHS()) {
+		controlValueMasks[20] |= 0x01;
+	}
+	if (hasSVNS()) {
+		controlValueMasks[20] |= 0x02;
+	}
+	if (hasILNS()) {
+		controlValueMasks[20] |= 0x04;
+	}
+	if (hasSP3()) {
+		controlValueMasks[20] |= 0x08;
+	}
+	if (hasEPAL()) {
+		controlValueMasks[16] |= 0xFF;
+		controlValueMasks[20] |= 0x10;
+	}
+	if (hasECOM()) {
+		controlValueMasks[20] |= 0x20;
+	}
+	if (hasEVR()) {
+		controlValueMasks[20] |= 0x40;
+	}
+	if (hasS16()) {
+		controlValueMasks[20] |= 0x80;
+	}
+	if (hasFIL()) {
+		controlValueMasks[21] |= 0x40;
+	}
+	if (hasISR()) {
+		controlValueMasks[21] |= 0x80;
+	}
+	if (hasSPS()) {
+		controlValueMasks[25] |= 0x80;
+	}
+	if (hasFID()) {
+		controlValueMasks[21] |= 0x01;
+	}
+	if (hasV58()) {
+		controlValueMasks[21] |= 0x01;
+	}
+
+	if (canEVR()) {
+		updateAddressMask(false);
 	}
 
 	resetInit(); // must be done early to avoid UMRs
 
 	// Video RAM.
 	EmuTime time = getCurrentTime();
-	unsigned vramSize =
-		(isMSX1VDP() ? 16 : config.getChildDataAsInt("vram", 0));
-	if (vramSize != one_of(16u, 64u, 128u, 192u)) {
-		throw MSXException(
-			"VRAM size of ", vramSize, "kB is not supported!");
+	unsigned vramSize;
+	if (canEVR()) {
+		vramSize = 256;
+	} else {
+		vramSize = (isMSX1VDP() ? 16 : config.getChildDataAsInt("vram", 0));
+		if (vramSize != one_of(16u, 64u, 128u, 192u)) {
+			throw MSXException(
+				"VRAM size of ", vramSize, "kB is not supported!");
+		}
 	}
 	vram = std::make_unique<VDPVRAM>(*this, vramSize * 1024, time);
+
+	compatibleMemoryTiming = config.getChildDataAsInt("timing", 0) != 0;
 
 	// Create sprite checker.
 	auto& renderSettings = display.getRenderSettings();
@@ -312,6 +366,7 @@ void VDP::resetInit()
 	registerDataStored = false;
 	writeAccess = false;
 	paletteDataStored = false;
+	paletteDataPointer = paletteLatchR = paletteLatchG = paletteLatchB = 0;
 	blinkState = false;
 	blinkCount = 0;
 	horizontalAdjust = 7;
@@ -319,7 +374,7 @@ void VDP::resetInit()
 	// real values, see execLineCountReset().
 	displayStart = (8 + getVerticalAdjust()
 	                + ((controlRegs[9] & 0x02) ? 54 : 27)) * TICKS_PER_LINE
-	             + 100 + 102;
+	             + VDP::TICKS_HSYNC_PERIOD + VDP::TICKS_LEFT_ERASE_PERIOD;
 	horizontalScanOffset = -1000 * TICKS_PER_LINE; // "never"
 
 	// TODO: Real VDP probably resets timing as well.
@@ -332,20 +387,62 @@ void VDP::resetInit()
 
 	// Init status registers.
 	statusReg0 = 0x00;
-	statusReg1 = (version == V9958 ? 0x04 : 0x00);
+	switch (version) {
+		default:
+			statusReg1 = 0x00 << 1;
+			break;
+		case V9958:
+			statusReg1 = 0x02 << 1;
+			break;
+		case V9968_OLD:
+		case V9968_NEW:
+			statusReg1 = 0;
+			updateChipVersion((controlRegs[21] & 0x01) == 0x00);
+			break;
+	}
 	statusReg2 = 0x0C;
 
 	// Update IRQ to reflect new register values.
 	irqVertical.reset();
 	irqHorizontal.reset();
+	irqCommandEnd.reset();
 
 	// From appendix 8 of the V9938 data book (page 148).
 	const std::array<uint16_t, 16> V9938_PALETTE = {
 		0x000, 0x000, 0x611, 0x733, 0x117, 0x327, 0x151, 0x627,
 		0x171, 0x373, 0x661, 0x664, 0x411, 0x265, 0x555, 0x777
 	};
+	// From vdp_color_palette.v
+	std::array<uint16_t, 16> V9968_PALETTE = {
+		(0b00000 << 5) | (0b00000 << 0) | (0b00000 << 10), // color#0
+		(0b00000 << 5) | (0b00000 << 0) | (0b00000 << 10), // color#1
+		(0b00100 << 5) | (0b00100 << 0) | (0b11011 << 10), // color#2
+		(0b01101 << 5) | (0b01101 << 0) | (0b11111 << 10), // color#3
+		(0b00100 << 5) | (0b11111 << 0) | (0b00100 << 10), // color#4
+		(0b01001 << 5) | (0b11111 << 0) | (0b01101 << 10), // color#5
+		(0b10110 << 5) | (0b00100 << 0) | (0b00100 << 10), // color#6
+		(0b01001 << 5) | (0b11111 << 0) | (0b11011 << 10), // color#7
+		(0b11111 << 5) | (0b00100 << 0) | (0b00100 << 10), // color#8
+		(0b11111 << 5) | (0b01101 << 0) | (0b01101 << 10), // color#9
+		(0b11011 << 5) | (0b00100 << 0) | (0b11011 << 10), // color#10
+		(0b11011 << 5) | (0b01101 << 0) | (0b11011 << 10), // color#11
+		(0b00100 << 5) | (0b00100 << 0) | (0b10010 << 10), // color#12
+		(0b11011 << 5) | (0b10110 << 0) | (0b01001 << 10), // color#13
+		(0b10110 << 5) | (0b10110 << 0) | (0b10110 << 10), // color#14
+		(0b11111 << 5) | (0b11111 << 0) | (0b11111 << 10)  // color#15
+	};
 	// Init the palette.
-	palette = V9938_PALETTE;
+	if (hasEPAL()) {
+		for (auto i : xrange(256)) {
+			palette[i] = V9968_PALETTE[i & 15];
+		}
+	} else {
+		for (auto i : xrange(16)) {
+			palette[i] = V9938_PALETTE[i];
+		}
+	}
+	//
+	spsTopPlane = 0;
 }
 
 void VDP::resetMasks(EmuTime time)
@@ -487,6 +584,8 @@ void VDP::execVScan(EmuTime time)
 	if (controlRegs[1] & 0x20) {
 		irqVertical.set();
 	}
+
+	spsTopPlane = (spsTopPlane + SpriteChecker::SPS_NEXT_FRAME) & 63;
 }
 
 void VDP::execHScan()
@@ -512,8 +611,8 @@ int VDP::getScrollBurstTicks(EmuTime time) const
 	// The new value is used from the first 8-pixel group that starts at
 	// least LEAD ticks after the write (the burst for that group is fetched
 	// ahead of the beam).
-	static constexpr int LEAD = 16;
-	static constexpr int GROUP = 8 * 4; // 8 pixels of 4 ticks
+	static constexpr int LEAD = 16 * VDP::CLK_MUL;
+	static constexpr int GROUP = 8 * 4 * VDP::CLK_MUL; // 8 pixels of 4 ticks
 	if (!isDisplayEnabled() || !getDisplayMode().isBitmapMode()) return -1;
 	int ticks = getTicksThisFrame(time);
 	int lineStart = ticks - ticks % TICKS_PER_LINE;
@@ -527,6 +626,7 @@ void VDP::execSetMode(EmuTime time)
 	updateDisplayMode(
 		DisplayMode(controlRegs[0], controlRegs[1], controlRegs[25]),
 		getCmdBit(),
+		isSP3(),
 		time);
 }
 
@@ -563,6 +663,10 @@ void VDP::execCpuVramAccess(EmuTime time)
 void VDP::execSyncCmdDone(EmuTime time)
 {
 	cmdEngine->sync(time);
+
+	if (controlRegs[21] & 0x80) {
+		irqCommandEnd.set();
+	}
 }
 
 // The vertical timing of the V9938 hangs off one display line counter. It is
@@ -585,7 +689,7 @@ void VDP::scheduleLineCountReset(EmuTime time)
 	// The reset happens at the start of the processing of the line, see
 	// syncAtNextLine().
 	int ticks = (8 + getVerticalAdjust()) * TICKS_PER_LINE
-	          + 144 + (horizontalAdjust - 7) * 4;
+	          + VDP::TICKS_BL_LATCH + (horizontalAdjust - 7) * VDP::TICKS_DIV_DLCLK;
 	EmuTime resetTime = frameStartTime + ticks;
 	if (resetTime <= time) {
 		// Moved behind us by an adjust change. If a reset is still
@@ -625,7 +729,7 @@ void VDP::execLineCountReset(EmuTime time)
 	int resetLine = getTicksThisFrame(time) / TICKS_PER_LINE;
 	displayStart =
 		(resetLine + linesToDisplay) * TICKS_PER_LINE
-		+ 100 + 102; // VR flips at start of left border
+		+ VDP::TICKS_HSYNC_PERIOD + VDP::TICKS_LEFT_ERASE_PERIOD; // VR flips at start of left border
 	displayStartSyncTime = frameStartTime + displayStart;
 	syncDisplayStart.setSyncPoint(displayStartSyncTime);
 
@@ -691,8 +795,8 @@ void VDP::scheduleHScan(EmuTime time)
 	// reset, so the match sits at a fixed distance from the display start,
 	// possibly in the top border of the next frame. If that moment lies at
 	// or after the next reset, the counter never gets there.
-	horizontalScanOffset = displayStart - (100 + 102)
-		+ ((controlRegs[19] - controlRegs[23]) & 0xFF) * TICKS_PER_LINE
+	horizontalScanOffset = displayStart - (VDP::TICKS_HSYNC_PERIOD + VDP::TICKS_LEFT_ERASE_PERIOD)
+		+ ((controlRegs[19] - (isILNS() ? 0 : controlRegs[23])) & 0xFF) * TICKS_PER_LINE
 		+ getRightBorder();
 	if (horizontalScanOffset < 0) {
 		// Before this frame, so already behind us. (Possible while the
@@ -738,7 +842,7 @@ void VDP::frameStart(EmuTime time)
 	// TODO: Interlace is effectuated in border height, according to
 	//       the data book. Exactly when is the fixation point?
 	palTiming = (controlRegs[9] & 0x02) != 0;
-	interlaced = !isFastBlinkEnabled() && ((controlRegs[9] & 0x08) != 0);
+	interlaced = !isFastBlinkEnabled() && (((controlRegs[9] & 0x08) != 0) || isFIL());
 
 	// Blinking.
 	if ((blinkCount != 0) && !isFastBlinkEnabled()) { // counter active?
@@ -808,7 +912,7 @@ void VDP::writeIO(uint16_t port, uint8_t value, EmuTime time_)
 	}
 
 	assert(isInsideFrame(time));
-	switch (port & (isMSX1VDP() ? 0x01 : 0x03)) {
+	switch (port & (hasISR() ? 0x07 : (isMSX1VDP() ? 0x01 : 0x03))) {
 	case 0: // VRAM data write
 		vramWrite(value, time);
 		registerDataStored = false;
@@ -859,15 +963,43 @@ void VDP::writeIO(uint16_t port, uint8_t value, EmuTime time_)
 		}
 		break;
 	case 2: // Palette data write
-		if (paletteDataStored) {
-			unsigned index = controlRegs[16];
-			uint16_t grb = ((value << 8) | dataLatch) & 0x777;
-			setPalette(index, grb, time);
-			controlRegs[16] = (index + 1) & 0x0F;
-			paletteDataStored = false;
+		if (isEPAL()) {
+			switch (paletteDataPointer & 0x03) {
+				case 0:	// R
+					paletteLatchR = value & 31;
+					break;
+				case 1:	// G
+					paletteLatchG = value & 31;
+					break;
+				case 2:	// B
+					paletteLatchB = value & 31;
+					break;
+			}
+			if (++paletteDataPointer >= 3) {
+				paletteDataPointer = 0;
+				setPalette(controlRegs[16] & 0xFF, (paletteLatchG << 10) | (paletteLatchR << 5) | paletteLatchB, time);
+				controlRegs[16] = (controlRegs[16] + 1) & 0xFF;
+			}
 		} else {
-			dataLatch = value;
-			paletteDataStored = true;
+			if (paletteDataStored) {
+				unsigned index = controlRegs[16] & 0x0F;
+				uint16_t grb = ((value << 8) | dataLatch) & 0x777;
+				if (hasEPAL()) {
+					uint8_t g = (grb >> 8) & 7;
+					uint8_t r = (grb >> 4) & 7;
+					uint8_t b = (grb >> 0) & 7;
+					g = (g << 2) | (g >> 1);
+					r = (r << 2) | (r >> 1);
+					b = (b << 2) | (b >> 1);
+					grb = (g << 10) | (r << 5) | (b << 0);
+				}
+				setPalette(index, grb, time);
+				controlRegs[16] = (index + 1) & 0x0F;
+				paletteDataStored = false;
+			} else {
+				dataLatch = value;
+				paletteDataStored = true;
+			}
 		}
 		break;
 	case 3: { // Indirect register write
@@ -879,6 +1011,24 @@ void VDP::writeIO(uint16_t port, uint8_t value, EmuTime time_)
 		if ((regNr & 0x80) == 0) {
 			// Auto-increment.
 			controlRegs[17] = (regNr + 1) & 0x3F;
+		}
+		break;
+	}
+	case 4: {	// interrupt clear register
+		if (hasISR()) {
+			if (value & 0x01) {
+				// clear H bit
+				statusReg0 &= ~0x80;
+				irqVertical.reset();
+			}
+			if (value & 0x02) {
+				// clear FH bit
+				irqHorizontal.reset();
+			}
+			if (value & 0x04) {
+				// clear CEI bit
+				irqCommandEnd.reset();
+			}
 		}
 		break;
 	}
@@ -905,7 +1055,7 @@ uint8_t VDP::peekRegister(unsigned address, EmuTime time) const
 {
 	if (address < 0x20) {
 		return controlRegs[address];
-	} else if (address < 0x2F) {
+	} else if (address < 0x3B) {
 		return cmdEngine->peekCmdReg(narrow<uint8_t>(address - 0x20), time);
 	} else {
 		return 0xFF;
@@ -959,7 +1109,20 @@ void VDP::scheduleCpuVramAccess(bool isRead, uint8_t write, EmuTime time)
 	// VDP goes on to lose.
 	if (!isRead) cpuVramData = write;
 
-	if (isMSX1VDP()) {
+	if (useHS()) {
+		if (pendingCpuAccess) {
+			syncCpuVramAccess.removeSyncPoint();
+			execCpuVramAccess(time);
+		}
+		cpuVramReqIsRead = isRead;
+		cpuVramReqData = cpuVramData;
+		if (allowTooFastAccess) {
+			executeCpuVramAccess(time);
+		} else {
+			pendingCpuAccess = true;
+			syncCpuVramAccess.setSyncPoint(getCpuAccessSlot(time));
+		}
+	} else if (isMSX1VDP()) {
 		scheduleTMS99x8VramAccess(isRead, time);
 	} else {
 		scheduleV99x8VramAccess(isRead, time);
@@ -1101,11 +1264,11 @@ bool VDP::cpuRequestIsTooEarly(EmuTime request) const
 	// does: a line carries only 4 cycles of it. Only the marginal cases need
 	// the exact distance, and those are always within a few cycles, so this
 	// also keeps the tick counts below well inside 32 bits.
-	if (request >= (previousCpuSlot + VDPClock::duration(5))) [[likely]] {
+	if (request >= (previousCpuSlot + VDPClock::duration(5 * CLK_MUL))) [[likely]] {
 		return false;
 	}
 	int tick = getTicksThisFrame(request) % TICKS_PER_LINE;
-	int threshold = previousCpuSlotIsLate ? -1 : 1;
+	int threshold = (previousCpuSlotIsLate ? -1 : 1) * CLK_MUL;
 
 	if (request >= previousCpuSlot) {
 		// 0 to 4 cycles after it
@@ -1149,16 +1312,22 @@ void VDP::flushCpuVramAccesses(EmuTime time)
 void VDP::executeCpuVramAccess(EmuTime time)
 {
 	int addr = (controlRegs[14] << 14) | vramPointer;
-	if (displayMode.isPlanar()) {
+	if (isPlanar()) {
 		// note: also extended VRAM is interleaved,
 		//       because there is only 64kB it's interleaved
 		//       with itself (every byte repeated twice)
-		addr = ((addr << 16) | (addr >> 1)) & 0x1FFFF;
+		if (canEVR()) {
+			addr = ((addr & 0x20000) | ((addr << 16) & 0x10000) | ((addr >> 1) & 0x0FFFF)) & 0x3FFFF;
+		} else {
+			addr = ((addr << 16) | (addr >> 1)) & 0x1FFFF;
+		}
 	}
 
 	bool doAccess = [&] {
 		if (!cpuExtendedVram) [[likely]] {
 			return true;
+		} else if (canEVR()) {
+			return false;
 		} else if (vram->getSize() == 192 * 1024) [[likely]] {
 			addr = 0x20000 | (addr & 0xFFFF);
 			return true;
@@ -1183,7 +1352,7 @@ void VDP::executeCpuVramAccess(EmuTime time)
 	vramPointer = (vramPointer + 1) & 0x3FFF;
 	if (vramPointer == 0 && displayMode.isV9938Mode()) {
 		// In MSX2 video modes, pointer range is 128K.
-		controlRegs[14] = (controlRegs[14] + 1) & 0x07;
+		controlRegs[14] = (controlRegs[14] + 1) & controlValueMasks[14];
 	}
 }
 
@@ -1191,6 +1360,18 @@ EmuTime VDP::getAccessSlot(EmuTime time, VDPAccessSlots::Delta delta) const
 {
 	return VDPAccessSlots::getAccessSlot(
 		getFrameStartTime(), time, delta, *this);
+}
+
+EmuTime VDP::getAccessSlot(EmuTime time, int delay, int wait, VDPCmdCache::CachePenalty penalty) const
+{
+	return VDPAccessSlots::getAccessSlot(
+		getFrameStartTime(), time, delay, wait, penalty, *this);
+}
+
+EmuTime VDP::getCpuAccessSlot(EmuTime time) const
+{
+	return VDPAccessSlots::getCpuAccessSlot(
+		getFrameStartTime(), time, *this);
 }
 
 VDPAccessSlots::Calculator VDP::getAccessSlotCalculator(
@@ -1220,8 +1401,8 @@ uint8_t VDP::peekStatusReg(uint8_t reg, EmuTime time) const
 				// afterMatch can still be negative at this
 				// point, see scheduleHScan()
 			}
-			int matchLength = (displayMode.isTextMode() ? 87 : 59)
-			                  + 27 + 100 + 102;
+			int matchLength = (displayMode.isTextMode() ? (87 * VDP::CLK_MUL) : (59 * VDP::CLK_MUL))
+			                  + VDP::TICKS_DELAY_27 + VDP::TICKS_HSYNC_PERIOD + VDP::TICKS_LEFT_ERASE_PERIOD;
 			return statusReg1 |
 			       (0 <= afterMatch && afterMatch < matchLength);
 		}
@@ -1297,7 +1478,7 @@ uint8_t VDP::readIO(uint16_t port, EmuTime time_)
 
 	registerDataStored = false; // Abort any port #1 writes in progress.
 
-	switch (port & (isMSX1VDP() ? 0x01 : 0x03)) {
+	switch (port & (hasISR() ? 0x07 : (isMSX1VDP() ? 0x01 : 0x03))) {
 	case 0: // VRAM data read
 		return vramRead(time);
 	case 1: // Status register read
@@ -1306,6 +1487,14 @@ uint8_t VDP::readIO(uint16_t port, EmuTime time_)
 	case 2:
 	case 3:
 		return 0xFF;
+	case 4: {
+		if (hasISR()) {
+			return ((statusReg0 & 0x80) ? 0x01 : 0x00)					// F
+				   | ((peekStatusReg(1, time) & 0x01) ? 0x02 : 0x00)	// FH
+				   | (irqCommandEnd.getState() ? 0x04 : 0x00);			// CEI
+		}
+		return 0xFF;
+	}
 	default:
 		UNREACHABLE;
 	}
@@ -1323,10 +1512,10 @@ void VDP::changeRegister(uint8_t reg, uint8_t val, EmuTime time)
 		// MXC belongs to CPU interface;
 		// other bits in this register belong to command engine.
 		if (reg == 45) {
-			cpuExtendedVram = (val & 0x40) != 0;
+			cpuExtendedVram = ((val & 0x40) != 0) && !canEVR() && !isECOM();
 		}
 		// Pass command register writes to command engine.
-		if (reg < 47) {
+		if (reg < (canECOM() ? 59 : 47)) {
 			cmdEngine->setCmdReg(reg - 32, val, time);
 		}
 		return;
@@ -1391,7 +1580,7 @@ void VDP::changeRegister(uint8_t reg, uint8_t val, EmuTime time)
 		// old code does not hurt.
 		// Eventually this line should be re-enabled.
 		/*
-		if (displayMode.isPlanar()) {
+		if (isPlanar()) {
 			base = ((base << 16) | (base >> 1)) & 0x1FFFF;
 		}
 		*/
@@ -1433,10 +1622,42 @@ void VDP::changeRegister(uint8_t reg, uint8_t val, EmuTime time)
 	case 16:
 		// Any half-finished palette loads are aborted.
 		paletteDataStored = false;
+		paletteDataPointer = 0;
 		break;
 	case 18:
 		if (change & 0x0F) {
 			syncAtNextLine(syncHorAdjust, time);
+		}
+		break;
+	case 20:
+		if (hasSP3() && (change & 0x08)) {
+			updateDisplayMode(getDisplayMode(),
+							  getCmdBit(),
+							  (val & 0x08) != 0,
+							  time);
+		}
+		if (   (hasSP3()  && (change & 0x08))
+			|| (hasEPAL() && (change & 0x10))
+			|| (hasILNS() && (change & 0x04))
+			|| (hasSVNS() && (change & 0x02))) {
+			syncAtNextLine(syncSetMode, time);
+		}
+		if (hasEVR() && (change & 0x40)) {
+			updateEVRMode((val & 0x40) != 0, time);
+		}
+		if (hasS16()  && (change & 0x80)) {
+			syncAtNextLine(syncSetSprites, time);
+		}
+		break;
+	case 21:
+		if (hasFID() && (change & 0x01)) {
+			bool v9968 = (val & 0x01) == 0;
+			updateChipVersion(v9968);
+		}
+		if (hasV58() && (change & 0x01)) {
+			bool v9968 = (val & 0x01) == 0;
+			updateChipVersion(v9968);
+			updateEVRMode(v9968, time);
 		}
 		break;
 	case 23:
@@ -1447,6 +1668,7 @@ void VDP::changeRegister(uint8_t reg, uint8_t val, EmuTime time)
 		if (change & (DisplayMode::REG25_MASK | 0x40)) {
 			updateDisplayMode(getDisplayMode().updateReg25(val),
 			                  val & 0x40,
+							  isSP3(),
 			                  time);
 		}
 		if (change & 0x08) {
@@ -1563,7 +1785,7 @@ void VDP::syncAtNextLine(SyncBase& type, EmuTime time) const
 {
 	// The processing of a new line starts in the middle of the left erase,
 	// ~144 cycles after the sync signal. Adjust affects it. See issue #1310.
-	int offset = 144 + (horizontalAdjust - 7) * 4;
+	int offset = VDP::TICKS_BL_LATCH + (horizontalAdjust - 7) * VDP::TICKS_DIV_DLCLK;
 	int line = (getTicksThisFrame(time) + TICKS_PER_LINE - offset) / TICKS_PER_LINE;
 	int ticks = line * TICKS_PER_LINE + offset;
 	EmuTime nextTime = frameStartTime + ticks;
@@ -1581,7 +1803,7 @@ void VDP::updateNameBase(EmuTime time)
 	// old code does not hurt.
 	// Eventually this line should be re-enabled.
 	/*
-	if (displayMode.isPlanar()) {
+	if (isPlanar()) {
 		base = ((base << 16) | (base >> 1)) & 0x1FFFF;
 	}
 	*/
@@ -1658,50 +1880,77 @@ void VDP::updatePatternBase(EmuTime time)
 
 void VDP::updateSpriteAttributeBase(EmuTime time)
 {
-	int mode = displayMode.getSpriteMode(isMSX1VDP());
+	int mode = displayMode.getSpriteMode(isMSX1VDP(), isSP3());
 	if (mode == 0) {
 		vram->spriteAttribTable.disable(time);
 		return;
 	}
-	unsigned baseMask = (controlRegs[11] << 15) | (controlRegs[5] << 7) | ~(~0u << 7);
-	unsigned indexMask = mode == 1 ? ~0u << 7 : ~0u << 10;
-	if (displayMode.isPlanar()) {
-		baseMask = ((baseMask << 16) | (baseMask >> 1)) & 0x1FFFF;
-		indexMask = ((indexMask << 16) | ~(1 << 16)) & (indexMask >> 1);
+	unsigned baseMask;
+	switch (mode) {
+	default:
+		baseMask = (controlRegs[11] << 15) | (controlRegs[5] << 7) | ~(~0u << 7);
+		break;
+	case 3:
+		baseMask = (controlRegs[11] << 15) | (controlRegs[5] << 7) | ~(~0u << 9);
+		break;
+	}
+	unsigned indexMask;
+	switch (mode) {
+	default:
+		indexMask = ~0u << 7;
+		break;
+	case 2:
+		indexMask = ~0u << 10;
+		break;
+	case 3:
+		indexMask = ~0u << 9;
+		break;
+	}
+	if (isPlanar()) {
+		baseMask = ((baseMask & 0x20000) | ((baseMask << 16) & 0x10000) | ((baseMask >> 1) & 0x0FFFF)) & (canEVR() ? 0x3FFFF : 0x1FFFF);
+		indexMask = ((indexMask << 16) |  ~(1 << 16)) & (((indexMask >> 1) & 0x0FFFF) | (indexMask & 0x20000));
 	}
 	vram->spriteAttribTable.setMask(baseMask, indexMask, time);
 }
 
 void VDP::updateSpritePatternBase(EmuTime time)
 {
-	if (displayMode.getSpriteMode(isMSX1VDP()) == 0) {
+	switch (displayMode.getSpriteMode(isMSX1VDP(), isSP3())) {
+	case 1:
+	case 2: {
+		unsigned baseMask = (controlRegs[6] << 11) | ~(~0u << 11);
+		unsigned indexMask = ~0u << 11;
+		if (isPlanar()) {
+			baseMask = ((baseMask & 0x20000) | ((baseMask << 16) & 0x10000) | ((baseMask >> 1) & 0x0FFFF)) & (canEVR() ? 0x3FFFF : 0x1FFFF);
+			indexMask = ((indexMask << 16) | ~(1 << 16)) & (((indexMask >> 1) & 0x0FFFF) | (indexMask & 0x20000));
+		}
+		vram->spritePatternTable.setMask(baseMask, indexMask, time);
+		break;
+	}
+	case 3:
+		vram->spritePatternTable.setMask(0x3FFFFu, ~0x3FFFFu, time);
+		break;
+	default:
 		vram->spritePatternTable.disable(time);
-		return;
+		break;
 	}
-	unsigned baseMask = (controlRegs[6] << 11) | ~(~0u << 11);
-	unsigned indexMask = ~0u << 11;
-	if (displayMode.isPlanar()) {
-		baseMask = ((baseMask << 16) | (baseMask >> 1)) & 0x1FFFF;
-		indexMask = ((indexMask << 16) | ~(1 << 16)) & (indexMask >> 1);
-	}
-	vram->spritePatternTable.setMask(baseMask, indexMask, time);
 }
 
-void VDP::updateDisplayMode(DisplayMode newMode, bool cmdBit, EmuTime time)
+void VDP::updateDisplayMode(DisplayMode newMode, bool cmdBit, bool sp3Bit, EmuTime time)
 {
 	// Synchronize subsystems.
-	vram->updateDisplayMode(newMode, cmdBit, time);
+	vram->updateDisplayMode(newMode, cmdBit, sp3Bit, time);
 
 	// TODO: Is this a useful optimisation, or doesn't it help
 	//       in practice?
 	// What aspects have changed:
 	// Switched from planar to non-planar or vice versa.
 	bool planarChange =
-		newMode.isPlanar() != displayMode.isPlanar();
+		isPlanar(newMode, sp3Bit) != isPlanar(displayMode, isSP3());
 	// Sprite mode changed.
 	bool msx1 = isMSX1VDP();
 	bool spriteModeChange =
-		newMode.getSpriteMode(msx1) != displayMode.getSpriteMode(msx1);
+		newMode.getSpriteMode(msx1, sp3Bit) != displayMode.getSpriteMode(msx1, sp3Bit);
 
 	// Commit the new display mode.
 	displayMode = newMode;
@@ -1724,6 +1973,21 @@ void VDP::updateDisplayMode(DisplayMode newMode, bool cmdBit, EmuTime time)
 	// which affects the moment hscan occurs.
 	// TODO: Why didn't I implement this yet?
 	//       It's one line of code and overhead is not huge either.
+}
+
+void VDP::updateAddressMask(bool evr)
+{
+	controlValueMasks[ 2] = evr ? 0xFF : 0xFF;
+	controlValueMasks[ 4] = evr ? 0x7F : 0x7F;
+	controlValueMasks[ 6] = evr ? 0x7F : 0x7F;
+	controlValueMasks[10] = evr ? 0x0F : 0x0F;
+	controlValueMasks[11] = evr ? 0x07 : 0x07;
+	controlValueMasks[14] = evr ? 0x0F : 0x07;
+}
+
+void VDP::updateEVRMode(bool evr, EmuTime time) {
+	updateAddressMask(evr);
+	vram->updateEVRMode(evr, time);
 }
 
 void VDP::update(const Setting& setting) noexcept
@@ -2117,7 +2381,8 @@ VDP::CycleInFrameInfo::CycleInFrameInfo(VDP& vdp_)
 
 int VDP::CycleInFrameInfo::calc(EmuTime time) const
 {
-	return vdp.getTicksThisFrame(time);
+	// Keep the public debugger/TAS API in traditional 21-MHz cycles.
+	return vdp.getTicksThisFrame(time) / VDP::CLK_MUL;
 }
 
 
@@ -2153,7 +2418,7 @@ VDP::CycleInLineInfo::CycleInLineInfo(VDP& vdp_)
 
 int VDP::CycleInLineInfo::calc(EmuTime time) const
 {
-	return vdp.getTicksThisFrame(time) % VDP::TICKS_PER_LINE;
+	return (vdp.getTicksThisFrame(time) % VDP::TICKS_PER_LINE) / VDP::CLK_MUL;
 }
 
 
@@ -2225,6 +2490,7 @@ int VDP::MsxX512PosInfo::calc(EmuTime time) const
 // version 13: added cpuVramReqData, secondCpuVramReqData
 // version 14: added syncLineCountReset and lineCountResetSyncTime; displayStart
 //             is latched there instead of at frame start
+// version 15: V9968 palette, palette latches, command IRQ and 85-MHz tick units
 template<typename Archive>
 void VDP::serialize(Archive& ar, unsigned serVersion)
 {
@@ -2239,7 +2505,7 @@ void VDP::serialize(Archive& ar, unsigned serVersion)
 		             "syncSetMode",       syncSetMode,
 		             "syncSetBlank",      syncSetBlank,
 		             "syncCpuVramAccess", syncCpuVramAccess);
-		             // no need for syncCmdDone (only used for probe)
+		// syncCmdDone is serialized below starting with version 15.
 		if (ar.versionAtLeast(serVersion, 11)) {
 			ar.serialize("syncCpuVramDummy", syncCpuVramDummy);
 		}
@@ -2276,7 +2542,6 @@ void VDP::serialize(Archive& ar, unsigned serVersion)
 	             "registers",            controlRegs,
 	             "blinkCount",           blinkCount,
 	             "vramPointer",          vramPointer,
-	             "palette",              palette,
 	             "isDisplayArea",        isDisplayArea,
 	             "palTiming",            palTiming,
 	             "interlaced",           interlaced,
@@ -2287,6 +2552,25 @@ void VDP::serialize(Archive& ar, unsigned serVersion)
 	             "dataLatch",            dataLatch,
 	             "registerDataStored",   registerDataStored,
 	             "paletteDataStored",    paletteDataStored);
+	if (ar.versionAtLeast(serVersion, 15)) {
+		ar.serialize("palette", palette,
+		             "paletteDataPointer", paletteDataPointer,
+		             "paletteLatchR", paletteLatchR,
+		             "paletteLatchG", paletteLatchG,
+		             "paletteLatchB", paletteLatchB,
+		             "irqCommandEnd", irqCommandEnd,
+		             "syncCmdDone", syncCmdDone);
+	} else {
+		// Old upstream states have 16 palette entries and 21-MHz ticks.
+		std::array<uint16_t, 16> oldPalette{};
+		ar.serialize("palette", oldPalette);
+		if constexpr (Archive::IS_LOADER) {
+			std::ranges::copy(oldPalette, palette.begin());
+			displayStart *= CLK_MUL;
+			horizontalScanOffset *= CLK_MUL;
+			paletteDataPointer = paletteLatchR = paletteLatchG = paletteLatchB = 0;
+		}
+	}
 	if (ar.versionAtLeast(serVersion, 5)) {
 		ar.serialize("cpuVramData",      cpuVramData,
 		             "cpuVramReqIsRead", cpuVramReqIsRead);

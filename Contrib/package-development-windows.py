@@ -75,7 +75,8 @@ def main():
         elif filename in ('doc/GPL.txt', 'doc/authors.txt', 'doc/release-notes.txt',
                           'doc/release-history.txt', 'doc/flash-persistence.md',
                           'doc/windows-rom-replacement.md', 'doc/development-state-restore.md',
-                          'doc/yamanooto-validation.md', 'doc/development-hard-reset.md'):
+                          'doc/yamanooto-validation.md', 'doc/development-hard-reset.md',
+                          'doc/v9968-integration.md', 'doc/v9968-upstream-readme.md'):
             target = filename
         if target:
             copy(ROOT / filename, stage / target)
@@ -83,6 +84,7 @@ def main():
         copy(ROOT / filename, stage / 'doc/licenses' / filename)
     copy(ROOT / 'Contrib/README.cbios', stage / 'doc/cbios.txt')
     copy(ROOT / 'Contrib/Start-openMSX.cmd', stage / 'Start-openMSX.cmd')
+    copy(ROOT / 'Contrib/Start-openMSX-V9968.cmd', stage / 'Start-openMSX-V9968.cmd')
     copy(ROOT / 'doc/fork-windows-download.md', stage / 'START-HERE.md')
     copy(ROOT / 'README.md', stage / 'README.md')
     for dependency, (_, licenses) in DEPENDENCIES.items():

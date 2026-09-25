@@ -24,6 +24,9 @@ class BooleanSetting;
 class SpriteChecker final : public VRAMObserver
 {
 public:
+	static constexpr int SPS_NEXT_PLANE = 19;
+	static constexpr int SPS_NEXT_FRAME = 5;
+
 	/** Bitmap of length 32 describing a sprite pattern.
 	  * Visible pixels are 1, transparent pixels are 0.
 	  * If the sprite is less than 32 pixels wide,
@@ -46,7 +49,16 @@ public:
 		  * Other bits are undefined.
 		  */
 		uint8_t colorAttrib;
+
+		int mgx;
+		uint8_t paletteSet;
+		uint8_t transparent;
+		SpritePattern pattern2;
 	};
+
+	static uint8_t swapNibble(uint8_t val) {
+		return ((val << 4) & 0xF0) | (val >> 4);
+	}
 
 	static constexpr SpritePattern doublePattern(SpritePattern a)
 	{
@@ -112,7 +124,7 @@ public:
 	  * @param mode The new display mode.
 	  * @param time The moment in emulated time this change occurs.
 	  */
-	void updateDisplayMode(DisplayMode mode, EmuTime time) {
+	void updateDisplayMode(DisplayMode mode, bool /*sp3Bit*/, EmuTime time) {
 		sync(time);
 		setDisplayMode(mode);
 
@@ -280,7 +292,7 @@ private:
 	/** Calculate 'updateSpritesMethod' and 'planar'.
 	  */
 	void setDisplayMode(DisplayMode mode) {
-		switch (mode.getSpriteMode(vdp.isMSX1VDP())) {
+		switch (mode.getSpriteMode(vdp.isMSX1VDP(), vdp.isSP3())) {
 		case 0:
 			updateSpritesMethod = nullptr;
 			break;
@@ -292,6 +304,9 @@ private:
 			planar = mode.isPlanar();
 			// An alternative is to have a planar and non-planar
 			// updateSprites2 method.
+			break;
+		case 3:
+			updateSpritesMethod = &SpriteChecker::updateSprites3;
 			break;
 		default:
 			UNREACHABLE;
@@ -305,6 +320,8 @@ private:
 	/** Calculate sprite patterns for sprite mode 2.
 	  */
 	void updateSprites2(int limit);
+
+	void updateSprites3(int limit);
 
 	/** Calculates a sprite pattern.
 	  * @param patternNr Number of the sprite pattern [0..255].
@@ -340,6 +357,8 @@ private:
 	  * @effect Fills in the spriteBuffer and spriteCount arrays.
 	  */
 	void checkSprites2(int minLine, int maxLine);
+
+	void checkSprites3(int minLine, int maxLine);
 
 private:
 	using UpdateSpritesMethod = void (SpriteChecker::*)(int limit);

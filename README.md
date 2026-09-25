@@ -1,5 +1,10 @@
 # openMSX: Flash saves and ROM/disk development
 
+**Experimental V9968 branch:** integrates buppu3's V9968 emulation, including
+S16 (16 sprites per scanline), alongside this fork's development features.
+[Setup, attribution and validation](doc/v9968-integration.md).
+The download below is the earlier stable fork build and does not include V9968.
+
 **Update an ASCII16-X or Yamanooto game ROM while keeping its in-game Flash saves.** This
 public fork also lets Windows developers rebuild an inserted ROM and return
 to a saved test point with updated graphics or text.

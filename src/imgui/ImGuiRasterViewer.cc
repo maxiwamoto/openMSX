@@ -26,7 +26,9 @@ namespace openmsx {
 using namespace std::literals;
 
 using Pixel = uint32_t;
-static constexpr auto PIXELS_PER_LINE = VDP::TICKS_PER_LINE / 2;
+// The viewer uses traditional 21-MHz coordinates (two ticks per pixel).
+static constexpr auto RASTER_TICKS_PER_LINE = VDP::TICKS_PER_LINE / VDP::CLK_MUL;
+static constexpr auto PIXELS_PER_LINE = RASTER_TICKS_PER_LINE / 2;
 static constexpr auto VISIBLE_PIXELS_PER_LINE = 28 + 512 + 30;
 static_assert(VISIBLE_PIXELS_PER_LINE % 2 == 0, "must be even");
 static constexpr auto FIRST_VISIBLE_LINE = 3 + 13;
@@ -229,9 +231,9 @@ void ImGuiRasterViewer::paintDisplay(MSXMotherBoard& motherBoard)
 	assert(last->getHeight() == 240);
 
 	auto timeToXY = [&](EmuTime t) -> std::pair<int, int> {
-		int ticks = vdp->getTicksThisFrame(t);
-		return {ticks % VDP::TICKS_PER_LINE,
-		        ticks / VDP::TICKS_PER_LINE};
+		int ticks = vdp->getTicksThisFrame(t) / VDP::CLK_MUL;
+		return {ticks % RASTER_TICKS_PER_LINE,
+		        ticks / RASTER_TICKS_PER_LINE};
 	};
 	auto [x, y] = timeToXY(time);
 
@@ -546,7 +548,7 @@ void ImGuiRasterViewer::paintDisplay(MSXMotherBoard& motherBoard)
 		if (closestDist < (6.0f * 6.0f)) {
 			im::Tooltip([&]{
 				auto [tx, vy] = trunc((closestPos - scrnPos) / (gl::vec2(0.5f, 2.0f) * float(zoom)));
-				int mx = (tx - vdp->getLeftSprites()) / 2;
+				int mx = (tx - vdp->getLeftSprites() / VDP::CLK_MUL) / 2;
 				int my = vy - vdp->getLineZero();
 				strAppend(closestText, "\nMSX coordinates: x=", mx, " y=", my);
 				ImGui::TextUnformatted(closestText);
@@ -557,10 +559,10 @@ void ImGuiRasterViewer::paintDisplay(MSXMotherBoard& motherBoard)
 	});
 	if (ImGui::IsItemHovered()) {
 		auto [tx, vy] = trunc((gl::vec2(ImGui::GetIO().MousePos) - scrnPos) / (gl::vec2(0.5f, 2.0f) * float(zoom)));
-		if (0 <= tx && tx < VDP::TICKS_PER_LINE &&
+		if (0 <= tx && tx < RASTER_TICKS_PER_LINE &&
 		    0 <= vy && vy < numLines) {
 			int vx = tx / 2;
-			int mx = (tx - vdp->getLeftSprites()) / 2;
+			int mx = (tx - vdp->getLeftSprites() / VDP::CLK_MUL) / 2;
 			int my = vy - vdp->getLineZero();
 			if (allLineWidths[vy] == 320) {
 				vx >>= 1;
@@ -588,8 +590,8 @@ void ImGuiRasterViewer::paintDisplay(MSXMotherBoard& motherBoard)
 					tx = xx;
 					vy = yy;
 				}
-				int ticks = vy * VDP::TICKS_PER_LINE + tx;
-				auto tt = vdp->getTimeInFrame(ticks);
+				int ticks = vy * RASTER_TICKS_PER_LINE + tx;
+				auto tt = vdp->getTimeInFrame(ticks * VDP::CLK_MUL);
 				if (tt > time) tt -= frameDuration;
 
 				bool shift = ImGui::IsKeyDown(ImGuiKey_LeftShift) || ImGui::IsKeyDown(ImGuiKey_RightShift);
@@ -675,9 +677,9 @@ static void drawRegion2(
 		drawRegion3(from, to, color, scrnTopLeft, zoom, lineWidths);
 	} else {
 		// split in 2 or 3
-		drawRegion3(from, {VDP::TICKS_PER_LINE, from.y}, color, scrnTopLeft, zoom, lineWidths);
+		drawRegion3(from, {RASTER_TICKS_PER_LINE, from.y}, color, scrnTopLeft, zoom, lineWidths);
 		if ((from.y + 1) < to.y) {
-			drawRegion3({0, from.y + 1}, {VDP::TICKS_PER_LINE, to.y - 1}, color, scrnTopLeft, zoom, lineWidths);
+			drawRegion3({0, from.y + 1}, {RASTER_TICKS_PER_LINE, to.y - 1}, color, scrnTopLeft, zoom, lineWidths);
 		}
 		drawRegion3({0, to.y}, to, color, scrnTopLeft, zoom, lineWidths);
 	}
@@ -690,7 +692,7 @@ void ImGuiRasterViewer::drawRegion(
 	auto color = ImGui::ColorConvertFloat4ToU32(color_);
 	if (std::tie(from.y, from.x) > std::tie(to.y, to.x)) {
 		// split in 2
-		drawRegion2(from, {VDP::TICKS_PER_LINE, narrow<int>(lineWidths.size() - 1)},
+		drawRegion2(from, {RASTER_TICKS_PER_LINE, narrow<int>(lineWidths.size() - 1)},
 		            color, scrnTopLeft, zoom, lineWidths);
 		drawRegion2({0, 0}, to,
 		            color, scrnTopLeft, zoom, lineWidths);

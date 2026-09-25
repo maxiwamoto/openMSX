@@ -3,6 +3,7 @@
 
 #include "VDP.hh"
 #include "VDPAccessSlots.hh"
+#include "VDPCmdCache.hh"
 
 #include "BooleanSetting.hh"
 #include "Probe.hh"
@@ -26,6 +27,8 @@ class VDPCmdEngine
 {
 public:
 	// bits in ARG register
+	static constexpr uint8_t FG4 = 0x80;
+	static constexpr uint8_t XHR = 0x40;
 	static constexpr uint8_t MXD = 0x20;
 	static constexpr uint8_t MXS = 0x10;
 	static constexpr uint8_t DIY = 0x08;
@@ -37,6 +40,22 @@ public:
 	static constexpr uint8_t TR = 1 << 7;
 	static constexpr uint8_t BD = 1 << 4;
 	static constexpr uint8_t CE = 1 << 0;
+
+	static constexpr int waitHmmc = 40 * 4;
+	static constexpr int waitYmmm = 40 * 4;
+	static constexpr int waitHmmm = 40 * 4;
+	static constexpr int waitHmmv = 40 * 4;
+	static constexpr int waitLmmc = 40 * 4;
+	static constexpr int waitLmcm = 40 * 4;
+	static constexpr int waitLmmm = 40 * 4;
+	static constexpr int waitLmmv = 40 * 4;
+	static constexpr int waitLine = 40 * 4;
+	static constexpr int waitSrch = 40 * 4;
+	static constexpr int waitPset = 40 * 4;
+	static constexpr int waitPoint = 40 * 4;
+	static constexpr int waitLfmm = 0;
+	static constexpr int waitLfmc = 0;
+	static constexpr int waitLrmm = 0;
 
 public:
 	VDPCmdEngine(VDP& vdp, CommandController& commandController);
@@ -52,9 +71,16 @@ public:
 	  * @param time The moment in emulated time to sync to.
 	  */
 	void sync(EmuTime time) {
-		if (CMD) sync2(time);
+		if (CMD) {
+			if (useHS()) {
+				sync2Hs(time);
+			} else {
+				sync2(time);
+			}
+		}
 	}
 	void sync2(EmuTime time);
+	void sync2Hs(EmuTime time);
 
 	/** Steal a VRAM access slot from the CmdEngine.
 	 * Used when the CPU reads/writes VRAM.
@@ -166,7 +192,7 @@ public:
 		std::optional<static_vector<Rect, 2>> dstRect;
 		std::string str;
 	};
-	[[nodiscard]] static FormatCmdResult formatCommand(const CmdRegs& r, int mode);
+	[[nodiscard]] static FormatCmdResult formatCommand(const CmdRegs& r, int mode, bool extended = false);
 
 	/** Get the (source and destination) X/Y coordinates of the currently
 	  * executing command. For debugging purposes only.
@@ -182,7 +208,119 @@ public:
 	void serialize(Archive& ar, unsigned version);
 
 private:
+	static constexpr int CACHE_BUFFER_COUNT = 4;
+
+	struct CacheBuffer {
+		bool		data_en;
+		bool		already_read;
+		std::array<bool, 4> data_mask;
+		unsigned	address;
+
+		template<typename Archive> void serialize(Archive& ar, unsigned) {
+			ar.serialize("enabled", data_en, "read", already_read,
+			             "mask", data_mask, "address", address);
+		}
+	};
+
+	VDPCmdCache::CachePenalty flushCache()
+	{
+		int cnt = 0;
+		for (auto& cb : cacheBuffer) {
+			if (cb.data_en && !(cb.data_mask[0] & cb.data_mask[1] & cb.data_mask[2] & cb.data_mask[3])) {
+				cb.data_en = false;
+				cb.data_mask[0] = true;
+				cb.data_mask[1] = true;
+				cb.data_mask[2] = true;
+				cb.data_mask[3] = true;
+				cnt++;
+			}
+		}
+
+		switch (cnt) {
+		case 1:
+			return VDPCmdCache::CachePenalty::CACHE_FLUSH_1;
+		case 2:
+			return VDPCmdCache::CachePenalty::CACHE_FLUSH_2;
+		case 3:
+			return VDPCmdCache::CachePenalty::CACHE_FLUSH_3;
+		case 4:
+			return VDPCmdCache::CachePenalty::CACHE_FLUSH_4;
+		default:
+			return VDPCmdCache::CachePenalty::CACHE_FLUSH_0;
+		}
+	}
+
+	VDPCmdCache::CachePenalty checkCache(bool write, unsigned addr)
+	{
+		unsigned word_address = addr >> 2;
+		unsigned word_offset = addr & 3;
+		CacheBuffer *cb_ptr = &cacheBuffer[cachePriority];
+		bool found_free = false;
+
+		if (write) {
+			for (auto& cb : cacheBuffer) {
+				if (cb.data_en && cb.address == word_address) {
+					cb.data_mask[word_offset] = false;
+					//cb.data[word_offset] = w_data;
+					return VDPCmdCache::CachePenalty::CACHE_WRITE_HIT;
+				}
+			}
+
+			for (auto& cb : cacheBuffer) {
+				if (!cb.data_en) {
+					found_free = true;
+					cb_ptr = &cb;
+					break;
+				}
+			}
+		} else {
+			for (auto& cb : cacheBuffer) {
+				if (cb.data_en && cb.address == word_address) {
+					if (cb.already_read || !cb.data_mask[word_offset]) {
+						// r_data = cb.data[word_offset];
+						return VDPCmdCache::CachePenalty::CACHE_READ_HIT;
+					}
+				}
+			}
+		}
+
+		// flush
+		if (!found_free) {
+			if (cb_ptr->data_en && !(cb_ptr->data_mask[0] & cb_ptr->data_mask[1] & cb_ptr->data_mask[2] & cb_ptr->data_mask[3])) {
+				//write_32bis(cb_ptr->address, (uint32_t)cb_ptr->data[0] | ((uint32_t)cb_ptr->data[1] << 8) | ((uint32_t)cb_ptr->data[2] << 16) | ((uint32_t)cb_ptr->data[3] << 24), cb_ptr->data_mask)
+				cb_ptr->data_en = false;
+			}
+			cachePriority = (cachePriority + 1) % CACHE_BUFFER_COUNT;
+		}
+
+		// make new buffer
+		cb_ptr->data_en = true;
+		cb_ptr->already_read = !write;
+		cb_ptr->data_mask[0] = !write || !(word_offset == 0);
+		cb_ptr->data_mask[1] = !write || !(word_offset == 1);
+		cb_ptr->data_mask[2] = !write || !(word_offset == 2);
+		cb_ptr->data_mask[3] = !write || !(word_offset == 3);
+		cb_ptr->address = word_address;
+		//if(write) {
+		//	cb_ptr->data[offset] = w_data;
+		//} else {
+		//	uint32_t data = read_32bis(cb_ptr->address);
+		//	cb_ptr->data[0] = data & 0xFF;
+		//	cb_ptr->data[1] = (data >> 8) & 0xFF;
+		//	cb_ptr->data[2] = (data >> 16) & 0xFF;
+		//	cb_ptr->data[3] = (data >> 24) & 0xFF;
+		//	r_dara = cb_ptr->data[word_offset];
+		//}
+
+		if (write) {
+			return found_free ? VDPCmdCache::CachePenalty::CACHE_WRITE_MISS : VDPCmdCache::CachePenalty::CACHE_WRITE_FLUSH;
+		} else {
+			return found_free ? VDPCmdCache::CachePenalty::CACHE_READ_MISS : VDPCmdCache::CachePenalty::CACHE_READ_FLUSH;
+		}
+	}
+
 	void executeCommand(EmuTime time);
+	void executeCommandHs(EmuTime time);
 
 	void setStatusChangeTime(EmuTime t);
 	void calcFinishTime(unsigned NX, unsigned NY, unsigned ticksPerPixel);
@@ -200,6 +338,9 @@ private:
 	template<typename Mode> void startHmmm(EmuTime time);
 	template<typename Mode> void startYmmm(EmuTime time);
 	template<typename Mode> void startHmmc(EmuTime time);
+	template<typename Mode> void startLfmc(EmuTime time);
+	template<typename Mode> void startLfmm(EmuTime time);
+	template<typename Mode> void startLrmm(EmuTime time);
 
 	template<typename Mode>                 void executePoint(EmuTime limit);
 	template<typename Mode, typename LogOp> void executePset(EmuTime limit);
@@ -213,6 +354,41 @@ private:
 	template<typename Mode>                 void executeHmmm(EmuTime limit);
 	template<typename Mode>                 void executeYmmm(EmuTime limit);
 	template<typename Mode>                 void executeHmmc(EmuTime limit);
+	template<typename Mode, typename LogOp> void executeLfmc(EmuTime limit);
+	template<typename Mode, typename LogOp> void executeLfmm(EmuTime limit);
+	template<typename Mode, typename LogOp> void executeLrmm(EmuTime limit);
+
+	template<typename Mode> void startPointHs(EmuTime time);
+	template<typename Mode> void startPsetHs(EmuTime time);
+	template<typename Mode> void startSrchHs(EmuTime time);
+	template<typename Mode>	void startLineHs(EmuTime time);
+	template<typename Mode> void startLmmvHs(EmuTime time);
+	template<typename Mode> void startLmmmHs(EmuTime time);
+	template<typename Mode> void startLmcmHs(EmuTime time);
+	template<typename Mode> void startLmmcHs(EmuTime time);
+	template<typename Mode> void startHmmvHs(EmuTime time);
+	template<typename Mode> void startHmmmHs(EmuTime time);
+	template<typename Mode> void startYmmmHs(EmuTime time);
+	template<typename Mode> void startHmmcHs(EmuTime time);
+//	template<typename Mode> void startLfmcHs(EmuTime time);
+	template<typename Mode> void startLfmmHs(EmuTime time);
+	template<typename Mode> void startLrmmHs(EmuTime time);
+
+	template<typename Mode> 				void executePointHs(EmuTime limit);
+	template<typename Mode, typename LogOp> void executePsetHs(EmuTime limit);
+	template<typename Mode>                 void executeSrchHs(EmuTime limit);
+	template<typename Mode, typename LogOp> void executeLineHs(EmuTime limit);
+	template<typename Mode, typename LogOp> void executeLmmvHs(EmuTime limit);
+	template<typename Mode, typename LogOp> void executeLmmmHs(EmuTime limit);
+	template<typename Mode>                 void executeLmcmHs(EmuTime limit);
+	template<typename Mode, typename LogOp> void executeLmmcHs(EmuTime limit);
+	template<typename Mode>                 void executeHmmvHs(EmuTime limit);
+	template<typename Mode>                 void executeHmmmHs(EmuTime limit);
+	template<typename Mode>                 void executeYmmmHs(EmuTime limit);
+	template<typename Mode>                 void executeHmmcHs(EmuTime limit);
+//	template<typename Mode, typename LogOp> void executeLfmcHs(EmuTime limit);
+	template<typename Mode, typename LogOp> void executeLfmmHs(EmuTime limit);
+	template<typename Mode, typename LogOp> void executeLrmmHs(EmuTime limit);
 
 	// Advance to the next access slot at or past the given time.
 	EmuTime getNextAccessSlot(EmuTime time) const {
@@ -220,6 +396,12 @@ private:
 	}
 	void nextAccessSlot(EmuTime time) {
 		engineTime = getNextAccessSlot(time);
+	}
+	void nextAccessSlotHs(EmuTime time, int delay, int wait, VDPCmdCache::CachePenalty penalty) {
+		engineTime = vdp.getAccessSlot(time, delay, wait, penalty);
+	}
+	void nextAccessSlotHs(EmuTime time) {
+		nextAccessSlotHs(time, 0, 0, VDPCmdCache::CachePenalty::CACHE_NONE);
 	}
 	// Advance to the next access slot that is at least 'delta' cycles past
 	// the current one.
@@ -232,6 +414,9 @@ private:
 	void nextAccessSlot(EmuTime time, VDPAccessSlots::Delta delta) {
 		engineTime = getNextAccessSlot(time, delta);
 	}
+	void nextAccessSlotHs(int delay, int wait, VDPCmdCache::CachePenalty penalty) {
+		nextAccessSlotHs(engineTime, delay, wait, penalty);
+	}
 	VDPAccessSlots::Calculator getSlotCalculator(
 			EmuTime limit) const {
 		return vdp.getAccessSlotCalculator(engineTime, limit);
@@ -242,6 +427,17 @@ private:
 	void commandDone(EmuTime time);
 
 private:
+	bool useHS() {
+		return vdp.useHS() || cmdForceHsSetting.getBoolean();
+	}
+
+	bool isHS() {
+		return vdp.isHS() || cmdForceHsSetting.getBoolean();
+	}
+
+	int cachePriority{0};
+	std::array<CacheBuffer, CACHE_BUFFER_COUNT> cacheBuffer{};
+
 	/** The VDP this command engine is part of.
 	  */
 	VDP& vdp;
@@ -288,6 +484,14 @@ private:
 	                                 // Register ASX can be read (via status register 8/9)
 	uint8_t COL{0}, ARG{0}, CMD{0};
 
+	int SX_12P8{0}, SY_12P8{0}, ASX_12P8{0}, ASY_12P8{0}, VX{0}, VY{0};
+	unsigned WSX{0}, WEX{0}, WSY{0}, WEY{0};
+	unsigned ANY{0};			// Y-loop every 8 horizontal dots (use for LFMM)
+	unsigned ADY{0};			// Y-loop every 8 horizontal dots (use for LFMM)
+	unsigned ASA{0};			// source address (use for LFMM)
+	unsigned fontWidthCount{0};	// Font width counter (use for LFMM, LFMC)
+	uint8_t fontColor{0};		// Font color (use for LFMC)
+
 	/** The last executed command (for debugging only).
 	  * A copy of the above registers when the command starts. Remains valid
 	  * until the next command starts (also if the corresponding VDP
@@ -317,8 +521,10 @@ private:
 	/** Flag that indicated whether extended VRAM is available
 	 */
 	const bool hasExtendedVRAM;
+
+	BooleanSetting cmdForceHsSetting;
 };
-SERIALIZE_CLASS_VERSION(VDPCmdEngine, 4);
+SERIALIZE_CLASS_VERSION(VDPCmdEngine, 5);
 
 } // namespace openmsx
 

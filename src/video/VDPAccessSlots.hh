@@ -2,6 +2,7 @@
 #define VDPACCESSSLOTS_HH
 
 #include "VDP.hh"
+#include "VDPCmdCache.hh"
 
 #include "narrow.hh"
 
@@ -62,6 +63,12 @@ static constexpr int CPU_ANY_DELTA = 4;
 static constexpr int FIRST_CMD_DELTA = 5;
 static constexpr int LAST_CMD_DELTA = NUM_DELTAS; // exclusive
 
+using tab_value = uint16_t;
+
+static constexpr int V9968_MEMORY_ACCESS_TIME = 7;
+
+[[nodiscard]] unsigned getAccessSlotTick(unsigned ticks, int delay, int wait, VDPCmdCache::CachePenalty penalty, std::span<const tab_value, NUM_DELTAS * TICKS> tab);
+
 /** VDP-VRAM access slot calculator, meant to be used in the inner loops of the
   * VDPCmdEngine commands. Code optimized for the case that:
   *  - timing remains constant (sprites/display enable/disable)
@@ -72,7 +79,7 @@ class Calculator
 public:
 	/** This shouldn't be called directly, instead use getCalculator(). */
 	Calculator(EmuTime frame, EmuTime time,
-	           EmuTime limit_, std::span<const uint8_t, NUM_DELTAS * TICKS> tab_)
+	           EmuTime limit_, std::span<const tab_value, NUM_DELTAS * TICKS> tab_)
 		: ref(frame), tab(tab_)
 	{
 		assert(frame <= time);
@@ -111,11 +118,20 @@ public:
 		}
 	}
 
+	void nextHs(int delay, int wait, VDPCmdCache::CachePenalty penalty) {
+		ticks = (int)getAccessSlotTick((unsigned)ticks, delay, wait, penalty, tab);
+		if (ticks >= TICKS) [[unlikely]] {
+			ticks -= TICKS;
+			limit -= TICKS;
+			ref   += TICKS;
+		}
+	}
+
 private:
 	int ticks;
 	int limit;
 	VDP::VDPClock ref;
-	std::span<const uint8_t, NUM_DELTAS * TICKS> tab;
+	std::span<const tab_value, NUM_DELTAS * TICKS> tab;
 };
 
 /** Return the time of the next available access slot that is at least 'delta'
@@ -123,6 +139,8 @@ private:
   * reference. */
 [[nodiscard]] EmuTime getAccessSlot(EmuTime frame, EmuTime time, Delta delta,
                       const VDP& vdp);
+[[nodiscard]] EmuTime getAccessSlot(EmuTime frame_, EmuTime time, int delay, int wait, VDPCmdCache::CachePenalty penalty, const VDP& vdp);
+[[nodiscard]] EmuTime getCpuAccessSlot(EmuTime frame, EmuTime time, const VDP& vdp);
 
 /** When many calls to getAccessSlot() are needed, it's more efficient to
   * instead use this function. */
@@ -131,7 +149,7 @@ private:
 	const VDP& vdp);
 
 /** The largest interval paddingCycles() accepts. */
-inline constexpr int MAX_PADDING_SPAN = 8;
+inline constexpr int MAX_PADDING_SPAN = 8 * VDP::CLK_MUL;
 
 /** How many cycles of line padding complete in the interval (t, t + n], where
   * 't' is at position 'tick' in its line: the number of cycles by which that

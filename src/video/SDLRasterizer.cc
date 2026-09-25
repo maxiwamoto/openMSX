@@ -28,15 +28,15 @@ using Pixel = SDLRasterizer::Pixel;
 
 /** VDP ticks between start of line and start of left border.
   */
-static constexpr int TICKS_LEFT_BORDER = 100 + 102;
-static constexpr int TICKS_RIGHT_BORDER = 100 + 102 + 56 + 1024 + 59;
+static constexpr int TICKS_LEFT_BORDER = VDP::TICKS_HSYNC_PERIOD + VDP::TICKS_LEFT_ERASE_PERIOD;
+static constexpr int TICKS_RIGHT_BORDER = VDP::TICKS_HSYNC_PERIOD + VDP::TICKS_LEFT_ERASE_PERIOD + VDP::TICKS_LEFT_BORDER_PERIOD + VDP::TICKS_HDISP_PERIOD + VDP::TICKS_RIGHT_BORDER_PERIOD;
 
 /** The middle of the visible (display + borders) part of a line,
   * expressed in VDP ticks since the start of the line.
   * TODO: Move this to a central location?
   */
 static constexpr int TICKS_VISIBLE_MIDDLE =
-	TICKS_LEFT_BORDER + (VDP::TICKS_PER_LINE - TICKS_LEFT_BORDER - 27) / 2;
+	TICKS_LEFT_BORDER + (VDP::TICKS_PER_LINE - TICKS_LEFT_BORDER - VDP::TICKS_DELAY_27) / 2;
 
 /** Translate from absolute VDP coordinates to screen coordinates:
   * Note: In reality, there are only 569.5 visible pixels on a line.
@@ -74,23 +74,28 @@ static constexpr int translateX(int absoluteX, bool narrow)
 	//       errors will occur. It must be the same boundary the display area
 	//       sits on: getLeftBackground() is 2 (mod 4), so the origin is too,
 	//       else mid-line border-color changes land half a pixel off it.
-	static_assert((TICKS_VISIBLE_MIDDLE % 4) == 3);
-	const int origin = TICKS_VISIBLE_MIDDLE - 1;
-	return ((absoluteX - origin)
+	static_assert(((TICKS_VISIBLE_MIDDLE / VDP::CLK_MUL) % 4) == 3);
+	const int origin = TICKS_VISIBLE_MIDDLE - 1 * VDP::CLK_MUL;
+	return (((absoluteX - origin)
 		>> (narrow ? 1 : 2))
+		/ VDP::CLK_MUL)
 		+ maxX / 2;
 }
 
 inline void SDLRasterizer::renderBitmapLine(std::span<Pixel> buf, unsigned vramLine)
 {
-	if (vdp.getDisplayMode().isPlanar()) {
+	if (!vdp.getDisplayMode().isPlanar()) {
+		auto vramPtr =
+			vram.bitmapCacheWindow.getReadArea<128>(vramLine * 128);
+		bitmapConverter.convertLine(buf, vramPtr);
+	} else if (vdp.isPlanar()) {
 		auto [vramPtr0, vramPtr1] =
 			vram.bitmapCacheWindow.getReadAreaPlanar<256>(vramLine * 256);
 		bitmapConverter.convertLinePlanar(buf, vramPtr0, vramPtr1);
 	} else {
 		auto vramPtr =
-			vram.bitmapCacheWindow.getReadArea<128>(vramLine * 128);
-		bitmapConverter.convertLine(buf, vramPtr);
+			vram.bitmapCacheWindow.getReadArea<256>(vramLine * 256);
+		bitmapConverter.convertLineNonPlanar(buf, vramPtr);
 	}
 }
 
@@ -102,18 +107,29 @@ SDLRasterizer::SDLRasterizer(
 	, postProcessor(std::move(postProcessor_))
 	, workFrame(std::make_unique<RawFrame>(640, 240))
 	, renderSettings(display.getRenderSettings())
-	, characterConverter(vdp, subspan<16>(palFg), palBg)
-	, bitmapConverter(palFg, PALETTE256, V9958_COLORS)
+	, characterConverter(vdp, subspan<16>(palFg), subspan<16>(palBg))
+	, bitmapConverter(palFg, palFgOdd, PALETTE256, V9958_COLORS)
 	, spriteConverter(vdp.getSpriteChecker(), palBg)
 {
 	// Init the palette.
 	precalcPalette();
 
 	// Initialize palette (avoid UMR)
-	if (!vdp.isMSX1VDP()) {
+	if (vdp.hasEPAL()) {
+		for (auto i : xrange(256)) {
+			palFg[i] = palBg[i] =
+				V9968_COLORS[0][0][0];
+		}
 		for (auto i : xrange(16)) {
-			palFg[i] = palFg[i + 16] = palBg[i] =
+			palFgOdd[i] = V9968_COLORS[0][0][0];
+		}
+	} else if (!vdp.isMSX1VDP()) {
+		for (auto i : xrange(256)) {
+			palFg[i] = palBg[i] =
 				V9938_COLORS[0][0][0];
+		}
+		for (auto i : xrange(16)) {
+			palFgOdd[i] = V9938_COLORS[0][0][0];
 		}
 	}
 
@@ -164,7 +180,12 @@ void SDLRasterizer::reset()
 
 void SDLRasterizer::resetPalette()
 {
-	if (!vdp.isMSX1VDP()) {
+	if (vdp.hasEPAL()) {
+		// Reset the palette.
+		for (auto i : xrange(256)) {
+			setPalette(i, vdp.getPalette(i));
+		}
+	} else if (!vdp.isMSX1VDP()) {
 		// Reset the palette.
 		for (auto i : xrange(16)) {
 			setPalette(i, vdp.getPalette(i));
@@ -203,13 +224,14 @@ void SDLRasterizer::setDisplayMode(DisplayMode mode)
 {
 	if (mode.isBitmapMode()) {
 		bitmapConverter.setDisplayMode(mode);
+		bitmapConverter.setEPAL(vdp.isEPAL());
 	} else {
 		characterConverter.setDisplayMode(mode);
 	}
 	precalcColorIndex0(mode, vdp.getTransparency(),
 	                   vdp.isSuperimposing(), vdp.getRawBackgroundColor());
 	spriteConverter.setDisplayMode(mode);
-	spriteConverter.setPalette(mode.getByte() == DisplayMode::GRAPHIC7
+	spriteConverter.setPalette((mode.getByte() == DisplayMode::GRAPHIC7 && !vdp.isEPAL())
 	                           ? palGraphic7Sprites : palBg);
 
 }
@@ -217,10 +239,12 @@ void SDLRasterizer::setDisplayMode(DisplayMode mode)
 void SDLRasterizer::setPalette(unsigned index, int grb)
 {
 	// Update SDL colors in palette.
-	Pixel newColor = V9938_COLORS[(grb >> 4) & 7][grb >> 8][grb & 7];
-	palFg[index     ] = newColor;
-	palFg[index + 16] = newColor;
-	palBg[index     ] = newColor;
+	Pixel newColor = vdp.hasEPAL()
+					 ? V9968_COLORS[(grb >> 5) & 31][(grb >> 10) & 31][grb & 31]
+					 : V9938_COLORS[(grb >> 4) & 7][grb >> 8][grb & 7];
+	palFg   [index] = newColor;
+	palBg   [index] = newColor;
+	if (index < 16) palFgOdd[index] = newColor;
 	bitmapConverter.palette16Changed();
 
 	precalcColorIndex0(vdp.getDisplayMode(), vdp.getTransparency(),
@@ -261,7 +285,7 @@ void SDLRasterizer::precalcPalette()
 		const auto palette = vdp.getMSX1Palette();
 		for (auto i : xrange(16)) {
 			const auto rgb = palette[i];
-			palFg[i] = palFg[i + 16] = palBg[i] =
+			palFg[i] = palFgOdd[i] = palBg[i] =
 				screen.mapRGB(
 					renderSettings.transformRGB(
 						vec3(rgb[0], rgb[1], rgb[2]) * (1.0f / 255.0f)));
@@ -310,6 +334,17 @@ void SDLRasterizer::precalcPalette()
 					}
 				}
 			}
+			// Precalculate palette for V9968 colors.
+			// Based on comparing red and green gradients, using palette and
+			// YJK, in SCREEN11 on a real turbo R.
+			for (auto r5 : xrange(32)) {
+				for (auto g5 : xrange(32)) {
+					for (auto b5 : xrange(32)) {
+						V9968_COLORS[r5][g5][b5] =
+							V9958_COLORS[(r5 << 10) + (g5 << 5) + b5];
+					}
+				}
+			}
 		} else {
 			// Precalculate palette for V9938 colors.
 			if (renderSettings.isColorMatrixIdentity()) {
@@ -342,19 +377,76 @@ void SDLRasterizer::precalcPalette()
 					}
 				}
 			}
+
+			// Precalculate palette for V9968 colors.
+			if (renderSettings.isColorMatrixIdentity()) {
+				std::array<int, 32> intensity;
+				for (auto [i, r] : enumerate(intensity)) {
+					r = narrow_cast<int>(255.0f * renderSettings.transformComponent(narrow<float>(i) * (1.0f / 31.0f)));
+				}
+				for (auto r : xrange(32)) {
+					for (auto g : xrange(32)) {
+						for (auto b : xrange(32)) {
+							V9968_COLORS[r][g][b] =
+								screen.mapRGB255(ivec3(
+									intensity[r],
+									intensity[g],
+									intensity[b]));
+						}
+					}
+				}
+			} else {
+				for (auto r : xrange(32)) {
+					for (auto g : xrange(32)) {
+						for (auto b : xrange(32)) {
+							vec3 rgb{narrow<float>(r),
+							         narrow<float>(g),
+							         narrow<float>(b)};
+							V9968_COLORS[r][g][b] =
+								screen.mapRGB(
+									renderSettings.transformRGB(rgb * (1.0f / 31.0f)));
+						}
+					}
+				}
+			}
 		}
 		// Precalculate Graphic 7 bitmap palette.
-		for (auto i : xrange(256)) {
-			PALETTE256[i] = V9938_COLORS
-				[(i & 0x1C) >> 2]
-				[(i & 0xE0) >> 5]
-				[(i & 0x03) == 3 ? 7 : (i & 0x03) * 2];
+		if (vdp.hasEPAL()) {
+			for (auto i : xrange(256)) {
+				uint8_t g = (i >> 5) & 7;
+				uint8_t r = (i >> 2) & 7;
+				uint8_t b = (i >> 0) & 3;
+				g = (g << 2) | (g >> 1);
+				r = (r << 2) | (r >> 1);
+				b = (b << 3) | (b << 1) | (b >> 1);
+				PALETTE256[i] = V9968_COLORS[r][g][b];
+			}
+		} else {
+			for (auto i : xrange(256)) {
+				PALETTE256[i] = V9938_COLORS
+					[(i & 0x1C) >> 2]
+					[(i & 0xE0) >> 5]
+					[(i & 0x03) == 3 ? 7 : (i & 0x03) * 2];
+			}
 		}
 		// Precalculate Graphic 7 sprite palette.
-		for (auto i : xrange(16)) {
-			uint16_t grb = Renderer::GRAPHIC7_SPRITE_PALETTE[i];
-			palGraphic7Sprites[i] =
-				V9938_COLORS[(grb >> 4) & 7][grb >> 8][grb & 7];
+		if (vdp.hasEPAL()) {
+			for (auto i : xrange(256)) {
+				uint16_t grb = Renderer::GRAPHIC7_SPRITE_PALETTE[i & 15];
+				uint8_t g = (grb >> 8) & 7;
+				uint8_t r = (grb >> 4) & 7;
+				uint8_t b = (grb >> 0) & 7;
+				g = (g << 2) | (g >> 1);
+				r = (r << 2) | (r >> 1);
+				b = (b << 2) | (b >> 1);
+				palGraphic7Sprites[i] = V9968_COLORS[r][g][b];
+			}
+		} else {
+			for (auto i : xrange(256)) {
+				uint16_t grb = Renderer::GRAPHIC7_SPRITE_PALETTE[i & 15];
+				palGraphic7Sprites[i] =
+					V9938_COLORS[(grb >> 4) & 7][grb >> 8][grb & 7];
+			}
 		}
 	}
 }
@@ -381,10 +473,10 @@ void SDLRasterizer::precalcColorIndex0(DisplayMode mode,
 		}
 	} else {
 		// TODO: superimposing
-		if ((palFg[ 0] != palBg[tpIndex >> 2]) ||
-		    (palFg[16] != palBg[tpIndex &  3])) {
-			palFg[ 0] = palBg[tpIndex >> 2];
-			palFg[16] = palBg[tpIndex &  3];
+		if ((palFg   [0] != palBg[tpIndex >> 2]) ||
+		    (palFgOdd[0] != palBg[tpIndex &  3])) {
+			palFg   [0] = palBg[tpIndex >> 2];
+			palFgOdd[0] = palBg[tpIndex &  3];
 			bitmapConverter.palette16Changed();
 		}
 	}
@@ -448,6 +540,14 @@ void SDLRasterizer::drawBorder(
 			}
 		}
 	}
+}
+
+static unsigned convInterleaveToFlat(bool flat, unsigned addr)
+{
+	if (!flat) return addr;
+	return ( addr       & ~0x1FF) |		// page
+		   ((addr << 1) &  0x1FE) |		// line
+		   ((addr >> 8) &  0x001);		// even/odd
 }
 
 void SDLRasterizer::drawDisplay(
@@ -517,14 +617,21 @@ void SDLRasterizer::drawDisplay(
 			//   but now do it per line. Per-line is actually only
 			//   needed when vdp.isFastBlinkEnabled() is true.
 			//   Idea: can be cheaply calculated incrementally.
-			unsigned pageMaskOdd = (mode.isPlanar() ? 0x000 : 0x200) |
-				vdp.getEvenOddMask(y);
+			bool filMode = vdp.isFIL();
+			unsigned pageMaskOdd = filMode ? (vdp.getEvenOdd() ? 0x100 : 0x000) : vdp.getEvenOddMask(y);
+			if (vdp.isEVR()) {
+				pageMaskOdd |= vdp.getDisplayMode().isPlanar() ? ((3 << 8) & ~0x100)	// page0~3 : screen7,8,10,11,12
+															   : ((7 << 8) & ~0x100);	// page0~7 : screen5,6
+			} else {
+				pageMaskOdd |= vdp.getDisplayMode().isPlanar() ? ((1 << 8) & ~0x100)	// page0~1 : screen7,8,10,11,12
+															   : ((3 << 8) & ~0x100);	// page0~3 : screen5,6
+			}
 			unsigned pageMaskEven = vdp.isMultiPageScrolling()
 				? (pageMaskOdd & ~0x100)
 				: pageMaskOdd;
 			const std::array<unsigned, 2> vramLine = {
-				(vram.nameTable.getMask() >> 7) & (pageMaskEven | displayY),
-				(vram.nameTable.getMask() >> 7) & (pageMaskOdd  | displayY)
+				convInterleaveToFlat(filMode, ((filMode ? 0x100 : 0) | (vram.nameTable.getMask() >> 7)) & (pageMaskEven | displayY)),
+				convInterleaveToFlat(filMode, ((filMode ? 0x100 : 0) | (vram.nameTable.getMask() >> 7)) & (pageMaskOdd  | displayY))
 			};
 
 			std::array<Pixel, 512> buf;
@@ -598,13 +705,18 @@ void SDLRasterizer::drawSprites(
 	// Render sprites.
 	// TODO: Call different SpriteConverter methods depending on narrow/wide
 	//       pixels in this display mode?
-	int spriteMode = vdp.getDisplayMode().getSpriteMode(vdp.isMSX1VDP());
+	int spriteMode = vdp.getDisplayMode().getSpriteMode(vdp.isMSX1VDP(), vdp.isSP3());
 	int displayLimitX = displayX + displayWidth;
 	int limitY = fromY + displayHeight;
 	int screenX = translateX(
 		vdp.getLeftSprites(),
 		vdp.getDisplayMode().getLineWidth() == 512);
-	if (spriteMode == 1) {
+	if (spriteMode == 3) {
+		for (int y = fromY; y < limitY; y++, screenY++) {
+			auto dst = workFrame->getLineDirect(screenY).subspan(screenX);
+			spriteConverter.drawMode3(y, displayX, displayLimitX, dst);
+		}
+	} else if (spriteMode == 1) {
 		for (int y = fromY; y < limitY; y++, screenY++) {
 			auto dst = workFrame->getLineDirect(screenY).subspan(screenX);
 			spriteConverter.drawMode1(y, displayX, displayLimitX, dst);
