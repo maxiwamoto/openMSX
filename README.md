@@ -1,4 +1,14 @@
-# openMSX: Flash saves and ROM/disk development
+# openMSX: Makoto, V9968 and ROM/disk development
+
+**Experimental Makoto / YM2608 support is now included.** Add `-ext Makoto`
+for FM/SSG/ADPCM emulation, independent chip timers, 256 KiB sample RAM,
+adjustable Master/SSG balance, debugger registers and save states.
+[Setup, hardware assumptions and tests](doc/makoto.md) ·
+[Playback and CPU findings](doc/makoto-replay-findings.md).
+The source is available on this fork's `master`; the older Windows download
+below does not contain Makoto or V9968. Analogue balance, sample RAM behavior
+and IRQ wiring still need confirmation on the physical cartridge.
+
 
 **Experimental V9968 branch:** integrates buppu3's V9968 emulation, including
 S16 (16 sprites per scanline), alongside this fork's development features.
