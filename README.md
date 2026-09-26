@@ -5,26 +5,28 @@ for FM/SSG/ADPCM emulation, independent chip timers, 256 KiB sample RAM,
 adjustable Master/SSG balance, debugger registers and save states.
 [Setup, hardware assumptions and tests](doc/makoto.md) ·
 [Playback and CPU findings](doc/makoto-replay-findings.md).
-The source is available on this fork's `master`; the older Windows download
-below does not contain Makoto or V9968. Analogue balance, sample RAM behavior
+The Windows x64 package below now includes both Makoto and V9968;
+the corresponding source is available on this fork's `master`. Analogue balance, sample RAM behavior
 and IRQ wiring still need confirmation on the physical cartridge.
 
 
-**Experimental V9968 branch:** integrates buppu3's V9968 emulation, including
+**Experimental V9968 support:** integrates buppu3's V9968 emulation, including
 S16 (16 sprites per scanline), alongside this fork's development features.
 [Setup, attribution and validation](doc/v9968-integration.md).
-The download below is the earlier stable fork build and does not include V9968.
+Use **Start-openMSX-Makoto.cmd** for a Turbo-R with Makoto, or
+**Start-openMSX-Makoto-V9968.cmd** to enable both in the same machine.
 
 **Update an ASCII16-X or Yamanooto game ROM while keeping its in-game Flash saves.** This
 public fork also lets Windows developers rebuild an inserted ROM and return
 to a saved test point with updated graphics or text.
 
-**[Download the Windows x64 build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.09.24.4)**
+**[Download the Windows x64 build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.09.25)**
 for this fork. Extract the ZIP and run **Start-openMSX.cmd**; it uses a separate
 profile beside the executable. [Setup and shortcuts](doc/fork-windows-download.md).
 
-Version **2026.09.24.4** fixes the F12 power-cycle bug: media reload now runs
-with the actual MSX power setting off, followed by power-on.
+Version **2026.09.25** packages Makoto and V9968 together, retaining the
+Flash persistence and F12 power-cycle/media-reload fixes. Makoto defaults to
+Master 50 / SSG 50; physical-cartridge calibration remains experimental.
 
 The source is available in this fork's `master` branch. These changes are proposed
 upstream, and the Flash persistence format is still experimental.
@@ -76,7 +78,7 @@ This is selective storage, not compression of the game ROM.
 
 ## Trying it and keeping existing saves
 
-[Download the Windows build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.09.24.4)
+[Download the Windows build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.09.25)
 and use its **Start-openMSX.cmd** launcher for a separate test profile. Other
 platforms can [build from source](doc/manual/compile.html). Load the game
 with the appropriate mapperâ€”`ASCII16-X` for an ASCII16-X cartridgeâ€”then save

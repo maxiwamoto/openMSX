@@ -4,11 +4,33 @@ This is an experimental build of maxiwamoto/openMSX, not an official openMSX rel
 It includes sector-based Flash persistence, Windows ROM replacement, reload/reset,
 no-reset media refresh, and development save-state restore. The Flash format is proposed upstream and may change.
 
-Version **2026.09.24.4** corrects F12 so it really switches MSX power off before
-reloading media and on afterwards. Upgrade the complete `share/` directory as
-well as the executable: the fix is in `share/scripts/dev_hard_reset.tcl`.
-If you installed your own copy of that script in `profile/share/scripts/`, update
-that copy too, because personal scripts override the packaged version.
+Version **2026.09.25** includes experimental Makoto/YM2608 and V9968 support,
+alongside the Flash and media-development fixes. Use the complete package,
+including `share/`, when upgrading.
+
+## Makoto and V9968 launchers
+
+- **Start-openMSX-Makoto.cmd**: Panasonic FS-A1GT Turbo-R with Makoto.
+- **Start-openMSX-Makoto-V9968.cmd**: the same, with the primary VDP replaced by V9968.
+- **Start-openMSX-V9968.cmd**: V9968 Turbo-R without Makoto.
+- **Start-openMSX.cmd**: normal emulator startup; select your preferred machine.
+
+All launchers accept additional openMSX arguments, such as `-cart demo.rom`,
+and use the separate `profile/` folder. Supply your own FS-A1GT firmware in
+`profile/share/systemroms/`. These packages do not include music demo ROMs.
+New profiles default to Makoto Master 50 / SSG 50. Existing settings are preserved;
+the console controls are `set makoto_master_volume 50` and `set makoto_psg_volume 50`.
+
+Makoto uses the pinned BSD-licensed YMFM sound core. Hardware clock/IRQ and analogue
+mixing still need confirmation. See Makoto details in `doc/makoto.md`. V9968 support is
+based on buppu3's work; basic S16 sprites are tested, not full hardware conformance.
+See V9968 details in `doc/v9968-integration.md`. A stock FS-A1GT has a V9958; the V9968
+configuration is an emulated variant. Software must enable S16 to use its increased
+per-line sprite limit.
+
+F12 retains the corrected global power-off, media reload, power-on sequence.
+A personal `profile/share/scripts/dev_hard_reset.tcl` overrides the packaged script;
+update that personal copy if you installed one previously.
 
 ## Start here
 

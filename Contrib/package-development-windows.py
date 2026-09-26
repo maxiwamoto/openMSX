@@ -76,15 +76,20 @@ def main():
                           'doc/release-history.txt', 'doc/flash-persistence.md',
                           'doc/windows-rom-replacement.md', 'doc/development-state-restore.md',
                           'doc/yamanooto-validation.md', 'doc/development-hard-reset.md',
-                          'doc/v9968-integration.md', 'doc/v9968-upstream-readme.md'):
+                          'doc/v9968-integration.md', 'doc/v9968-upstream-readme.md',
+                          'doc/makoto.md', 'doc/makoto-replay-findings.md',
+                          'doc/makoto-replay-results.json', 'doc/makoto-native-replay-results.json'):
             target = filename
         if target:
             copy(ROOT / filename, stage / target)
-    for filename in ('src/3rdparty/imgui/LICENSE.txt', 'src/3rdparty/ImGuiFileDialog/LICENSE'):
+    for filename in ('src/3rdparty/imgui/LICENSE.txt', 'src/3rdparty/ImGuiFileDialog/LICENSE',
+                     'src/3rdparty/ymfm/LICENSE', 'src/3rdparty/ymfm/README.openmsx'):
         copy(ROOT / filename, stage / 'doc/licenses' / filename)
     copy(ROOT / 'Contrib/README.cbios', stage / 'doc/cbios.txt')
     copy(ROOT / 'Contrib/Start-openMSX.cmd', stage / 'Start-openMSX.cmd')
     copy(ROOT / 'Contrib/Start-openMSX-V9968.cmd', stage / 'Start-openMSX-V9968.cmd')
+    for launcher in ('Start-openMSX-Makoto.cmd', 'Start-openMSX-Makoto-V9968.cmd'):
+        copy(ROOT / 'Contrib' / launcher, stage / launcher)
     copy(ROOT / 'doc/fork-windows-download.md', stage / 'START-HERE.md')
     copy(ROOT / 'README.md', stage / 'README.md')
     for dependency, (_, licenses) in DEPENDENCIES.items():

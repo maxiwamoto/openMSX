@@ -16,13 +16,16 @@ our V9968, Flash-save and media-reload fork. It is not a hardware-validated rele
 - Optional CSV tracing of writes, status reads, timer overflows and IRQ changes.
 
 The pinned YMFM source and BSD license are under `src/3rdparty/ymfm`.
-Only the OPN/SSG/ADPCM subset is vendored, without modifications.
+Only the OPN/SSG/ADPCM subset is vendored. The sole local core patch
+value-initializes the operator cache; see its README.openmsx for the revision and details.
 
 ## Run
 
 Add `-ext Makoto` when starting openMSX, or run `ext Makoto` in the console.
-For the Illusion City test ROM, select ASCII16. Use bank 12 for thunder and
-bank 11 for the two opening themes. The ROM itself is unchanged by this work.
+Current music test ROMs carry an ASCII16X signature and can use automatic
+mapper detection. Older unmarked demos require ASCII16. Use bank 12 for thunder
+and bank 11 for the two opening themes; the current demo selects its assigned
+bank when changing track. Music demos are distributed separately from this emulator.
 
 Console controls:
 
