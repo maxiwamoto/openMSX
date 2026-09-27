@@ -3,9 +3,11 @@
 **Makoto / YM2608 now includes all six internal rhythm sounds**, using a
 verified public reconstruction. This update also adds editable sound registers,
 side-effect-free debugger reads, native independent timers and compatibility
-with earlier Makoto save states. Channel-tool processing used about 19% less
-CPU in our local benchmark; ordinary playback was essentially unchanged, and
-recorded audio and saved chip state matched exactly in the comparison.
+with earlier Makoto save states. The latest source removes the 33.86 kHz cartridge filter after a blind test scored
+6/12. A local paired benchmark measured about 17% less whole-emulator CPU in
+normal playback and 9% less with channel tools. Chip state and emulated timing
+were unchanged; this does not speed up the emulated music driver or establish
+universal inaudibility. [Method, results and limitations](doc/makoto-filter-comparison.md).
 [Setup and hardware details](doc/makoto.md) ·
 [Performance results](doc/makoto-performance-results.json) ·
 [Playback and CPU findings](doc/makoto-replay-findings.md).
@@ -20,6 +22,8 @@ Use **Start-openMSX-Makoto.cmd** for a Turbo-R with Makoto, or
 **Update an ASCII16-X or Yamanooto game ROM while keeping its in-game Flash saves.** This
 public fork also lets Windows developers rebuild an inserted ROM and return
 to a saved test point with updated graphics or text.
+
+The published Windows build below predates the filter removal.
 
 **[Download the Windows x64 build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.09.27)**
 for this fork. Extract the ZIP and run **Start-openMSX.cmd**; it uses a separate
