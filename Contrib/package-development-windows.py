@@ -77,13 +77,14 @@ def main():
                           'doc/windows-rom-replacement.md', 'doc/development-state-restore.md',
                           'doc/yamanooto-validation.md', 'doc/development-hard-reset.md',
                           'doc/v9968-integration.md', 'doc/v9968-upstream-readme.md',
-                          'doc/makoto.md', 'doc/makoto-hardware-results.json', 'doc/makoto-replay-findings.md',
+                          'doc/makoto.md', 'doc/makoto-performance-results.json', 'doc/makoto-hardware-results.json', 'doc/makoto-replay-findings.md',
                           'doc/makoto-replay-results.json', 'doc/makoto-native-replay-results.json'):
             target = filename
         if target:
             copy(ROOT / filename, stage / target)
     for filename in ('src/3rdparty/imgui/LICENSE.txt', 'src/3rdparty/ImGuiFileDialog/LICENSE',
-                     'src/3rdparty/ymfm/LICENSE', 'src/3rdparty/ymfm/README.openmsx'):
+                     'src/3rdparty/ymfm/LICENSE', 'src/3rdparty/ymfm/README.openmsx',
+                     'src/3rdparty/ym2608/LICENSE', 'src/3rdparty/ym2608/README.openmsx'):
         copy(ROOT / filename, stage / 'doc/licenses' / filename)
     copy(ROOT / 'Contrib/README.cbios', stage / 'doc/cbios.txt')
     copy(ROOT / 'Contrib/Start-openMSX.cmd', stage / 'Start-openMSX.cmd')

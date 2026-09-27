@@ -4,7 +4,7 @@ This is an experimental build of maxiwamoto/openMSX, not an official openMSX rel
 It includes sector-based Flash persistence, Windows ROM replacement, reload/reset,
 no-reset media refresh, and development save-state restore. The Flash format is proposed upstream and may change.
 
-Version **2026.09.26** includes experimental Makoto/YM2608 and V9968 support,
+Version **2026.09.27** includes experimental Makoto/YM2608 and V9968 support,
 alongside the Flash and media-development fixes. Use the complete package,
 including `share/`, when upgrading.
 
@@ -18,6 +18,11 @@ including `share/`, when upgrading.
 All launchers accept additional openMSX arguments, such as `-cart demo.rom`,
 and use the separate `profile/` folder. Supply your own FS-A1GT firmware in
 `profile/share/systemroms/`. These packages do not include music demo ROMs.
+The six internal rhythm sounds are built in; no external rhythm file is needed.
+Sound registers can be edited in the debugger. Side-effect-free reads, independent
+timers and old-state compatibility are tested. Individual channel tools use less
+CPU while retaining identical tested audio output; normal playback is unchanged.
+
 Master now uses the standard Makoto device-volume slider. New profiles use
 `set Makoto_volume 75` and `set makoto_psg_volume 50`; adjusted normalization
 preserves the former default listening level. Existing device-volume preferences
