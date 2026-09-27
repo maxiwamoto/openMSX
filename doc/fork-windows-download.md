@@ -4,7 +4,7 @@ This is an experimental build of maxiwamoto/openMSX, not an official openMSX rel
 It includes sector-based Flash persistence, Windows ROM replacement, reload/reset,
 no-reset media refresh, and development save-state restore. The Flash format is proposed upstream and may change.
 
-Version **2026.09.27** includes experimental Makoto/YM2608 and V9968 support,
+Version **2026.09.27.1** includes experimental Makoto/YM2608 and V9968 support,
 alongside the Flash and media-development fixes. Use the complete package,
 including `share/`, when upgrading.
 
@@ -20,8 +20,10 @@ and use the separate `profile/` folder. Supply your own FS-A1GT firmware in
 `profile/share/systemroms/`. These packages do not include music demo ROMs.
 The six internal rhythm sounds are built in; no external rhythm file is needed.
 Sound registers can be edited in the debugger. Side-effect-free reads, independent
-timers and old-state compatibility are tested. Individual channel tools use less
-CPU while retaining identical tested audio output; normal playback is unchanged.
+timers and old-state compatibility are tested. The cartridge summer filter is now removed following a 6/12 blind-test result.
+A paired local benchmark measured about 17% less host CPU in normal playback
+and 9% less with channel tools. This does not speed up the emulated music driver;
+see `doc/makoto-filter-comparison.md` for the method and limits.
 
 Master now uses the standard Makoto device-volume slider. New profiles use
 `set Makoto_volume 75` and `set makoto_psg_volume 50`; adjusted normalization
@@ -31,8 +33,8 @@ use `Makoto_volume` instead; see the conversion formula in `doc/makoto.md`.
 
 Makoto uses the pinned BSD-licensed YMFM sound core. Its designer confirmed the
 8 MHz clock, direct timer IRQ wiring, 256 KB RAM and nominal FM/SSG gain. The
-summer filter and 16 separate voices are now implemented, with versioned states
-and compatibility for earlier Makoto states. Amplifier distortion and headphone
+16 separate voices use the normal host resampler, with versioned states and
+compatibility for earlier Makoto states. The extra 33.86 kHz filter is omitted. Amplifier distortion and headphone
 load response remain uncalibrated. See `doc/makoto.md`. V9968 support is
 based on buppu3's work; basic S16 sprites are tested, not full hardware conformance.
 See V9968 details in `doc/v9968-integration.md`. A stock FS-A1GT has a V9958; the V9968

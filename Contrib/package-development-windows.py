@@ -77,7 +77,8 @@ def main():
                           'doc/windows-rom-replacement.md', 'doc/development-state-restore.md',
                           'doc/yamanooto-validation.md', 'doc/development-hard-reset.md',
                           'doc/v9968-integration.md', 'doc/v9968-upstream-readme.md',
-                          'doc/makoto.md', 'doc/makoto-performance-results.json', 'doc/makoto-hardware-results.json', 'doc/makoto-replay-findings.md',
+                          'doc/makoto.md', 'doc/makoto-filter-comparison.md',
+                          'doc/makoto-filter-listening-results.json', 'doc/makoto-performance-results.json', 'doc/makoto-hardware-results.json', 'doc/makoto-replay-findings.md',
                           'doc/makoto-replay-results.json', 'doc/makoto-native-replay-results.json'):
             target = filename
         if target:
