@@ -4,7 +4,7 @@ This is an experimental build of maxiwamoto/openMSX, not an official openMSX rel
 It includes sector-based Flash persistence, Windows ROM replacement, reload/reset,
 no-reset media refresh, and development save-state restore. The Flash format is proposed upstream and may change.
 
-Version **2026.09.25** includes experimental Makoto/YM2608 and V9968 support,
+Version **2026.09.26** includes experimental Makoto/YM2608 and V9968 support,
 alongside the Flash and media-development fixes. Use the complete package,
 including `share/`, when upgrading.
 
@@ -18,11 +18,17 @@ including `share/`, when upgrading.
 All launchers accept additional openMSX arguments, such as `-cart demo.rom`,
 and use the separate `profile/` folder. Supply your own FS-A1GT firmware in
 `profile/share/systemroms/`. These packages do not include music demo ROMs.
-New profiles default to Makoto Master 50 / SSG 50. Existing settings are preserved;
-the console controls are `set makoto_master_volume 50` and `set makoto_psg_volume 50`.
+Master now uses the standard Makoto device-volume slider. New profiles use
+`set Makoto_volume 75` and `set makoto_psg_volume 50`; adjusted normalization
+preserves the former default listening level. Existing device-volume preferences
+are retained. Scripts using the removed `makoto_master_volume` setting need to
+use `Makoto_volume` instead; see the conversion formula in `doc/makoto.md`.
 
-Makoto uses the pinned BSD-licensed YMFM sound core. Hardware clock/IRQ and analogue
-mixing still need confirmation. See Makoto details in `doc/makoto.md`. V9968 support is
+Makoto uses the pinned BSD-licensed YMFM sound core. Its designer confirmed the
+8 MHz clock, direct timer IRQ wiring, 256 KB RAM and nominal FM/SSG gain. The
+summer filter and 16 separate voices are now implemented, with versioned states
+and compatibility for earlier Makoto states. Amplifier distortion and headphone
+load response remain uncalibrated. See `doc/makoto.md`. V9968 support is
 based on buppu3's work; basic S16 sprites are tested, not full hardware conformance.
 See V9968 details in `doc/v9968-integration.md`. A stock FS-A1GT has a V9958; the V9968
 configuration is an emulated variant. Software must enable S16 to use its increased
