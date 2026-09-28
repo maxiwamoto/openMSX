@@ -229,8 +229,8 @@ not been run locally. This is not a new real-board audio comparison.
 | 11-16 | Bass drum, snare, cymbal, hi-hat, tom, rim shot |
 
 Normal playback uses the combined YMFM FM/ADPCM and SSG output directly.
-Separate-channel tools reuse per-voice targets until an input changes. Empty
-buffers are marked silent so openMSX can bypass downstream mixing/resampling
+Separate-channel tools reuse per-voice targets until an input changes. Whole-chip
+silent buffers are marked silent so openMSX can bypass downstream mixing/resampling
 work. Chip clocks, envelopes, noise and ADPCM continue running. This saves host
 CPU and does not fix late updates caused by an overloaded emulated Z80.
 
@@ -241,12 +241,15 @@ timer deadlines are migrated without restarting the counters. Version 2's
 `coreFormat` identifier is accepted only for its supported value (1).
 Version 1 lacks voice histories; they start at zero and refill at the next FM
 update. Current fork version 5 retains voice caches but omits filter histories.
-Versions 2-4 still load; their obsolete filter histories are read and discarded.
+Versions 2-4 still load; their obsolete filter histories are skipped by the XML loader.
 A future core-layout change must bump the sound-state version and provide a
 migration/legacy decoder rather than guessing compatibility from byte count.
 The core regression pins a deterministic old-format state fingerprint as well
 as checking exact mixed-output equivalence. Host resampler buffers remain outside
 the device state, so immediate WAV continuity after restore is not guaranteed.
+
+See the [2026-09-28 review follow-up](makoto-review-2026-09-28.md) for mixing,
+silence-detection, CPU and state-format validation.
 
 ## Reproducing the checks
 
@@ -295,7 +298,7 @@ peek, suppresses IRQ callbacks, or maintains 512 shadow register bytes and a
 second address latch. Register inspection uses core storage; later register-edit support is described below.
 Normal CPU reads/writes, audio synthesis and the core's serialized layout are
 unchanged. Version 4 saves omit the duplicate host registers/latch; versions 1–3
-are read using their core state, with old duplicate fields consumed and ignored.
+are read using their core state, with obsolete duplicate XML fields skipped.
 
 `Contrib/makoto-peek-test.cc` checks all four peek ports against real reads on a
 cloned core across 1,189 states, including BUSY, GPIO, ADPCM dummy reads, RAM
