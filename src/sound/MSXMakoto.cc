@@ -1,5 +1,6 @@
 #include "MSXMakoto.hh"
 #include "MakotoMix.hh"
+#include "MakotoNativeChip.hh"
 
 #include "DeviceConfig.hh"
 #include "Clock.hh"
@@ -19,6 +20,7 @@
 #include <algorithm>
 #include <array>
 #include <vector>
+#include <numbers>
 
 namespace openmsx {
 // Cartridge integration is separate from the pinned YMFM core (see README.openmsx).
@@ -26,6 +28,54 @@ class MakotoSound final : public ResampledSoundDevice,
 			  private ymfm::ymfm_interface
 {
 	static constexpr unsigned CLOCK = 8000000;
+
+	class SsgPart final : public ResampledSoundDevice {
+	public:
+		SsgPart(DeviceConfig& config, MakotoSound& owner_)
+			: ResampledSoundDevice(config.getMotherBoard(), "Makoto SSG", "Makoto SSG", 3, CLOCK / 32, false)
+			, owner(owner_) {}
+		void start(DeviceConfig& config) { registerSound(config); registered = true; }
+		~SsgPart() { if (registered) unregisterSound(); }
+		void restoreClock(EmuTime time) { createResampler(); getEmuClock().reset(time); }
+		void rate(unsigned value) {
+			if (getInputRate() != value) { setInputRate(value); createResampler(); }
+		}
+		void setOutputRate(unsigned rate, double speed) override {
+			const auto previous = getEmuClock();
+			ResampledSoundDevice::setOutputRate(rate, speed);
+			if (clockInitialized && previous.getPeriod() == getEmuClock().getPeriod())
+				getEmuClock().reset(previous.getTime());
+			clockInitialized = true;
+		}
+	private:
+		float getAmplificationFactorImpl() const override {
+			// Mono centre panning contributes 1/sqrt(2) to each host side.
+			return std::numbers::sqrt2_v<float> / 32768.0f;
+		}
+		void generateChannels(std::span<float*> buffers, unsigned num) override {
+			const bool combined = std::ranges::all_of(buffers, [&](auto* b) { return b == buffers[0]; });
+			uint32_t orOutput = 0;
+			for (unsigned i = 0; i < num; ++i) {
+				const auto s = owner.chip.clockSSG();
+				const auto total = (s[0] + s[1] + s[2]) * 2 / 3;
+				if (combined) {
+					buffers[0][i] += float(total) * owner.ssgGain;
+					orOutput |= uint32_t(total);
+				} else {
+					std::array<int32_t, 3> scaled = {s[0] * 2 / 3, s[1] * 2 / 3, s[2] * 2 / 3};
+					scaled[s[2] ? 2 : s[1] ? 1 : 0] += total - scaled[0] - scaled[1] - scaled[2];
+					for (unsigned c = 0; c < 3; ++c) buffers[c][i] += float(scaled[c]) * owner.ssgGain;
+				}
+			}
+			if (combined) {
+				std::ranges::fill(buffers.subspan(1), nullptr);
+				if (!orOutput) buffers[0] = nullptr;
+			}
+		}
+		MakotoSound& owner;
+		bool registered = false;
+		bool clockInitialized = false;
+	};
 
 	class Timer final : public Schedulable {
 	public:
@@ -56,8 +106,8 @@ class MakotoSound final : public ResampledSoundDevice,
 
 public:
 	MakotoSound(DeviceConfig& config, EmuTime time)
-		: ResampledSoundDevice(config.getMotherBoard(), "Makoto", "Makoto YM2608 OPNA", 16,
-				       CLOCK / 8,
+		: ResampledSoundDevice(config.getMotherBoard(), "Makoto", "Makoto FM, rhythm and ADPCM", 13,
+				       (CLOCK + 72) / 144,
 				       true)
 		, irq(config.getMotherBoard(), "Makoto.IRQ")
 		, psgVolume(config.getCommandController(), "makoto_psg_volume",
@@ -70,6 +120,7 @@ public:
 		, chip(*this)
 		, sampleRAM(config, "Makoto ADPCM RAM", "YM2608 ADPCM-B sample RAM", 262144)
 		, registers(config.getMotherBoard(), *this)
+		, ssgPart(config, *this)
 	{
 		if (config.findChild("rom")) {
 			rhythm = std::make_unique<Rom>("Makoto rhythm ROM",
@@ -84,6 +135,7 @@ public:
 		psgVolume.attach(*this);
 		reset(time);
 		registerSound(config);
+		ssgPart.start(config);
 	}
 	~MakotoSound()
 	{
@@ -96,6 +148,7 @@ public:
 		contextTime = time;
 		for (auto& timer : timers) timer.cancel();
 		chip.reset();
+		applyRates();
 		busyEnd = time;
 		channelOutput.fill(0);
 		irq.reset();
@@ -120,6 +173,7 @@ public:
 		updateStream(time);
 		contextTime = time;
 		chip.write(port, value);
+		applyRates();
 	}
 	template<typename Archive> void serialize(Archive& ar, unsigned version)
 	{
@@ -159,6 +213,7 @@ public:
 			std::ranges::copy(*legacy, sampleRAM.begin());
 		}
 		ar.serialize("irq", irq, "sampleClock", getEmuClock());
+		if (ar.versionAtLeast(version, 8)) ar.serialize("ssgClock", ssgPart.getEmuClock());
 		if (ar.versionAtLeast(version, 2)) {
 			ar.serialize("channelOutput", channelOutput);
 		} else if constexpr (Archive::IS_LOADER) {
@@ -180,7 +235,15 @@ public:
 				throw MSXException("Invalid Makoto core state size");
 			ymfm::ymfm_saved_state saved(state, false);
 			chip.save_restore(saved);
-			chip.set_fidelity(ymfm::OPN_FIDELITY_MAX);
+			// Restore rates before reinstating the saved sample-clock phases.
+			const auto fmTime = getEmuClock().getTime();
+			const auto ssgTime = ar.versionAtLeast(version, 8)
+				? ssgPart.getEmuClock().getTime() : fmTime;
+			applyRates();
+			// Old releases stored a 1 MHz clock; reconstruct the native periods.
+			createResampler();
+			ssgPart.restoreClock(ssgTime);
+			getEmuClock().reset(fmTime);
 			chip.invalidate_caches();
 			contextTime = timers[0].getCurrentTime();
 		}
@@ -245,47 +308,40 @@ private:
 			ResampledSoundDevice::update(setting);
 		}
 	}
+
+	void applyRates() {
+		if (getInputRate() != chip.fmRate()) {
+			setInputRate(chip.fmRate());
+			createResampler();
+		}
+		ssgPart.rate(chip.ssgRate());
+	}
 	void generateChannels(std::span<float*> buffers, unsigned num) override
 	{
-		// YMFM already applies the aggregate DAC clamp and SSG 2/3 scale.
-		// Keep its combined output for normal playback. MakotoMix splits
-		// that same signal for channel tools (see makoto-mix-test.cc).
-		if (std::ranges::all_of(buffers, [&](auto* b) { return b == buffers[0]; })) {
-			uint32_t orOutput = 0;
-			for (unsigned i = 0; i < num; ++i) {
-				ymfm::ym2608::output_data output;
-				chip.generate(&output);
-				float ssg = ssgGain * float(output.data[2]);
-				buffers[0][2 * i]     += float(output.data[0]) + ssg;
-				buffers[0][2 * i + 1] += float(output.data[1]) + ssg;
-				orOutput |= uint32_t(output.data[0] | output.data[1] | output.data[2]);
-			}
-			std::ranges::fill(buffers.subspan(1), nullptr);
-			// A muted but active SSG conservatively keeps this buffer active.
-			if (orOutput == 0) buffers[0] = nullptr;
-			return;
-		}
+		const bool combined = std::ranges::all_of(buffers, [&](auto* b) { return b == buffers[0]; });
+		uint32_t orOutput = 0;
 		MakotoMix mix;
-		std::array<int32_t, 3> lastSSG = {};
+		constexpr std::array<int32_t, 3> noSSG = {};
 		for (unsigned i = 0; i < num; ++i) {
-			ymfm::ym2608::output_data output;
-			chip.generate(&output);
-			const auto& ssg = chip.ssg_output();
-			bool changed = i == 0 || chip.channel_output_changed();
-			for (unsigned c = 0; c < 3; ++c) {
-				changed = changed || lastSSG[c] != ssg.data[c];
-				lastSSG[c] = ssg.data[c];
-			}
-			if (changed) {
-				mix.update(channelOutput, ssg.data, output.data, ssgGain);
-			}
-			for (unsigned c = 0; c < 16; ++c) {
-				buffers[c][2 * i]     += mix.voices[2 * c];
-				buffers[c][2 * i + 1] += mix.voices[2 * c + 1];
+			const auto fm = chip.clockFM();
+			if (combined) {
+				buffers[0][2 * i] += float(fm[0]);
+				buffers[0][2 * i + 1] += float(fm[1]);
+				orOutput |= uint32_t(fm[0] | fm[1]);
+			} else {
+				const std::array<int32_t, 3> mixed = {fm[0], fm[1], 0};
+				mix.update(channelOutput, noSSG, mixed, 0.0f);
+				for (unsigned c = 0; c < 13; ++c) {
+					const unsigned source = c < 6 ? c : c + 3;
+					buffers[c][2 * i] += mix.voices[2 * source];
+					buffers[c][2 * i + 1] += mix.voices[2 * source + 1];
+				}
 			}
 		}
-		// Channel tools usually inspect active output. Avoid a per-voice
-		// silence scan; the host can sum these buffers directly.
+		if (combined) {
+			std::ranges::fill(buffers.subspan(1), nullptr);
+			if (!orOutput) buffers[0] = nullptr;
+		}
 	}
 
 	struct Registers final : SimpleDebuggable {
@@ -304,6 +360,7 @@ private:
 			owner.updateStream(time);
 			owner.contextTime = time;
 			owner.chip.write_register(uint16_t(address), value);
+			owner.applyRates();
 		}
 		MakotoSound& owner;
 	};
@@ -315,15 +372,17 @@ private:
 	std::array<Timer, 2> timers;
 	EmuTime contextTime;
 	EmuTime busyEnd;
-	ymfm::ym2608 chip;
+	MakotoNativeChip chip;
 	Ram sampleRAM;
 	std::unique_ptr<Rom> rhythm;
 	Registers registers;
+	SsgPart ssgPart;
 };
 
 // Versions 1/2 were distributed in the public Makoto preview builds.
 // Version 6 stores sample RAM as a delta-compressed blob; older saves still load.
-SERIALIZE_CLASS_VERSION(MakotoSound, 7);
+// Experimental version 8 adds a separately clocked native SSG stream.
+SERIALIZE_CLASS_VERSION(MakotoSound, 8);
 
 MSXMakoto::MSXMakoto(DeviceConfig& config)
 	: MSXDevice(config)

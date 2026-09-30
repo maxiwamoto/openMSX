@@ -11,8 +11,8 @@
  <devices>
   <Makoto id="Makoto">
    <io base="0x14" num="4"/>
-   <!-- Listening normalization includes the former 50% master default.
-        The standard Makoto_volume slider now controls the combined output. -->
+   <!-- Native-stream experiment: FM and SSG have separate device volumes.
+        Equal device volumes retain the calibrated balance and SSG control. -->
    <sound><volume>96000</volume></sound>
    <!-- Internal rhythm samples are built in. Optional 8192-byte override: <rom><filename>ym2608_adpcm_rom.bin</filename></rom> -->
   </Makoto>

@@ -40,14 +40,18 @@ def main():
       try:
        e.command('set pause on; set mute off; set volume 50')
        if not active:e.command('carta eject')
-       if case!='no-makoto':e.command('ext Makoto; set Makoto_volume 20; set makoto_psg_volume 50')
+       if case!='no-makoto':
+        e.command('ext Makoto; set Makoto_volume 20; set makoto_psg_volume 50')
+        if e.command('info exists {Makoto SSG_volume}')=='1':e.command('set {Makoto SSG_volume} 20')
        e.command('reset');step(e,15)
        if active:
         e.command(f"debug write memory 0xD200 {track}; debug write memory 0xD201 {songs[track]['default_bank']-1}; keymatrixdown 8 1")
         step(e,.1);e.command('keymatrixup 8 1');step(e,1)
         assert e.command('debug read memory 0xD202')=='1','Music did not start'
         assert e.command('debug read memory 0xD203')=='0','Player hardware error'
-       if case=='channel-tools':e.command('set Makoto_ch1_mute true')
+       if case=='channel-tools':
+        e.command('set Makoto_ch1_mute true')
+        e.command('set {Makoto SSG_ch3_mute} true' if e.command('info exists {Makoto SSG_volume}')=='1' else 'set Makoto_ch9_mute true')
        cpu_mode=e.command('get_active_cpu');start=b.cpu_time(e.process);wall=time.perf_counter()
        step(e,a.seconds);elapsed=time.perf_counter()-wall;end=b.cpu_time(e.process)
        row=dict(build=label,case=case,repeat=repeat,cpu_mode=cpu_mode,cpu_seconds=None if start is None else end-start,wall_seconds=elapsed)

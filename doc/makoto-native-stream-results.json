@@ -1,0 +1,683 @@
+{
+  "date": "2026-09-30",
+  "branch": "codex/makoto-native-streams",
+  "base_commit": "ad6afbc95b72ecbcfcf8f0b55b30790dde6fd0a6",
+  "builds": {
+    "baseline": {
+      "sha256": "309184433c2d4f67406214ff7487285a1738b808d7b482ef56603c9c08ada769",
+      "compiler": "MSVC v145 x64 Release"
+    },
+    "native": {
+      "sha256": "465ddc75d09c9391ccad0f3855c4dab4ced6dc16823fd8c9922bff0de851f264",
+      "compiler": "MSVC v145 x64 Release"
+    }
+  },
+  "benchmark": {
+    "seconds": 60.0,
+    "rom_sha256": "0342ca280afb3efeea765e37ef01d5aef4ddd406781296313fd9f52b8e853585",
+    "track": 10,
+    "runs": [
+      {
+        "build": "baseline",
+        "case": "no-makoto",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 2.921875,
+        "wall_seconds": 3.0921447000000626
+      },
+      {
+        "build": "baseline",
+        "case": "silent-basic",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.296875,
+        "wall_seconds": 4.521924500004388
+      },
+      {
+        "build": "baseline",
+        "case": "music",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 6.921875,
+        "wall_seconds": 7.507543599989731
+      },
+      {
+        "build": "baseline",
+        "case": "channel-tools",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 9.703125,
+        "wall_seconds": 10.276257999998052
+      },
+      {
+        "build": "native",
+        "case": "no-makoto",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.0,
+        "wall_seconds": 3.1626119000138715
+      },
+      {
+        "build": "native",
+        "case": "silent-basic",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.03125,
+        "wall_seconds": 4.238634800014552
+      },
+      {
+        "build": "native",
+        "case": "music",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.640625,
+        "wall_seconds": 5.94317859999137
+      },
+      {
+        "build": "native",
+        "case": "channel-tools",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 6.125,
+        "wall_seconds": 6.535480600025039
+      },
+      {
+        "build": "native",
+        "case": "no-makoto",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.03125,
+        "wall_seconds": 3.2215489000082016
+      },
+      {
+        "build": "native",
+        "case": "silent-basic",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.21875,
+        "wall_seconds": 4.522128299984615
+      },
+      {
+        "build": "native",
+        "case": "music",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.53125,
+        "wall_seconds": 5.995799399970565
+      },
+      {
+        "build": "native",
+        "case": "channel-tools",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 6.59375,
+        "wall_seconds": 6.959215499984566
+      },
+      {
+        "build": "baseline",
+        "case": "no-makoto",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 2.953125,
+        "wall_seconds": 3.2496490000048652
+      },
+      {
+        "build": "baseline",
+        "case": "silent-basic",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.65625,
+        "wall_seconds": 4.897405399999116
+      },
+      {
+        "build": "baseline",
+        "case": "music",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 7.453125,
+        "wall_seconds": 7.723107199999504
+      },
+      {
+        "build": "baseline",
+        "case": "channel-tools",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 10.0625,
+        "wall_seconds": 10.611034400004428
+      },
+      {
+        "build": "baseline",
+        "case": "no-makoto",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.140625,
+        "wall_seconds": 3.525567199976649
+      },
+      {
+        "build": "baseline",
+        "case": "silent-basic",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.59375,
+        "wall_seconds": 4.7570497000124305
+      },
+      {
+        "build": "baseline",
+        "case": "music",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 7.40625,
+        "wall_seconds": 7.857462500047404
+      },
+      {
+        "build": "baseline",
+        "case": "channel-tools",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 10.015625,
+        "wall_seconds": 10.584068199968897
+      },
+      {
+        "build": "native",
+        "case": "no-makoto",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.125,
+        "wall_seconds": 3.209782099991571
+      },
+      {
+        "build": "native",
+        "case": "silent-basic",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.171875,
+        "wall_seconds": 4.36502719996497
+      },
+      {
+        "build": "native",
+        "case": "music",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 6.03125,
+        "wall_seconds": 6.440140999970026
+      },
+      {
+        "build": "native",
+        "case": "channel-tools",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 6.25,
+        "wall_seconds": 6.6535810000495985
+      },
+      {
+        "build": "native",
+        "case": "no-makoto",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.03125,
+        "wall_seconds": 3.2046198999742046
+      },
+      {
+        "build": "native",
+        "case": "silent-basic",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.046875,
+        "wall_seconds": 4.439131099963561
+      },
+      {
+        "build": "native",
+        "case": "music",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.8125,
+        "wall_seconds": 6.325661200040486
+      },
+      {
+        "build": "native",
+        "case": "channel-tools",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 6.109375,
+        "wall_seconds": 6.527283300005365
+      },
+      {
+        "build": "baseline",
+        "case": "no-makoto",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 2.984375,
+        "wall_seconds": 3.258620799984783
+      },
+      {
+        "build": "baseline",
+        "case": "silent-basic",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.453125,
+        "wall_seconds": 4.731501600006595
+      },
+      {
+        "build": "baseline",
+        "case": "music",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 7.171875,
+        "wall_seconds": 7.577782600012142
+      },
+      {
+        "build": "baseline",
+        "case": "channel-tools",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 10.015625,
+        "wall_seconds": 10.49413419998018
+      },
+      {
+        "build": "baseline",
+        "case": "no-makoto",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.296875,
+        "wall_seconds": 3.4581095000030473
+      },
+      {
+        "build": "baseline",
+        "case": "silent-basic",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.65625,
+        "wall_seconds": 4.917096899996977
+      },
+      {
+        "build": "baseline",
+        "case": "music",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 7.25,
+        "wall_seconds": 7.698791499948129
+      },
+      {
+        "build": "baseline",
+        "case": "channel-tools",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 9.90625,
+        "wall_seconds": 10.731192899984308
+      },
+      {
+        "build": "native",
+        "case": "no-makoto",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.0625,
+        "wall_seconds": 3.271446999977343
+      },
+      {
+        "build": "native",
+        "case": "silent-basic",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.25,
+        "wall_seconds": 4.511297699995339
+      },
+      {
+        "build": "native",
+        "case": "music",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.765625,
+        "wall_seconds": 6.117291699978523
+      },
+      {
+        "build": "native",
+        "case": "channel-tools",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 6.265625,
+        "wall_seconds": 6.629488000005949
+      }
+    ],
+    "summary": {
+      "baseline": {
+        "median_seconds": {
+          "no-makoto": 2.984375,
+          "silent-basic": 4.59375,
+          "music": 7.25,
+          "channel-tools": 10.015625
+        },
+        "relative_to_no_makoto": {
+          "no-makoto": 1.0,
+          "silent-basic": 1.5392670157068062,
+          "music": 2.4293193717277486,
+          "channel-tools": 3.356020942408377
+        }
+      },
+      "native": {
+        "median_seconds": {
+          "no-makoto": 3.03125,
+          "silent-basic": 4.171875,
+          "music": 5.765625,
+          "channel-tools": 6.25
+        },
+        "relative_to_no_makoto": {
+          "no-makoto": 1.0,
+          "silent-basic": 1.3762886597938144,
+          "music": 1.902061855670103,
+          "channel-tools": 2.0618556701030926
+        }
+      }
+    }
+  },
+  "native_prescaler": {
+    "6-0": {
+      "prescaler": 6,
+      "frequency_hz": 976.6134629718463,
+      "expected_hz": 976.5625,
+      "peak": 1175.0,
+      "save_restore": "exact chip/clock continuation"
+    },
+    "3-1": {
+      "prescaler": 3,
+      "frequency_hz": 1953.0617036458082,
+      "expected_hz": 1953.125,
+      "peak": 676.0,
+      "save_restore": "exact chip/clock continuation"
+    },
+    "2-2": {
+      "prescaler": 2,
+      "frequency_hz": 3906.678468503705,
+      "expected_hz": 3906.25,
+      "peak": 682.0,
+      "save_restore": "exact chip/clock continuation"
+    },
+    "6-3": {
+      "prescaler": 6,
+      "frequency_hz": 976.6134350117412,
+      "expected_hz": 976.5625,
+      "peak": 703.0,
+      "save_restore": "exact chip/clock continuation"
+    },
+    "rewind": "exact chip/clock restore across live prescaler change"
+  },
+  "baseline_prescaler": {
+    "6-0": {
+      "prescaler": 6,
+      "frequency_hz": 976.6849711907198,
+      "expected_hz": 976.5625,
+      "peak": 1175.0,
+      "save_restore": "exact chip/clock continuation"
+    },
+    "3-1": {
+      "prescaler": 3,
+      "frequency_hz": 1953.3130673194032,
+      "expected_hz": 1953.125,
+      "peak": 686.0,
+      "save_restore": "exact chip/clock continuation"
+    },
+    "2-2": {
+      "prescaler": 2,
+      "frequency_hz": 3906.6784810496815,
+      "expected_hz": 3906.25,
+      "peak": 683.0,
+      "save_restore": "exact chip/clock continuation"
+    },
+    "6-3": {
+      "prescaler": 6,
+      "frequency_hz": 976.6849390527556,
+      "expected_hz": 976.5625,
+      "peak": 684.0,
+      "save_restore": "exact chip/clock continuation"
+    },
+    "rewind": "exact chip/clock restore across live prescaler change"
+  },
+  "integration": {
+    "current-ssg-high": {
+      "rms": [
+        505.44780906939366,
+        505.44780906939366
+      ],
+      "peak": 725.0
+    },
+    "current-ssg-low": {
+      "rms": [
+        552.2339143980474,
+        552.2339143980474
+      ],
+      "peak": 668.0
+    },
+    "current-separate-buffers": {
+      "rms": [
+        552.2216500481923,
+        552.2216500481923
+      ],
+      "peak": 668.0
+    },
+    "channel_tools_output_ratio": 0.9999777913859772,
+    "current-ssg-muted": {
+      "rms": [
+        1.9758740307337879,
+        1.9758740307337879
+      ],
+      "peak": 11.0
+    },
+    "current-other-muted": {
+      "rms": [
+        552.2485319120683,
+        552.2485319120683
+      ],
+      "peak": 679.0
+    },
+    "current-fm-left": {
+      "rms": [
+        158.37200498915746,
+        1.9701868186509879
+      ],
+      "peak": 235.0
+    },
+    "current-fm-muted": {
+      "rms": [
+        0.0,
+        0.0
+      ],
+      "peak": 0.0
+    },
+    "current-master-zero": {
+      "rms": [
+        0.0,
+        0.0
+      ],
+      "peak": 0.0
+    },
+    "data_peeks": "ADPCM dummy reads, next RAM byte, IRQ and complete saved chip state preserved",
+    "state_format": "RAM restored; future sound-state version rejected by the native serializer",
+    "unfinished_write_state": "stale A7 buffer survives device save/restore; RESET releases it",
+    "legacy_state_baseline": "core, deadlines, BUSY, RAM and clock timestamp preserved; native clock periods reconstructed; resumed",
+    "legacy_state_makoto-integration-18imussg": "core, deadlines, BUSY, RAM and clock timestamp preserved; native clock periods reconstructed; resumed",
+    "channels": "16 voices exposed; SSG/FM isolation and stereo pan passed",
+    "ram": "CPU readback in each 64KB quarter of 256KB x1-mode RAM passed"
+  },
+  "timers": {
+    "passed": [
+      "Standard device volume defaults to 75 percent and SSG to 50 percent",
+      "BUSY appears on both status ports and expires",
+      "Timer A period, sticky overflow, acknowledge and reload",
+      "Timer B period and overflow",
+      "Stopping timers cancels scheduled overflows",
+      "Both timers raise MSX CPU IRQ; acknowledge and cancellation release it",
+      "Cancelling timer A leaves independently scheduled timer B running",
+      "Debugger exposes core ID, IRQ mask and effective latched FM registers",
+      "Debugger peeks preserve the entire chip state",
+      "Save/restore resumes the same chip, RAM, BUSY and both active timers",
+      "Native in-memory rewind restores active timers and complete Makoto state",
+      "Native I/O watchpoints and IRQ probe tracing work without device file tracing",
+      "MSX reset stops OPNA timers"
+    ]
+  },
+  "hardware_v4": [
+    {
+      "machine": "Philips_NMS_8250",
+      "makoto": false,
+      "display_complete": true,
+      "irq": null,
+      "timeout": 1,
+      "result_bytes": "4d4b5434010000000000000000000000ffffffffffffffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101010100000000"
+    },
+    {
+      "machine": "Philips_NMS_8250",
+      "makoto": true,
+      "display_complete": true,
+      "irq": "0",
+      "timeout": 0,
+      "result_bytes": "4d4b543400000000000000000000000000000000000000000808080808080808c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c1c2c3c4c5c6c7c8c1c2c3c4c5c6c7c8ffffffff200800000000000000000000"
+    },
+    {
+      "machine": "Panasonic_FS-A1GT",
+      "makoto": false,
+      "display_complete": true,
+      "irq": null,
+      "timeout": 1,
+      "result_bytes": "4d4b5434010000000000000000000000ffffffffffffffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101010100000000"
+    },
+    {
+      "machine": "Panasonic_FS-A1GT",
+      "makoto": true,
+      "display_complete": true,
+      "irq": "0",
+      "timeout": 0,
+      "result_bytes": "4d4b543400000000000000000000000000000000000000000808080808080808c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c1c2c3c4c5c6c7c8c1c2c3c4c5c6c7c8ffffffff200800000000000000000000"
+    }
+  ],
+  "hardware_v5": [
+    {
+      "machine": "Philips_NMS_8250",
+      "makoto": false,
+      "display_complete": true,
+      "irq": null,
+      "timeout": 1,
+      "result_bytes": "4d4b5435010000000000000000000000ffffffffffffffff0000000000000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "machine": "Philips_NMS_8250",
+      "makoto": true,
+      "display_complete": true,
+      "irq": "0",
+      "timeout": 0,
+      "result_bytes": "4d4b543500010100000000000000000000000000000000000808080808080808a1a2a3a4ffffffffb1b2b3b4b1b2b3b4c1c2c3c4c5c6c7c8b1b2b3b4b5b6b7b8ffff0000200804000000000000000000"
+    },
+    {
+      "machine": "Panasonic_FS-A1GT",
+      "makoto": false,
+      "display_complete": true,
+      "irq": null,
+      "timeout": 1,
+      "result_bytes": "4d4b5435010000000000000000000000ffffffffffffffff0000000000000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "machine": "Panasonic_FS-A1GT",
+      "makoto": true,
+      "display_complete": true,
+      "irq": "0",
+      "timeout": 0,
+      "result_bytes": "4d4b543500010100000000000000000000000000000000000808080808080808a1a2a3a4ffffffffb1b2b3b4b1b2b3b4c1c2c3c4c5c6c7c8b1b2b3b4b5b6b7b8ffff0000200804000000000000000000"
+    }
+  ],
+  "core": {
+    "samples": 1080000,
+    "mismatches": 0,
+    "negative_control_differences": 107967,
+    "prescalers": [
+      6,
+      3,
+      2
+    ],
+    "all_16_voices_exercised": true,
+    "built_in_rhythm_samples": true
+  },
+  "recordings": {
+    "rom_sha256": "0342ca280afb3efeea765e37ef01d5aef4ddd406781296313fd9f52b8e853585",
+    "seconds": 20.0,
+    "recordings": [
+      {
+        "build": "baseline",
+        "track": 1,
+        "name": "THUNDER",
+        "bank": 12,
+        "file": "baseline-01.wav",
+        "sample_rate": 44100,
+        "rms": 108.84035609184883,
+        "peak": 1840.0
+      },
+      {
+        "build": "baseline",
+        "track": 4,
+        "name": "SHOP",
+        "bank": 3,
+        "file": "baseline-04.wav",
+        "sample_rate": 44100,
+        "rms": 247.48178826679634,
+        "peak": 1725.0
+      },
+      {
+        "build": "baseline",
+        "track": 10,
+        "name": "BUSTLING TOWN",
+        "bank": 5,
+        "file": "baseline-10.wav",
+        "sample_rate": 44100,
+        "rms": 194.06979361087338,
+        "peak": 1330.0
+      },
+      {
+        "build": "baseline",
+        "track": 14,
+        "name": "LAO SHI",
+        "bank": 2,
+        "file": "baseline-14.wav",
+        "sample_rate": 44100,
+        "rms": 116.17228796865568,
+        "peak": 955.0
+      },
+      {
+        "build": "native",
+        "track": 1,
+        "name": "THUNDER",
+        "bank": 12,
+        "file": "native-01.wav",
+        "sample_rate": 44100,
+        "rms": 108.80199314386184,
+        "peak": 1842.0
+      },
+      {
+        "build": "native",
+        "track": 4,
+        "name": "SHOP",
+        "bank": 3,
+        "file": "native-04.wav",
+        "sample_rate": 44100,
+        "rms": 247.56162894308764,
+        "peak": 1778.0
+      },
+      {
+        "build": "native",
+        "track": 10,
+        "name": "BUSTLING TOWN",
+        "bank": 5,
+        "file": "native-10.wav",
+        "sample_rate": 44100,
+        "rms": 195.28561146724292,
+        "peak": 1354.0
+      },
+      {
+        "build": "native",
+        "track": 14,
+        "name": "LAO SHI",
+        "bank": 2,
+        "file": "native-14.wav",
+        "sample_rate": 44100,
+        "rms": 116.06732813209126,
+        "peak": 967.0
+      }
+    ]
+  }
+}

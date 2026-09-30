@@ -44,7 +44,12 @@ for variant, exe in variants:
    e.command("set makoto_master_volume 100; set Makoto_volume 20")
   else:
    e.command("set Makoto_volume 20")
-   assert e.command("llength [info vars Makoto_ch*_mute]") == "16"
+   native = e.command("info exists {Makoto SSG_volume}") == "1"
+   if native:
+    e.command("set {Makoto SSG_volume} 20")
+    assert e.command("llength [info vars Makoto_ch*_mute]") == "13"
+    assert e.command("llength [info vars {Makoto SSG_ch*_mute}]") == "3"
+   else: assert e.command("llength [info vars Makoto_ch*_mute]") == "16"
   write(0,9);write(1,0);write(7,0x3e);write(8,15)
   x,rate=record("ssg-high")
   results[variant]={"high":x,"rate":rate}
@@ -53,14 +58,16 @@ for variant, exe in variants:
   results[variant]["low"]=x
   if variant == "baseline": continue
   e.command("set Makoto_ch1_record "+m.tcl_path(directory/"fm1-alone.wav"))
+  if native: e.command("set {Makoto SSG_ch1_record} "+m.tcl_path(directory/"ssg1-alone.wav"))
   separate,_=record("separate-buffers")
   e.command("set Makoto_ch1_record {}")
+  if native: e.command("set {Makoto SSG_ch1_record} {}")
   ratio=float(np.sqrt(np.mean(separate*separate))/np.sqrt(np.mean(x*x)))
   assert abs(ratio-1)<.005,ratio
   metrics["channel_tools_output_ratio"]=ratio
-  e.command("set Makoto_ch7_mute true")
+  e.command("set {Makoto SSG_ch1_mute} true" if native else "set Makoto_ch7_mute true")
   x,_=record("ssg-muted"); assert np.max(abs(x[-1024:])) <= 1
-  e.command("set Makoto_ch7_mute false; set Makoto_ch1_mute true")
+  e.command(("set {Makoto SSG_ch1_mute} false" if native else "set Makoto_ch7_mute false") + "; set Makoto_ch1_mute true")
   x,_=record("other-muted"); assert np.sqrt(np.mean(x*x)) > 5
   e.command("set Makoto_ch1_mute false")
   write(8,0)
@@ -156,9 +163,9 @@ for variant, exe in variants:
     root=ET.fromstring(gzip.decompress(path.read_bytes()))
     return root,root.find('.//device[@type="Makoto"]/sound')
    legacy_root,legacy_sound=sound_state(legacy_path)
-   assert legacy_sound.get("version","1") in ("1","2","3","4","5","6")
+   assert legacy_sound.get("version","1") in ("1","2","3","4","5","6","7")
    deadlines=[int(x.text) for x in legacy_sound.findall("deadlines/item/time")]
-   if legacy_sound.get("version") in ("3","4","5","6"):
+   if legacy_sound.get("version") in ("3","4","5","6","7"):
     deadlines=[]
     for name in ("timerA","timerB"):
      node=legacy_sound.find(name+"/Schedulable/syncPoints/item/time/time")
@@ -201,8 +208,10 @@ for variant, exe in variants:
      times=[int(x.text) for x in current_sound.findall(name+"/Schedulable/syncPoints/item/time/time")]
      expected=[] if deadlines[index]==2**64-1 else [deadlines[index]]
      assert times==expected,(name,times,expected)
-    for name in ("core","busyEnd","sampleRAM","irq","sampleClock"):
+    for name in ("core","busyEnd","sampleRAM","irq"):
      assert payload(current_sound.find(name))==payload(legacy_sound.find(name)),(label,name)
+    assert payload(current_sound.find("sampleClock/lastTick/time")) == payload(legacy_sound.find("sampleClock/lastTick/time"))
+    if not native: assert payload(current_sound.find("sampleClock")) == payload(legacy_sound.find("sampleClock"))
     expected_volume = e.command("debug read {Makoto registers} 8")
     step(.01)
     assert e.command("debug read {Makoto registers} 8") == expected_volume
@@ -213,7 +222,7 @@ for variant, exe in variants:
     unsupported.write_bytes(gzip.compress(xml.replace(b"<coreFormat>1</coreFormat>",b"<coreFormat>2</coreFormat>")))
     error=e.command("catch {restore_machine "+m.tcl_path(unsupported)+"} reason; set reason")
     assert "Unsupported Makoto core state format" in error,error
-   metrics["legacy_state_"+legacy_path.parent.name]="core, deadlines, BUSY, RAM and clock preserved; resumed; no duplicate registers in new save"
+   metrics["legacy_state_"+legacy_path.parent.name]="core, deadlines, BUSY, RAM and clock timestamp preserved; native clock periods reconstructed; resumed"
   metrics["channels"]="16 voices exposed; SSG/FM isolation and stereo pan passed"
   metrics["ram"]="CPU readback in each 64KB quarter of 256KB x1-mode RAM passed"
  finally:e.close()
