@@ -41,7 +41,7 @@ def main():
        e.command('set pause on; set mute off; set volume 50')
        if not active:e.command('carta eject')
        if case!='no-makoto':
-        e.command('ext Makoto; set Makoto_volume 20; set makoto_psg_volume 50')
+        e.command('ext Makoto; set Makoto_volume 20; set [lindex [info vars ?akoto_psg_volume] 0] 50')
         if e.command('info exists {Makoto SSG_volume}')=='1':e.command('set {Makoto SSG_volume} 20')
        e.command('reset');step(e,15)
        if active:

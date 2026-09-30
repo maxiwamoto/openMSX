@@ -117,3 +117,10 @@ The existing integration, V4/V5 and timer tests use the same executable.
 accepts `--rom`, `--manifest`, `--firmware-dir`, `--seconds 60 --repeats 5`.
 `Contrib/makoto-native-listening.py` uses the same arguments without `--repeats`
 and produces local WAVs plus an HTML player. Supply your own firmware and music.
+
+## Review follow-up
+
+The [2026-09-30 follow-up](makoto-review-2026-09-30.md) integrates the native
+streams into PR #2209, removes internal clipping compensation, moves SSG gain
+to the mixer, and fixes instance names and derived prescaler restoration.
+The earlier measurements above describe the initial native-stream revision.

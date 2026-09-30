@@ -12,14 +12,15 @@ an experimental implementation.
 - Timer A/B events scheduled in emulated time, independently of host audio buffers.
 - 256 KiB sample RAM (256K x 16 DRAM, low byte wired, x1-bit DRAM mode).
 - Native openMSX stereo audio, recording, register inspection and save states.
-- Standard `Makoto_volume` for the combined output, plus `makoto_psg_volume`
-  for the physical SSG balance adjustment. The extra Master setting is removed.
+- Separate `Makoto_volume` (FM/rhythm/ADPCM) and `{Makoto SSG_volume}` controls.
+  Equal values preserve the calibrated balance; `Makoto_psg_volume` is the
+  additional linear SSG trim (50% default).
 - All 16 voices exposed to openMSX's existing mute/record/channel-viewer tools.
 - Standard host resampling; the cartridge summer filter is omitted after a
   [blind listening and CPU comparison](makoto-filter-comparison.md).
 - Native debugger watchpoints and probe traces for I/O and IRQ analysis.
 - Blob-backed sample RAM, exposed as `Makoto ADPCM RAM` in the debugger.
-  Current fork sound-state version 7 can load older fork snapshots (versions 1-6).
+  Current fork sound-state version 8 retains older fork-state migration (versions 1-7).
 
 The pinned YMFM source and BSD license are under `src/3rdparty/ymfm`.
 Only the OPN/SSG/ADPCM subset is vendored. Local patches initialize an operator
@@ -39,12 +40,15 @@ Console controls:
 
 ```
 set Makoto_volume 75
-set makoto_psg_volume 50
+set {Makoto SSG_volume} 75
+set Makoto_psg_volume 50
 soundlog start makoto.wav
 soundlog stop
 ```
 
-The ordinary sound-chip volume setting controls the final combined output.
+FM/rhythm/ADPCM runs at approximately 55.56 kHz stereo and SSG at 250 kHz mono.
+The standard mixer combines the two resampled streams. See the
+[latest review results](makoto-review-2026-09-30.md) for the current changes.
 The `Makoto registers` debuggable reads effective registers directly from YMFM.
 It is not a log of the last bytes written: for example, a pending FM frequency
 high byte takes effect only when the corresponding low byte is written. Use an
@@ -57,8 +61,9 @@ The cartridge designer supplied the following details through the owner:
 
 - 8.000 MHz oscillator on phi-M. At the normal prescaler, FM updates at
   8 MHz / 144 = 55.56 kHz. YMFM's maximum-fidelity output stream is 1 MHz
-  (clock / 8), with an FM sample repeated 18 times. These rates are consistent;
-  the emulator must not change the oscillator or slow the entire core to 55.56 kHz.
+  (clock / 8), with an FM sample repeated 18 times. The native-stream wrapper
+  bypasses those repetitions and clocks FM and SSG separately. The oscillator
+  and chip timer rates remain unchanged.
 - YM2608 /IRQ pin 56 connects directly to MSX /INT, with a 10k pull-up.
   Timer A and Timer B can interrupt the CPU. This connection and the 8 MHz
   oscillator are fixed hardware properties, not extension options.
@@ -75,14 +80,16 @@ The cartridge designer supplied the following details through the owner:
   are paralleled, then feeds both summers (approximately x2.17 at maximum).
   Sander gives the resulting ratio as 4.3:1 FM:SSG per YMFM LSB with both
   pots fully up. The emulator therefore mixes each FM stereo output with
-  `(SSG / 4.3) * ssgGain`, then applies the standard device volume to both together.
+  `(SSG / 4.3) * ssgGain`. The native wrapper folds the prior YMFM SSG numeric
+  scale into its amplification factor and applies trim through the mixer.
 - Master Vol is a dual-10k pot after the summers. The headphone path uses
   a TPA6111A2 (x1.23), then 100 uF coupling to the jack. Each channel also
   feeds MSX SOUNDIN through 7.5k.
 - Rev 1.1 uses LMV358; Rev 1.2 uses NE5532. Pot taper is unspecified.
 
-The implementation models the confirmed digital wiring, relative gain and shared
-DAC clamp. The physical summer's 100k/47 pF feedback gives a 33.86 kHz low-pass
+The implementation models the confirmed digital wiring and relative gain. The
+internal YMFM DAC clamp is omitted; deliberate overdrive differs, and clipping
+occurs only at final host output. The physical summer's 100k/47 pF feedback gives a 33.86 kHz low-pass
 corner; this additional filter is now omitted. The normal host resampler remains
 active. A blind test scored 6/12, while a local paired benchmark measured 16.86%
 less whole-process CPU in normal playback and 8.58% less with channel tools.
@@ -403,3 +410,13 @@ MAX fidelity, matching both the existing default and the restore path.
 See [the measurements and validation](makoto-review-2026-09-29.md). The upstream
 proposal has short user and developer guides; historical research stays here.
 The standalone ADPCM probe is `Contrib/makoto-hardware-test.asm`.
+
+## Multiple cartridges
+
+Device, setting, IRQ and debugger names follow the extension's XML device ID.
+A second Makoto is named `Makoto (1)`, for example
+`{Makoto (1)_psg_volume}`, `{Makoto (1) registers}` and `{Makoto (1).IRQ}`.
+The first cartridge's SSG setting is now `Makoto_psg_volume` (capital M);
+older custom startup scripts using `makoto_psg_volume` need that spelling update.
+Each cartridge retains its own RAM, timers and state. Real Makoto uses 14h-17h;
+a copied test configuration can map another instance to a different aligned range.

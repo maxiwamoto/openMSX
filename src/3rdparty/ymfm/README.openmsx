@@ -8,9 +8,11 @@ Local patches:
    initialization gives the fields a defined state and addresses cpp:S2107.
 2. Add an optional host-owned YM2608 channel-output cache and an accessor to
    the last SSG outputs. When requested, FM/ADPCM voices are rendered individually
-   before the same aggregate DAC clamp. The original mixed path remains available.
+   before summing. The original mixed path remains available; patch 8 below
+   removes the aggregate clamp from both paths.
    No clocks, envelopes, operator calculations or raw core state fields change.
-   SSG separation is used only at MAX fidelity, whose prescalers repeat samples.
+   The native-stream wrapper clocks raw SSG separately; the old MAX-fidelity
+   comparison path repeats SSG samples for differential tests.
 3. Add explicit YM2608 port peeks, effective register accessors and safe SSG /
    ADPCM external-peek callbacks for debugger use. Normal read/write semantics
    and serialized core fields are unchanged. Hosts/SSG overrides without a
@@ -59,3 +61,14 @@ Versions 1-6 load with that byte initialized to false: old snapshots never
 recorded this transfer history, so preserve their former unlatched behavior.
 All previous core fields stay in place. Version 6 already changed sample RAM
 from a byte array to native Ram; the two migrations are independent.
+
+7. Rebuild the YM2608 derived sampling configuration after restoring its
+   prescaler. This permits the wrapper to set fidelity only at construction.
+   Contrib/makoto-prescale-restore-test.cc checks continuation at all three
+   prescalers and fidelities; no serialized bytes change.
+
+8. Leave the YM2608 FM/rhythm/ADPCM sum unclipped for openMSX's floating-point
+   mixer. Separate voice buffers now use raw taps directly. Deliberately
+   overdriven material differs from the old 16-bit internal clamp; final host
+   output can still clip. Contrib/makoto-unclipped-mix-test.cc checks both
+   ordinary levels and a coherent six-voice stress signal. No state fields change.

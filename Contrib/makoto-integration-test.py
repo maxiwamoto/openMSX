@@ -39,7 +39,7 @@ for variant, exe in variants:
   metrics[variant+"-"+label]={"rms":rms.tolist(),"peak":float(np.max(abs(data)))}
   return data,rate
  try:
-  e.command("set pause on; ext Makoto; set mute off; set volume 50; set makoto_psg_volume 100")
+  e.command("set pause on; ext Makoto; set mute off; set volume 50; set [lindex [info vars ?akoto_psg_volume] 0] 100")
   if variant == "baseline":
    e.command("set makoto_master_volume 100; set Makoto_volume 20")
   else:

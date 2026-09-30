@@ -24,7 +24,7 @@ for label,exe in (item.split('=',1) for item in a.build):
   run=out/f'{label}-{track+1:02d}';run.mkdir()
   e=m.Emulator(Path(exe),run,a.firmware_dir,a.rom,'ASCII16',machine='Panasonic_FS-A1GT')
   try:
-   e.command('set pause on; ext Makoto; set mute off; set volume 50; set Makoto_volume 20; set makoto_psg_volume 50')
+   e.command('set pause on; ext Makoto; set mute off; set volume 50; set Makoto_volume 20; set [lindex [info vars ?akoto_psg_volume] 0] 50')
    if e.command('info exists {Makoto SSG_volume}')=='1':e.command('set {Makoto SSG_volume} 20')
    e.command('reset');step(e,15)
    # Start recording before the same timed keypress on both builds.

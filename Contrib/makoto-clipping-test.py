@@ -9,7 +9,7 @@ p=argparse.ArgumentParser(__doc__);p.add_argument('--openmsx',type=Path,required
 out=Path(tempfile.mkdtemp(prefix='makoto-clipping-',dir=ROOT/'derived'));songs=json.loads(a.manifest.read_text())['songs'];report={'rom_sha256':hashlib.sha256(a.rom.read_bytes()).hexdigest(),'seconds_per_track':a.seconds,'tracks':[]}
 e=m.Emulator(a.openmsx,out,a.firmware_dir,a.rom,'ASCII16',machine='Panasonic_FS-A1GT')
 try:
- e.command('set pause on; ext Makoto; set mute off; set Makoto_volume 20; set makoto_psg_volume 50; reset');w.step(e,15)
+ e.command('set pause on; ext Makoto; set mute off; set Makoto_volume 20; set [lindex [info vars ?akoto_psg_volume] 0] 50; reset');w.step(e,15)
  # Muting one host channel forces the separate-channel path. Chip synthesis is unchanged.
  e.command('set Makoto_ch1_mute true')
  for i,song in enumerate(songs):

@@ -1,0 +1,912 @@
+{
+  "scope": "Windows x64 MSVC Release, turbo R; native-stream review follow-up, 2026-09-30",
+  "benchmark": {
+    "seconds": 60.0,
+    "rom_sha256": "0342ca280afb3efeea765e37ef01d5aef4ddd406781296313fd9f52b8e853585",
+    "track": 10,
+    "runs": [
+      {
+        "build": "baseline",
+        "case": "no-makoto",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.1875,
+        "wall_seconds": 4.621760100009851
+      },
+      {
+        "build": "baseline",
+        "case": "silent-basic",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.9375,
+        "wall_seconds": 5.391372899990529
+      },
+      {
+        "build": "baseline",
+        "case": "music",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.6875,
+        "wall_seconds": 6.121114400040824
+      },
+      {
+        "build": "baseline",
+        "case": "channel-tools",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 6.5625,
+        "wall_seconds": 6.9866261999704875
+      },
+      {
+        "build": "native",
+        "case": "no-makoto",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.171875,
+        "wall_seconds": 3.3269303000415675
+      },
+      {
+        "build": "native",
+        "case": "silent-basic",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.15625,
+        "wall_seconds": 4.311630500014871
+      },
+      {
+        "build": "native",
+        "case": "music",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.8125,
+        "wall_seconds": 6.23329260002356
+      },
+      {
+        "build": "native",
+        "case": "channel-tools",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 6.03125,
+        "wall_seconds": 6.515947000007145
+      },
+      {
+        "build": "native",
+        "case": "no-makoto",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.171875,
+        "wall_seconds": 3.317302600014955
+      },
+      {
+        "build": "native",
+        "case": "silent-basic",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.15625,
+        "wall_seconds": 4.3578391000046395
+      },
+      {
+        "build": "native",
+        "case": "music",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.671875,
+        "wall_seconds": 5.974445300002117
+      },
+      {
+        "build": "native",
+        "case": "channel-tools",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 6.28125,
+        "wall_seconds": 6.644775499997195
+      },
+      {
+        "build": "baseline",
+        "case": "no-makoto",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.03125,
+        "wall_seconds": 3.3430613999953493
+      },
+      {
+        "build": "baseline",
+        "case": "silent-basic",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.234375,
+        "wall_seconds": 4.469423400005326
+      },
+      {
+        "build": "baseline",
+        "case": "music",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.765625,
+        "wall_seconds": 5.9888721000170335
+      },
+      {
+        "build": "baseline",
+        "case": "channel-tools",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 6.40625,
+        "wall_seconds": 6.697650299989618
+      },
+      {
+        "build": "baseline",
+        "case": "no-makoto",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.171875,
+        "wall_seconds": 3.287533800001256
+      },
+      {
+        "build": "baseline",
+        "case": "silent-basic",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.203125,
+        "wall_seconds": 4.41750579996733
+      },
+      {
+        "build": "baseline",
+        "case": "music",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.75,
+        "wall_seconds": 6.062793500022963
+      },
+      {
+        "build": "baseline",
+        "case": "channel-tools",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 6.09375,
+        "wall_seconds": 6.523364499968011
+      },
+      {
+        "build": "native",
+        "case": "no-makoto",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.03125,
+        "wall_seconds": 3.2248404000420123
+      },
+      {
+        "build": "native",
+        "case": "silent-basic",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.171875,
+        "wall_seconds": 4.376611599989701
+      },
+      {
+        "build": "native",
+        "case": "music",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.484375,
+        "wall_seconds": 6.029191500041634
+      },
+      {
+        "build": "native",
+        "case": "channel-tools",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.984375,
+        "wall_seconds": 6.32289499999024
+      },
+      {
+        "build": "native",
+        "case": "no-makoto",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.03125,
+        "wall_seconds": 3.258105200016871
+      },
+      {
+        "build": "native",
+        "case": "silent-basic",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.171875,
+        "wall_seconds": 4.35090229997877
+      },
+      {
+        "build": "native",
+        "case": "music",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.859375,
+        "wall_seconds": 6.023216400004458
+      },
+      {
+        "build": "native",
+        "case": "channel-tools",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 6.171875,
+        "wall_seconds": 6.495883400028106
+      },
+      {
+        "build": "baseline",
+        "case": "no-makoto",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.0,
+        "wall_seconds": 3.2479390999651514
+      },
+      {
+        "build": "baseline",
+        "case": "silent-basic",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.359375,
+        "wall_seconds": 4.606617599958554
+      },
+      {
+        "build": "baseline",
+        "case": "music",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.734375,
+        "wall_seconds": 6.152340799977537
+      },
+      {
+        "build": "baseline",
+        "case": "channel-tools",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 6.1875,
+        "wall_seconds": 6.6869100999902
+      },
+      {
+        "build": "baseline",
+        "case": "no-makoto",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.25,
+        "wall_seconds": 3.4845700999721885
+      },
+      {
+        "build": "baseline",
+        "case": "silent-basic",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.171875,
+        "wall_seconds": 4.337806500028819
+      },
+      {
+        "build": "baseline",
+        "case": "music",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.71875,
+        "wall_seconds": 6.130629999970552
+      },
+      {
+        "build": "baseline",
+        "case": "channel-tools",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 6.421875,
+        "wall_seconds": 6.734848899999633
+      },
+      {
+        "build": "native",
+        "case": "no-makoto",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.0625,
+        "wall_seconds": 3.362125299987383
+      },
+      {
+        "build": "native",
+        "case": "silent-basic",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.046875,
+        "wall_seconds": 4.365338400006294
+      },
+      {
+        "build": "native",
+        "case": "music",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.53125,
+        "wall_seconds": 6.015357600001153
+      },
+      {
+        "build": "native",
+        "case": "channel-tools",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.9375,
+        "wall_seconds": 6.392951100016944
+      }
+    ],
+    "summary": {
+      "baseline": {
+        "median_seconds": {
+          "no-makoto": 3.171875,
+          "silent-basic": 4.234375,
+          "music": 5.734375,
+          "channel-tools": 6.40625
+        },
+        "relative_to_no_makoto": {
+          "no-makoto": 1.0,
+          "silent-basic": 1.3349753694581281,
+          "music": 1.8078817733990147,
+          "channel-tools": 2.019704433497537
+        }
+      },
+      "native": {
+        "median_seconds": {
+          "no-makoto": 3.0625,
+          "silent-basic": 4.15625,
+          "music": 5.671875,
+          "channel-tools": 6.03125
+        },
+        "relative_to_no_makoto": {
+          "no-makoto": 1.0,
+          "silent-basic": 1.3571428571428572,
+          "music": 1.8520408163265305,
+          "channel-tools": 1.969387755102041
+        }
+      }
+    }
+  },
+  "matched_state_audio": [
+    {
+      "track": 1,
+      "name": "THUNDER",
+      "max_pcm_difference": 1.0,
+      "rms_pcm_difference": 0.018333553557521566,
+      "baseline_rms": 66.52810770444879,
+      "candidate_rms": 66.52809541509752,
+      "clipped_samples": 0
+    },
+    {
+      "track": 4,
+      "name": "SHOP",
+      "max_pcm_difference": 1.0,
+      "rms_pcm_difference": 0.09100098427117147,
+      "baseline_rms": 248.70005254305966,
+      "candidate_rms": 248.7002857328129,
+      "clipped_samples": 0
+    },
+    {
+      "track": 10,
+      "name": "BUSTLING TOWN",
+      "max_pcm_difference": 1.0,
+      "rms_pcm_difference": 0.10604196319940364,
+      "baseline_rms": 196.8223817018164,
+      "candidate_rms": 196.82298859381817,
+      "clipped_samples": 0
+    },
+    {
+      "track": 14,
+      "name": "LAO SHI",
+      "max_pcm_difference": 1.0,
+      "rms_pcm_difference": 0.06920343666508552,
+      "baseline_rms": 118.06978040697574,
+      "candidate_rms": 118.07015637068,
+      "clipped_samples": 0
+    }
+  ],
+  "earlier_clipping_survey": {
+    "rom_sha256": "0342ca280afb3efeea765e37ef01d5aef4ddd406781296313fd9f52b8e853585",
+    "seconds_per_track": 20.0,
+    "tracks": [
+      {
+        "track": 1,
+        "name": "THUNDER",
+        "bank": 12,
+        "samples": 19988331,
+        "fm_updates": 1110463,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 5013,
+        "peak_raw_right": 5013,
+        "mix_updates": 1259670,
+        "hardware_error": 0
+      },
+      {
+        "track": 2,
+        "name": "OPENING THEME A",
+        "bank": 11,
+        "samples": 20025849,
+        "fm_updates": 1112547,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 3811,
+        "peak_raw_right": 3811,
+        "mix_updates": 2094534,
+        "hardware_error": 0
+      },
+      {
+        "track": 3,
+        "name": "OPENING THEME B",
+        "bank": 11,
+        "samples": 20002116,
+        "fm_updates": 1111229,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 2013,
+        "peak_raw_right": 2013,
+        "mix_updates": 2870672,
+        "hardware_error": 0
+      },
+      {
+        "track": 4,
+        "name": "SHOP",
+        "bank": 3,
+        "samples": 20002108,
+        "fm_updates": 1111228,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 4063,
+        "peak_raw_right": 4063,
+        "mix_updates": 2033773,
+        "hardware_error": 0
+      },
+      {
+        "track": 5,
+        "name": "CRISIS AREA",
+        "bank": 3,
+        "samples": 20002131,
+        "fm_updates": 1111230,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 2882,
+        "peak_raw_right": 2882,
+        "mix_updates": 2664417,
+        "hardware_error": 0
+      },
+      {
+        "track": 6,
+        "name": "INDOOR COMBAT",
+        "bank": 2,
+        "samples": 20002104,
+        "fm_updates": 1111228,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 3903,
+        "peak_raw_right": 3903,
+        "mix_updates": 2036414,
+        "hardware_error": 0
+      },
+      {
+        "track": 7,
+        "name": "METAL AREA",
+        "bank": 1,
+        "samples": 20002128,
+        "fm_updates": 1111229,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 4366,
+        "peak_raw_right": 4366,
+        "mix_updates": 2215879,
+        "hardware_error": 0
+      },
+      {
+        "track": 8,
+        "name": "SEWER PIPES",
+        "bank": 3,
+        "samples": 20002117,
+        "fm_updates": 1111229,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 3928,
+        "peak_raw_right": 3928,
+        "mix_updates": 2966319,
+        "hardware_error": 0
+      },
+      {
+        "track": 9,
+        "name": "CAVERN (LABYRINTH)",
+        "bank": 5,
+        "samples": 20001883,
+        "fm_updates": 1111215,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 2746,
+        "peak_raw_right": 2746,
+        "mix_updates": 2016233,
+        "hardware_error": 0
+      },
+      {
+        "track": 10,
+        "name": "BUSTLING TOWN",
+        "bank": 5,
+        "samples": 20002357,
+        "fm_updates": 1111242,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 2966,
+        "peak_raw_right": 2966,
+        "mix_updates": 2039934,
+        "hardware_error": 0
+      },
+      {
+        "track": 11,
+        "name": "NIGHTMARE (DARK DREAM)",
+        "bank": 3,
+        "samples": 20002111,
+        "fm_updates": 1111229,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 3549,
+        "peak_raw_right": 3549,
+        "mix_updates": 2020280,
+        "hardware_error": 0
+      },
+      {
+        "track": 12,
+        "name": "HOME",
+        "bank": 5,
+        "samples": 20002114,
+        "fm_updates": 1111228,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 1161,
+        "peak_raw_right": 1161,
+        "mix_updates": 2056111,
+        "hardware_error": 0
+      },
+      {
+        "track": 13,
+        "name": "XIAO MEI",
+        "bank": 1,
+        "samples": 20002113,
+        "fm_updates": 1111229,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 632,
+        "peak_raw_right": 632,
+        "mix_updates": 2015622,
+        "hardware_error": 0
+      },
+      {
+        "track": 14,
+        "name": "LAO SHI",
+        "bank": 2,
+        "samples": 20002123,
+        "fm_updates": 1111229,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 2118,
+        "peak_raw_right": 2118,
+        "mix_updates": 1997103,
+        "hardware_error": 0
+      },
+      {
+        "track": 15,
+        "name": "DANCING",
+        "bank": 5,
+        "samples": 20002111,
+        "fm_updates": 1111228,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 3385,
+        "peak_raw_right": 3385,
+        "mix_updates": 2708165,
+        "hardware_error": 0
+      },
+      {
+        "track": 16,
+        "name": "VIP ROOM",
+        "bank": 5,
+        "samples": 20002107,
+        "fm_updates": 1111228,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 1360,
+        "peak_raw_right": 1360,
+        "mix_updates": 2029935,
+        "hardware_error": 0
+      },
+      {
+        "track": 17,
+        "name": "LOVERS",
+        "bank": 4,
+        "samples": 20002115,
+        "fm_updates": 1111229,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 1362,
+        "peak_raw_right": 1362,
+        "mix_updates": 2059433,
+        "hardware_error": 0
+      },
+      {
+        "track": 18,
+        "name": "BEING IMPRISONED",
+        "bank": 4,
+        "samples": 20002053,
+        "fm_updates": 1111225,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 2641,
+        "peak_raw_right": 2641,
+        "mix_updates": 2181397,
+        "hardware_error": 0
+      },
+      {
+        "track": 19,
+        "name": "VICTORY",
+        "bank": 4,
+        "samples": 20002199,
+        "fm_updates": 1111233,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 2842,
+        "peak_raw_right": 2842,
+        "mix_updates": 2315488,
+        "hardware_error": 0
+      },
+      {
+        "track": 20,
+        "name": "ILLUSION CASTLE",
+        "bank": 1,
+        "samples": 20002116,
+        "fm_updates": 1111229,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 3157,
+        "peak_raw_right": 3157,
+        "mix_updates": 2021554,
+        "hardware_error": 0
+      },
+      {
+        "track": 21,
+        "name": "INCITEMENT",
+        "bank": 5,
+        "samples": 20002102,
+        "fm_updates": 1111228,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 3119,
+        "peak_raw_right": 3119,
+        "mix_updates": 2004086,
+        "hardware_error": 0
+      },
+      {
+        "track": 22,
+        "name": "MO TIAN SECT",
+        "bank": 5,
+        "samples": 20002130,
+        "fm_updates": 1111229,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 2455,
+        "peak_raw_right": 2455,
+        "mix_updates": 2026769,
+        "hardware_error": 0
+      },
+      {
+        "track": 23,
+        "name": "RITUAL",
+        "bank": 4,
+        "samples": 20002117,
+        "fm_updates": 1111229,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 4024,
+        "peak_raw_right": 4024,
+        "mix_updates": 2002624,
+        "hardware_error": 0
+      },
+      {
+        "track": 24,
+        "name": "CRISIS",
+        "bank": 4,
+        "samples": 20002111,
+        "fm_updates": 1111229,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 3638,
+        "peak_raw_right": 3638,
+        "mix_updates": 2095916,
+        "hardware_error": 0
+      },
+      {
+        "track": 25,
+        "name": "REQUIEM",
+        "bank": 4,
+        "samples": 20002106,
+        "fm_updates": 1111228,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 2427,
+        "peak_raw_right": 2427,
+        "mix_updates": 2130961,
+        "hardware_error": 0
+      },
+      {
+        "track": 26,
+        "name": "NETWORK IMAGE",
+        "bank": 5,
+        "samples": 20002127,
+        "fm_updates": 1111229,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 2586,
+        "peak_raw_right": 2586,
+        "mix_updates": 2050848,
+        "hardware_error": 0
+      },
+      {
+        "track": 27,
+        "name": "REGULAR THEME B",
+        "bank": 2,
+        "samples": 20002113,
+        "fm_updates": 1111228,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 1895,
+        "peak_raw_right": 1895,
+        "mix_updates": 2871831,
+        "hardware_error": 0
+      },
+      {
+        "track": 28,
+        "name": "BATTLE",
+        "bank": 5,
+        "samples": 20002102,
+        "fm_updates": 1111228,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 3246,
+        "peak_raw_right": 3246,
+        "mix_updates": 2068882,
+        "hardware_error": 0
+      },
+      {
+        "track": 29,
+        "name": "MO TIAN EIGHT LEGIONS BATTLE",
+        "bank": 4,
+        "samples": 20002132,
+        "fm_updates": 1111230,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 2967,
+        "peak_raw_right": 2967,
+        "mix_updates": 2255039,
+        "hardware_error": 0
+      },
+      {
+        "track": 30,
+        "name": "HAZARD AREA",
+        "bank": 6,
+        "samples": 20002115,
+        "fm_updates": 1111229,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 1706,
+        "peak_raw_right": 1706,
+        "mix_updates": 2029704,
+        "hardware_error": 0
+      },
+      {
+        "track": 31,
+        "name": "REGULAR THEME A",
+        "bank": 3,
+        "samples": 20002126,
+        "fm_updates": 1111229,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 3789,
+        "peak_raw_right": 3789,
+        "mix_updates": 2093718,
+        "hardware_error": 0
+      },
+      {
+        "track": 32,
+        "name": "MO TIAN WANG BATTLE",
+        "bank": 5,
+        "samples": 20002109,
+        "fm_updates": 1111228,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 2984,
+        "peak_raw_right": 2984,
+        "mix_updates": 2031934,
+        "hardware_error": 0
+      },
+      {
+        "track": 33,
+        "name": "FINAL BATTLE",
+        "bank": 5,
+        "samples": 20002121,
+        "fm_updates": 1111229,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 4841,
+        "peak_raw_right": 4841,
+        "mix_updates": 2440848,
+        "hardware_error": 0
+      },
+      {
+        "track": 34,
+        "name": "DOC'S STORE / RESOURCE 45",
+        "bank": 1,
+        "samples": 20002112,
+        "fm_updates": 1111228,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 1053,
+        "peak_raw_right": 1053,
+        "mix_updates": 2406315,
+        "hardware_error": 0
+      },
+      {
+        "track": 35,
+        "name": "ENDING SHORT CUE",
+        "bank": 10,
+        "samples": 19978385,
+        "fm_updates": 1109911,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 2939,
+        "peak_raw_right": 2939,
+        "mix_updates": 1287626,
+        "hardware_error": 0
+      },
+      {
+        "track": 36,
+        "name": "ENDING THEME A",
+        "bank": 10,
+        "samples": 20025852,
+        "fm_updates": 1112547,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 3798,
+        "peak_raw_right": 3798,
+        "mix_updates": 2093923,
+        "hardware_error": 0
+      },
+      {
+        "track": 37,
+        "name": "LABORATORIES (LUNAR MADNESS)",
+        "bank": 3,
+        "samples": 20002113,
+        "fm_updates": 1111229,
+        "clipped_left": 0,
+        "clipped_right": 0,
+        "peak_raw_left": 3802,
+        "peak_raw_right": 3802,
+        "mix_updates": 2533335,
+        "hardware_error": 0
+      }
+    ]
+  },
+  "builds": {
+    "native-review-build": "139fb1759431b6acec61751d3a9b46f0a63294760aec504d38dfb7685769e5ee",
+    "native-tweaks-build": "35446faae381e9e5a8ee6c20a56fd39e8ea11a5e3eeb858e14f3d0459d9a9de6",
+    "makoto-upstream-review-build": "fc5353caf6cb85607c85a2754f1c90685b72ce88e63609efeffb6caf375f24fa"
+  },
+  "prescale_restore": {
+    "before": "Non-default prescalers diverged at all three fidelities",
+    "after": "0 mismatches at 3 fidelities x 3 prescalers x 4096 samples"
+  },
+  "stress": {
+    "samples": 100000,
+    "normal_peak": 3072,
+    "normal_overrange_sides": 0,
+    "stress_peak": 98016,
+    "stress_overrange_sides": 156250
+  },
+  "regressions": [
+    "two-instance unique names/settings/RAM/registers/IRQs, save/load and removal",
+    "timers/BUSY/peeks/rewind/reset",
+    "pitch and exact state continuation at prescalers 6,3,2",
+    "13+3 channel mute/record/pan, 256 KiB RAM, unfinished writer restore",
+    "all six rhythm mutes/pan/key-off and mid-cymbal restore",
+    "V4/V5 probes on emulated MSX2 and turbo R, with/without Makoto",
+    "1,080,000 native vs mixed source samples; negative control 107,967 mismatches",
+    "360,000 adapter samples, unchanged legacy core prefix hash 4faf7577",
+    "fork version 6/7 saved-state migrations passed"
+  ]
+}

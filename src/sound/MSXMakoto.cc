@@ -1,5 +1,4 @@
 #include "MSXMakoto.hh"
-#include "MakotoMix.hh"
 #include "MakotoNativeChip.hh"
 
 #include "DeviceConfig.hh"
@@ -11,6 +10,7 @@
 #include "Ram.hh"
 #include "Rom.hh"
 #include "SimpleDebuggable.hh"
+#include "StringOp.hh"
 #include "serialize.hh"
 #include "serialize_meta.hh"
 #include "serialize_stl.hh"
@@ -31,8 +31,8 @@ class MakotoSound final : public ResampledSoundDevice,
 
 	class SsgPart final : public ResampledSoundDevice {
 	public:
-		SsgPart(DeviceConfig& config, MakotoSound& owner_)
-			: ResampledSoundDevice(config.getMotherBoard(), "Makoto SSG", "Makoto SSG", 3, CLOCK / 32, false)
+		SsgPart(DeviceConfig& config, std::string_view name, MakotoSound& owner_)
+			: ResampledSoundDevice(config.getMotherBoard(), strCat(name, " SSG"), "Makoto SSG", 3, CLOCK / 32, false)
 			, owner(owner_) {}
 		void start(DeviceConfig& config) { registerSound(config); registered = true; }
 		~SsgPart() { if (registered) unregisterSound(); }
@@ -50,21 +50,21 @@ class MakotoSound final : public ResampledSoundDevice,
 	private:
 		float getAmplificationFactorImpl() const override {
 			// Mono centre panning contributes 1/sqrt(2) to each host side.
-			return std::numbers::sqrt2_v<float> / 32768.0f;
+			// Preserve the previous YMFM numeric scale and board balance here,
+			// without integer rounding or gain work in the source-sample loop.
+			return std::numbers::sqrt2_v<float> * (2.0f / 3.0f) / (32768.0f * 4.3f);
 		}
 		void generateChannels(std::span<float*> buffers, unsigned num) override {
 			const bool combined = std::ranges::all_of(buffers, [&](auto* b) { return b == buffers[0]; });
 			uint32_t orOutput = 0;
 			for (unsigned i = 0; i < num; ++i) {
 				const auto s = owner.chip.clockSSG();
-				const auto total = (s[0] + s[1] + s[2]) * 2 / 3;
+				const auto total = s[0] + s[1] + s[2];
 				if (combined) {
-					buffers[0][i] += float(total) * owner.ssgGain;
+					buffers[0][i] += float(total);
 					orOutput |= uint32_t(total);
 				} else {
-					std::array<int32_t, 3> scaled = {s[0] * 2 / 3, s[1] * 2 / 3, s[2] * 2 / 3};
-					scaled[s[2] ? 2 : s[1] ? 1 : 0] += total - scaled[0] - scaled[1] - scaled[2];
-					for (unsigned c = 0; c < 3; ++c) buffers[c][i] += float(scaled[c]) * owner.ssgGain;
+					for (unsigned c = 0; c < 3; ++c) buffers[c][i] += float(s[c]);
 				}
 			}
 			if (combined) {
@@ -105,12 +105,12 @@ class MakotoSound final : public ResampledSoundDevice,
 	};
 
 public:
-	MakotoSound(DeviceConfig& config, EmuTime time)
-		: ResampledSoundDevice(config.getMotherBoard(), "Makoto", "Makoto FM, rhythm and ADPCM", 13,
+	MakotoSound(DeviceConfig& config, std::string_view name, EmuTime time)
+		: ResampledSoundDevice(config.getMotherBoard(), name, "Makoto FM, rhythm and ADPCM", 13,
 				       (CLOCK + 72) / 144,
 				       true)
-		, irq(config.getMotherBoard(), "Makoto.IRQ")
-		, psgVolume(config.getCommandController(), "makoto_psg_volume",
+		, irq(config.getMotherBoard(), strCat(name, ".IRQ"))
+		, psgVolume(config.getCommandController(), strCat(name, "_psg_volume"),
 			    "Makoto SSG gain relative to its hardware maximum (linear percent)", 50,
 			    0, 100)
 		, timers{Timer(config.getScheduler(), *this, 0),
@@ -118,12 +118,12 @@ public:
 		, contextTime(time)
 		, busyEnd(time)
 		, chip(*this)
-		, sampleRAM(config, "Makoto ADPCM RAM", "YM2608 ADPCM-B sample RAM", 262144)
-		, registers(config.getMotherBoard(), *this)
-		, ssgPart(config, *this)
+		, sampleRAM(config, strCat(name, " ADPCM RAM"), "YM2608 ADPCM-B sample RAM", 262144)
+		, registers(config.getMotherBoard(), name, *this)
+		, ssgPart(config, name, *this)
 	{
 		if (config.findChild("rom")) {
-			rhythm = std::make_unique<Rom>("Makoto rhythm ROM",
+			rhythm = std::make_unique<Rom>(strCat(name, " rhythm ROM"),
 						       "YM2608 internal rhythm samples", config);
 			if (rhythm->size() != 8192)
 				throw MSXException("Makoto rhythm ROM must be 8192 bytes");
@@ -131,11 +131,11 @@ public:
 		chip.set_fidelity(ymfm::OPN_FIDELITY_MAX);
 		sampleRAM.clear(0); // Start zeroed; reset preserves these contents.
 		chip.set_channel_output(channelOutput.data());
-		ssgGain = (1.0f / 4.3f) * float(psgVolume.getInt()) / 100.0f;
 		psgVolume.attach(*this);
 		reset(time);
 		registerSound(config);
 		ssgPart.start(config);
+		ssgPart.setSoftwareVolume(float(psgVolume.getInt()) / 100.0f, time);
 	}
 	~MakotoSound()
 	{
@@ -302,8 +302,7 @@ private:
 	{
 		if (&setting == &psgVolume) {
 			// Render up to the change with the previous gain.
-			updateStream(timers[0].getCurrentTime());
-			ssgGain = (1.0f / 4.3f) * float(psgVolume.getInt()) / 100.0f;
+			ssgPart.setSoftwareVolume(float(psgVolume.getInt()) / 100.0f, timers[0].getCurrentTime());
 		} else {
 			ResampledSoundDevice::update(setting);
 		}
@@ -320,8 +319,6 @@ private:
 	{
 		const bool combined = std::ranges::all_of(buffers, [&](auto* b) { return b == buffers[0]; });
 		uint32_t orOutput = 0;
-		MakotoMix mix;
-		constexpr std::array<int32_t, 3> noSSG = {};
 		for (unsigned i = 0; i < num; ++i) {
 			const auto fm = chip.clockFM();
 			if (combined) {
@@ -329,12 +326,10 @@ private:
 				buffers[0][2 * i + 1] += float(fm[1]);
 				orOutput |= uint32_t(fm[0] | fm[1]);
 			} else {
-				const std::array<int32_t, 3> mixed = {fm[0], fm[1], 0};
-				mix.update(channelOutput, noSSG, mixed, 0.0f);
 				for (unsigned c = 0; c < 13; ++c) {
 					const unsigned source = c < 6 ? c : c + 3;
-					buffers[c][2 * i] += mix.voices[2 * source];
-					buffers[c][2 * i + 1] += mix.voices[2 * source + 1];
+					buffers[c][2 * i] += float(channelOutput[2 * source]);
+					buffers[c][2 * i + 1] += float(channelOutput[2 * source + 1]);
 				}
 			}
 		}
@@ -345,8 +340,8 @@ private:
 	}
 
 	struct Registers final : SimpleDebuggable {
-		Registers(MSXMotherBoard& board, MakotoSound& owner_)
-			: SimpleDebuggable(board, "Makoto registers", "Effective YM2608 core registers",
+		Registers(MSXMotherBoard& board, std::string_view name, MakotoSound& owner_)
+			: SimpleDebuggable(board, strCat(name, " registers"), "Effective YM2608 core registers",
 					   512)
 			, owner(owner_)
 		{
@@ -365,7 +360,6 @@ private:
 		MakotoSound& owner;
 	};
 	std::array<int32_t, 32> channelOutput = {};
-	float ssgGain = 0.0f;
 	bool sampleClockInitialized = false;
 	IRQHelper irq;
 	IntegerSetting psgVolume;
@@ -386,7 +380,7 @@ SERIALIZE_CLASS_VERSION(MakotoSound, 8);
 
 MSXMakoto::MSXMakoto(DeviceConfig& config)
 	: MSXDevice(config)
-	, sound(std::make_unique<MakotoSound>(config, getCurrentTime()))
+	, sound(std::make_unique<MakotoSound>(config, getName(), getCurrentTime()))
 {
 }
 MSXMakoto::~MSXMakoto() = default;
