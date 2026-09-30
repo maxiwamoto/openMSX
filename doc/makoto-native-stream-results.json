@@ -679,5 +679,10 @@
         "peak": 967.0
       }
     ]
+  },
+  "listening_feedback": {
+    "observation": "User reported no audible difference.",
+    "method": "Informal listening; not a blind test.",
+    "scope": "No claim that all tracks or prescaler transitions were evaluated."
   }
 }

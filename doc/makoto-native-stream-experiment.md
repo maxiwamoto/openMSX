@@ -1,6 +1,6 @@
 # Makoto native-stream experiment — 2026-09-30
 
-Local branch: `codex/makoto-native-streams`, based on fork release commit
+Experimental branch: `codex/makoto-native-streams`, based on fork release commit
 `ad6afbc95b72ecbcfcf8f0b55b30790dde6fd0a6`. No changes pushed to master or the
 upstream PR. Full measurements: [JSON](makoto-native-stream-results.json).
 
@@ -12,8 +12,8 @@ channel buffers active. Idle improves 9.2%; its remaining cost is still too high
 to recommend adding Makoto to every Boosted machine by default.
 
 This measures host emulator cost, not the Z80/R800 music driver's frame budget.
-It does not establish that playback sounds better. Listening comparison remains
-necessary before changing the release.
+The user compared playback and reported no audible difference. This was informal
+listening, not a blind test, and does not establish that playback sounds better.
 
 ## Implementation
 
@@ -96,7 +96,7 @@ These are local results, not a universal speedup or the other fork's measurement
 
 ## Remaining work before proposing upstream replacement
 
-Listen to the supplied excerpts and explicitly judge rate-switch transitions.
+Informal listening found no audible difference. Still explicitly judge rate-switch transitions.
 Recreating resamplers discards filter history; the pitch/state tests do not prove
 that every switch is inaudible. Hardware analogue/DAC frequency response is a
 separate question; these measurements do not settle the ZOH discussion.
