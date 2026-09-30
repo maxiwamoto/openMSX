@@ -1,0 +1,146 @@
+{
+  "probe": "MKT4",
+  "observed": [
+    {
+      "machine": "Panasonic Turbo-R",
+      "photo_sha256": "0dc4311b8431d71ef5dbe9021c4112a228bbdc31d8436398e219862593731547",
+      "initial_status": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "unmasked_status": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "A": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "B": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "C": [
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199,
+        200
+      ],
+      "D": [
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199,
+        200
+      ],
+      "errors": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "machine": "Sanyo 70FD",
+      "photo_sha256": "7ff1f9d902a16df7c68fd3bff984bed3be9b3774b0e4a27c5e39399c351bc3a5",
+      "initial_status": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "unmasked_status": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "A": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "B": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "C": [
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199,
+        200
+      ],
+      "D": [
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199,
+        200
+      ],
+      "errors": [
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "conclusion": "On the tested Makoto on both hosts, explicit ADPCM reset followed by read mode changes B repeated-last-byte output to C correct sequential data. Both reselected/flag-handshake reads (C) and stream reads (D) work. Reset/read setup is isolated; original end/limit boundary behavior is not yet established. These are two host tests, not evidence of two independent cartridge samples."
+}

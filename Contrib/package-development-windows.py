@@ -78,7 +78,11 @@ def main():
                           'doc/yamanooto-validation.md', 'doc/development-hard-reset.md',
                           'doc/v9968-integration.md', 'doc/v9968-upstream-readme.md',
                           'doc/makoto.md', 'doc/makoto-filter-comparison.md',
-                          'doc/makoto-filter-listening-results.json', 'doc/makoto-performance-results.json', 'doc/makoto-hardware-results.json', 'doc/makoto-replay-findings.md',
+                          'doc/makoto-filter-listening-results.json',
+                          'doc/makoto-review-2026-09-29.md', 'doc/makoto-review-2026-09-29-results.json',
+                          'doc/makoto-hardware-2026-09-29-v2.json', 'doc/makoto-hardware-2026-09-29-v3.json',
+                          'doc/makoto-hardware-2026-09-29-v4.json', 'doc/makoto-hardware-2026-09-30-v5.json',
+                          'doc/makoto-adpcm-boundary-fix-2026-09-30.json', 'doc/makoto-read-reset-fix-2026-09-30.json', 'doc/makoto-performance-results.json', 'doc/makoto-hardware-results.json', 'doc/makoto-replay-findings.md',
                           'doc/makoto-replay-results.json', 'doc/makoto-native-replay-results.json'):
             target = filename
         if target:

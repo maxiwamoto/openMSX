@@ -1,0 +1,146 @@
+{
+  "probe": "MKT3",
+  "observed": [
+    {
+      "machine": "Sanyo 70FD",
+      "photo_sha256": "613b306f68ede36ffa4a23067c6acef21293b4dc60eb141f109fb7f0e3049f45",
+      "initial_status": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "unmasked_status": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "baseline": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "end": [
+        238,
+        238,
+        238,
+        238,
+        238,
+        238,
+        238,
+        238
+      ],
+      "reseed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "limit": [
+        238,
+        238,
+        238,
+        238,
+        238,
+        238,
+        238,
+        238
+      ],
+      "error": 0,
+      "checks": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "machine": "Panasonic Turbo-R",
+      "photo_sha256": "40978f45d487119179265ba064e608ecdc01103c1b39a7e853b261f3e267b9d0",
+      "initial_status": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "unmasked_status": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "baseline": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "end": [
+        238,
+        238,
+        238,
+        238,
+        238,
+        238,
+        238,
+        238
+      ],
+      "reseed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "limit": [
+        238,
+        238,
+        238,
+        238,
+        238,
+        238,
+        238,
+        238
+      ],
+      "error": 0,
+      "checks": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "interpretation": "Baseline returns the final written byte C8 in all eight positions. No BUSY/BRDY timeout. Boundary tests correctly skipped; no conclusion about chip end/limit semantics."
+}

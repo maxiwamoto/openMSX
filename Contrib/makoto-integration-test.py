@@ -135,21 +135,46 @@ for variant, exe in variants:
   error=e.command("catch {restore_machine "+m.tcl_path(unsupported)+"} reason; set reason")
   assert "version" in error.lower(),error
   metrics["state_format"]="RAM restored; future sound-state version rejected by the native serializer"
+  # Save the new unfinished-write latch through the complete device serializer.
+  start(0,0x60)
+  write(0x108,0xa7)
+  write(0x100,0);write(0x100,0x20)
+  e.command("debug write ioports 22 8")
+  assert e.command("debug read ioports 23") == "167"
+  pending=out/"unfinished-write.oms"
+  e.command("store_machine [machine] "+m.tcl_path(pending))
+  write(0x100,1)
+  e.command("set old [machine]; set new [restore_machine "+m.tcl_path(pending)+"]; delete_machine $old; activate_machine $new")
+  assert e.command("debug read ioports 23") == "167", "Lost unfinished writer after restore"
+  write(0x100,1);write(0x100,0x20)
+  e.command("debug write ioports 22 8")
+  assert e.command("debug read ioports 23") == "0", "Reset did not clear writer latch"
+  metrics["unfinished_write_state"]="stale A7 buffer survives device save/restore; RESET releases it"
   for legacy_path in a.legacy_state:
    import xml.etree.ElementTree as ET
    def sound_state(path):
     root=ET.fromstring(gzip.decompress(path.read_bytes()))
     return root,root.find('.//device[@type="Makoto"]/sound')
    legacy_root,legacy_sound=sound_state(legacy_path)
-   assert legacy_sound.get("version","1") in ("1","2","3","4")
+   assert legacy_sound.get("version","1") in ("1","2","3","4","5","6")
    deadlines=[int(x.text) for x in legacy_sound.findall("deadlines/item/time")]
-   if legacy_sound.get("version") in ("3","4"):
+   if legacy_sound.get("version") in ("3","4","5","6"):
     deadlines=[]
     for name in ("timerA","timerB"):
      node=legacy_sound.find(name+"/Schedulable/syncPoints/item/time/time")
      deadlines.append(int(node.text) if node is not None else 2**64-1)
    assert len(deadlines)==2
    def payload(node):
+    if node.tag == "core":
+     values = tuple(int(x.text) for x in node)
+     if len(values) == 1133:
+      return values + (0,)
+     assert len(values) == 1134
+     return values
+    if node.tag == "sampleRAM":
+     import base64,zlib
+     blob=node.find("ram")
+     return bytes(int(x.text) for x in node) if blob is None else zlib.decompress(base64.b64decode(blob.text))
     return tuple(text.strip() for text in node.itertext() if text.strip())
    variants=[("released-v"+legacy_sound.get("version","1"),legacy_path)]
    if legacy_sound.get("version")=="2":
@@ -178,8 +203,9 @@ for variant, exe in variants:
      assert times==expected,(name,times,expected)
     for name in ("core","busyEnd","sampleRAM","irq","sampleClock"):
      assert payload(current_sound.find(name))==payload(legacy_sound.find(name)),(label,name)
+    expected_volume = e.command("debug read {Makoto registers} 8")
     step(.01)
-    assert e.command("debug read {Makoto registers} 8") == "15"
+    assert e.command("debug read {Makoto registers} 8") == expected_volume
    # Old explicit format tags must still be validated, not ignored.
    if len(variants)==2:
     xml=gzip.decompress(legacy_path.read_bytes())

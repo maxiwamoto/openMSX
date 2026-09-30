@@ -1,7 +1,8 @@
 # Makoto / YM2608 prototype
 
 This local development branch adds an experimental Makoto extension on top of
-our V9968, Flash-save and media-reload fork. It is not a hardware-validated release.
+our V9968, Flash-save and media-reload fork. Selected transfer sequences have been checked on real hardware; this remains
+an experimental implementation.
 
 ## Implemented
 
@@ -17,10 +18,13 @@ our V9968, Flash-save and media-reload fork. It is not a hardware-validated rele
 - Standard host resampling; the cartridge summer filter is omitted after a
   [blind listening and CPU comparison](makoto-filter-comparison.md).
 - Native debugger watchpoints and probe traces for I/O and IRQ analysis.
+- Blob-backed sample RAM, exposed as `Makoto ADPCM RAM` in the debugger.
+  Current fork sound-state version 7 can load older fork snapshots (versions 1-6).
 
 The pinned YMFM source and BSD license are under `src/3rdparty/ymfm`.
 Only the OPN/SSG/ADPCM subset is vendored. Local patches initialize an operator
-cache and expose individual channel output; see README.openmsx for exact scope
+cache, expose individual channel output, and correct CPU sample-RAM transfers;
+see README.openmsx for exact scope
 and the differential test against the original mixed path.
 
 ## Run
@@ -311,7 +315,7 @@ channel, stereo and 256 KiB RAM tests. Repeated ADPCM data/status peeks preserve
 the entire saved chip state. Version-2 and version-3 snapshots, plus a version-1
 fixture derived from version 2, migrate with exact core/RAM/clock/deadline values.
 The unchanged core differential test still matches 360,000 samples and the
-1133-byte pinned state fingerprint. To test multiple older formats, repeat the
+1133-byte legacy prefix fingerprint and the appended transfer-latch byte. To test multiple older formats, repeat the
 `--legacy-state` option of `makoto-integration-test.py`.
 
 ## Internal percussion, 2026-09-27
@@ -381,3 +385,21 @@ No CLI option selects the report path, and the final write does not re-resolve
 it. `Contrib/makoto-tools-test.py` checks refusal to overwrite an existing or
 linked file and report cleanup after a launch failure. As with any developer
 test harness, executable arguments must point to builds the developer trusts.
+
+## RAM and mixer review, 2026-09-29
+
+Sample RAM now uses native `Ram` storage instead of a serialized byte array.
+This removes 262144 XML items and enables native blob/delta storage for rewind.
+Existing fork snapshots still load. Reset preserves RAM; initial contents remain
+zero, matching the earlier integration. This does not establish the contents of
+uninitialized RAM on physical hardware.
+
+The combined mixer uses an integer OR accumulator to identify silence. Channel
+tools no longer scan individual voices for silence. The mix helper takes sized
+spans and skips proportional attenuation when the shared DAC has not clipped.
+The clipping fallback remains tested. Constructor initialization explicitly sets
+MAX fidelity, matching both the existing default and the restore path.
+
+See [the measurements and validation](makoto-review-2026-09-29.md). The upstream
+proposal has short user and developer guides; historical research stays here.
+The standalone ADPCM probe is `Contrib/makoto-hardware-test.asm`.

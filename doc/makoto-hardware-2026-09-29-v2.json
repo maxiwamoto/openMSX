@@ -1,0 +1,98 @@
+{
+  "date": "2026-09-29",
+  "probe": "MKT2",
+  "reported_by": "Owner, physical Makoto",
+  "results": [
+    {
+      "machine": "Panasonic Turbo-R",
+      "photo_sha256": "975c8a031d782f451c0bee37a4bc58871b77f6901b676c980ded416ead79c458",
+      "status_before": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "status_after_unmask": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "end_read": [
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255
+      ],
+      "limit_read": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "timeout": 0
+    },
+    {
+      "machine": "Sanyo 70FD",
+      "photo_sha256": "092904e625192b07f9868358c905975915418d167e77be440ecec342a7d4618b",
+      "status_before": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "status_after_unmask": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "end_read": [
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255
+      ],
+      "limit_read": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "timeout": 0
+    }
+  ],
+  "interpretation": "The two observed flag states match emulation. End/limit results differ, but v2 did not validate baseline RAM transfers and omitted the documented transfer termination/flag/BRDY sequence. Boundary behavior remains inconclusive."
+}

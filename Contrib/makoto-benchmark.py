@@ -6,6 +6,9 @@ The executable arguments must name trusted developer builds; this tool is not
 a sandbox for running untrusted executables.
 """
 import argparse
+import base64
+import hashlib
+import zlib
 import ctypes
 import gzip
 import importlib.util
@@ -70,10 +73,30 @@ def main():
     def sound_state(path):
         root = ET.fromstring(gzip.decompress(path.read_bytes()))
         sound = root.find('.//device[@type="Makoto"]/sound')
+        # Compare RAM contents across the fork's array-to-Ram migration.
+        version = int(sound.attrib.pop('version', '1'))
+        core = sound.find('core')
+        if version < 7:
+            assert len(core) == 1133
+            ET.SubElement(core, 'item').text = '0'
+        assert len(core) == 1134 and core[-1].text == '0'
+        ram = sound.find('sampleRAM')
+        blob = ram.find('ram')
+        if blob is None:
+            data = bytes(int(item.text) for item in ram)
+        else:
+            assert blob.get('encoding') == 'gz-base64'
+            data = zlib.decompress(base64.b64decode(blob.text))
+        assert len(data) == 262144
+        ram.clear()
+        ram.text = hashlib.sha256(data).hexdigest()
         # SSG taps are obtained separately; slots 12..17 are not FM/ADPCM cache.
         cache = sound.find('channelOutput')
         for value in list(cache)[12:18]:
             value.text = '0'
+        for node in sound.iter():
+            node.text = node.text.strip() if node.text and node.text.strip() else None
+            node.tail = None
         return ET.tostring(sound)
 
     # The output name is fixed inside our fresh private run directory. Create

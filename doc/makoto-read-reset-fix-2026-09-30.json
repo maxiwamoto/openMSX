@@ -1,0 +1,262 @@
+{
+  "date": "2026-09-30",
+  "issue": "V4 no-reset readback after unfinished CPU write",
+  "physical_evidence": "makoto-hardware-2026-09-29-v4.json",
+  "reference": {
+    "url": "https://github.com/nukeykt/YM2608-LLE",
+    "revision": "7a2aca7b6830b96e48e3a4e1a40d15525993fa60",
+    "scope": "isolated transfer-control experiment; constant external input, no DRAM model"
+  },
+  "fork_sound_version": 7,
+  "core_bytes": 1134,
+  "legacy_prefix_fnv1a": "4faf7577",
+  "v4_fork": [
+    {
+      "machine": "Philips_NMS_8250",
+      "makoto": false,
+      "display_complete": true,
+      "irq": null,
+      "timeout": 1,
+      "result_bytes": "4d4b5434010000000000000000000000ffffffffffffffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101010100000000"
+    },
+    {
+      "machine": "Philips_NMS_8250",
+      "makoto": true,
+      "display_complete": true,
+      "irq": "0",
+      "timeout": 0,
+      "result_bytes": "4d4b543400000000000000000000000000000000000000000808080808080808c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c1c2c3c4c5c6c7c8c1c2c3c4c5c6c7c8ffffffff200800000000000000000000"
+    },
+    {
+      "machine": "Panasonic_FS-A1GT",
+      "makoto": false,
+      "display_complete": true,
+      "irq": null,
+      "timeout": 1,
+      "result_bytes": "4d4b5434010000000000000000000000ffffffffffffffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101010100000000"
+    },
+    {
+      "machine": "Panasonic_FS-A1GT",
+      "makoto": true,
+      "display_complete": true,
+      "irq": "0",
+      "timeout": 0,
+      "result_bytes": "4d4b543400000000000000000000000000000000000000000808080808080808c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c1c2c3c4c5c6c7c8c1c2c3c4c5c6c7c8ffffffff200800000000000000000000"
+    }
+  ],
+  "v4_upstream_device": [
+    {
+      "machine": "Philips_NMS_8250",
+      "makoto": false,
+      "display_complete": true,
+      "irq": null,
+      "timeout": 1,
+      "result_bytes": "4d4b5434010000000000000000000000ffffffffffffffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101010100000000"
+    },
+    {
+      "machine": "Philips_NMS_8250",
+      "makoto": true,
+      "display_complete": true,
+      "irq": "0",
+      "timeout": 0,
+      "result_bytes": "4d4b543400000000000000000000000000000000000000000808080808080808c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c1c2c3c4c5c6c7c8c1c2c3c4c5c6c7c8ffffffff200800000000000000000000"
+    },
+    {
+      "machine": "Panasonic_FS-A1GT",
+      "makoto": false,
+      "display_complete": true,
+      "irq": null,
+      "timeout": 1,
+      "result_bytes": "4d4b5434010000000000000000000000ffffffffffffffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101010100000000"
+    },
+    {
+      "machine": "Panasonic_FS-A1GT",
+      "makoto": true,
+      "display_complete": true,
+      "irq": "0",
+      "timeout": 0,
+      "result_bytes": "4d4b543400000000000000000000000000000000000000000808080808080808c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c1c2c3c4c5c6c7c8c1c2c3c4c5c6c7c8ffffffff200800000000000000000000"
+    }
+  ],
+  "v5": [
+    {
+      "machine": "Philips_NMS_8250",
+      "makoto": false,
+      "display_complete": true,
+      "irq": null,
+      "timeout": 1,
+      "result_bytes": "4d4b5435010000000000000000000000ffffffffffffffff0000000000000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "machine": "Philips_NMS_8250",
+      "makoto": true,
+      "display_complete": true,
+      "irq": "0",
+      "timeout": 0,
+      "result_bytes": "4d4b543500010100000000000000000000000000000000000808080808080808a1a2a3a4ffffffffb1b2b3b4b1b2b3b4c1c2c3c4c5c6c7c8b1b2b3b4b5b6b7b8ffff0000200804000000000000000000"
+    },
+    {
+      "machine": "Panasonic_FS-A1GT",
+      "makoto": false,
+      "display_complete": true,
+      "irq": null,
+      "timeout": 1,
+      "result_bytes": "4d4b5435010000000000000000000000ffffffffffffffff0000000000000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "machine": "Panasonic_FS-A1GT",
+      "makoto": true,
+      "display_complete": true,
+      "irq": "0",
+      "timeout": 0,
+      "result_bytes": "4d4b543500010100000000000000000000000000000000000808080808080808a1a2a3a4ffffffffb1b2b3b4b1b2b3b4c1c2c3c4c5c6c7c8b1b2b3b4b5b6b7b8ffff0000200804000000000000000000"
+    }
+  ],
+  "audio": {
+    "combined": "32768 PCM values and chip state (excluding unused SSG tap slots) match exactly",
+    "combined_vs_channel_tools": {
+      "pcm_values": 32768,
+      "max_delta": 0,
+      "different_values": 0
+    },
+    "channel-tools": "32768 PCM values and chip state (excluding unused SSG tap slots) match exactly"
+  },
+  "integration_v6": {
+    "current-ssg-high": {
+      "rms": [
+        503.08135803190703,
+        503.08135803190703
+      ],
+      "peak": 722.0
+    },
+    "current-ssg-low": {
+      "rms": [
+        552.1271543279972,
+        552.1271543279972
+      ],
+      "peak": 667.0
+    },
+    "current-separate-buffers": {
+      "rms": [
+        552.1207591185229,
+        552.1207591185229
+      ],
+      "peak": 667.0
+    },
+    "channel_tools_output_ratio": 0.9999884171437246,
+    "current-ssg-muted": {
+      "rms": [
+        1.9650972349624694,
+        1.9650972349624694
+      ],
+      "peak": 11.0
+    },
+    "current-other-muted": {
+      "rms": [
+        552.1152860523462,
+        552.1152860523462
+      ],
+      "peak": 675.0
+    },
+    "current-fm-left": {
+      "rms": [
+        158.4034352111075,
+        1.953581751612064
+      ],
+      "peak": 235.0
+    },
+    "current-fm-muted": {
+      "rms": [
+        0.0,
+        0.0
+      ],
+      "peak": 0.0
+    },
+    "current-master-zero": {
+      "rms": [
+        0.0,
+        0.0
+      ],
+      "peak": 0.0
+    },
+    "data_peeks": "ADPCM dummy reads, next RAM byte, IRQ and complete saved chip state preserved",
+    "state_format": "RAM restored; future sound-state version rejected by the native serializer",
+    "unfinished_write_state": "stale A7 buffer survives device save/restore; RESET releases it",
+    "legacy_state_baseline": "core, deadlines, BUSY, RAM and clock preserved; resumed; no duplicate registers in new save",
+    "channels": "16 voices exposed; SSG/FM isolation and stereo pan passed",
+    "ram": "CPU readback in each 64KB quarter of 256KB x1-mode RAM passed"
+  },
+  "integration_v5": {
+    "current-ssg-high": {
+      "rms": [
+        503.08551806763654,
+        503.08551806763654
+      ],
+      "peak": 721.0
+    },
+    "current-ssg-low": {
+      "rms": [
+        552.1310333318955,
+        552.1310333318955
+      ],
+      "peak": 667.0
+    },
+    "current-separate-buffers": {
+      "rms": [
+        552.1269023628004,
+        552.1269023628004
+      ],
+      "peak": 667.0
+    },
+    "channel_tools_output_ratio": 0.9999925181363738,
+    "current-ssg-muted": {
+      "rms": [
+        1.979351664455564,
+        1.979351664455564
+      ],
+      "peak": 11.0
+    },
+    "current-other-muted": {
+      "rms": [
+        552.1493199905382,
+        552.1493199905382
+      ],
+      "peak": 674.0
+    },
+    "current-fm-left": {
+      "rms": [
+        158.4093165915805,
+        1.9389201110182948
+      ],
+      "peak": 235.0
+    },
+    "current-fm-muted": {
+      "rms": [
+        0.0,
+        0.0
+      ],
+      "peak": 0.0
+    },
+    "current-master-zero": {
+      "rms": [
+        0.0,
+        0.0
+      ],
+      "peak": 0.0
+    },
+    "data_peeks": "ADPCM dummy reads, next RAM byte, IRQ and complete saved chip state preserved",
+    "state_format": "RAM restored; future sound-state version rejected by the native serializer",
+    "unfinished_write_state": "stale A7 buffer survives device save/restore; RESET releases it",
+    "legacy_state_makoto-ram-e2am20vv": "core, deadlines, BUSY, RAM and clock preserved; resumed; no duplicate registers in new save",
+    "channels": "16 voices exposed; SSG/FM isolation and stereo pan passed",
+    "ram": "CPU readback in each 64KB quarter of 256KB x1-mode RAM passed"
+  },
+  "core_tests": {
+    "boundary_cases": 56,
+    "buffer_reset_save_cases": 6,
+    "synthesis_samples": 360000,
+    "clipped_cases": 430704
+  },
+  "windows_exe_sha256": "1a2bbf7ee267db4f95cdefa70f411af6d54ac20b99995f8f942b9c3cb07bb233",
+  "publication": "local only"
+}

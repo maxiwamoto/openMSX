@@ -7,6 +7,7 @@
 #include "Schedulable.hh"
 #include "IRQHelper.hh"
 #include "IntegerSetting.hh"
+#include "Ram.hh"
 #include "Rom.hh"
 #include "SimpleDebuggable.hh"
 #include "serialize.hh"
@@ -67,6 +68,7 @@ public:
 		, contextTime(time)
 		, busyEnd(time)
 		, chip(*this)
+		, sampleRAM(config, "Makoto ADPCM RAM", "YM2608 ADPCM-B sample RAM", 262144)
 		, registers(config.getMotherBoard(), *this)
 	{
 		if (config.findChild("rom")) {
@@ -75,6 +77,8 @@ public:
 			if (rhythm->size() != 8192)
 				throw MSXException("Makoto rhythm ROM must be 8192 bytes");
 		}
+		chip.set_fidelity(ymfm::OPN_FIDELITY_MAX);
+		sampleRAM.clear(0); // Start zeroed; reset preserves these contents.
 		chip.set_channel_output(channelOutput.data());
 		ssgGain = (1.0f / 4.3f) * float(psgVolume.getInt()) / 100.0f;
 		psgVolume.attach(*this);
@@ -145,8 +149,16 @@ public:
 			ymfm::ymfm_saved_state saved(state, true);
 			chip.save_restore(saved);
 		}
-		ar.serialize("core", state, "busyEnd", busyEnd,
-			     "sampleRAM", sampleRAM, "irq", irq, "sampleClock", getEmuClock());
+		ar.serialize("core", state, "busyEnd", busyEnd);
+		if (ar.versionAtLeast(version, 6)) {
+			ar.serialize("sampleRAM", sampleRAM);
+		} else if constexpr (Archive::IS_LOADER) {
+			// Public fork versions 1-5 stored one XML item per byte.
+			auto legacy = std::make_unique<std::array<byte, 262144>>();
+			ar.serialize("sampleRAM", *legacy);
+			std::ranges::copy(*legacy, sampleRAM.begin());
+		}
+		ar.serialize("irq", irq, "sampleClock", getEmuClock());
 		if (ar.versionAtLeast(version, 2)) {
 			ar.serialize("channelOutput", channelOutput);
 		} else if constexpr (Archive::IS_LOADER) {
@@ -160,6 +172,10 @@ public:
 			std::vector<uint8_t> expected;
 			ymfm::ymfm_saved_state measure(expected, true);
 			chip.save_restore(measure);
+			// Versions 1-6 predate the appended CPU-write latch. They cannot
+			// recover that history; retain their old unlatched read behavior.
+			if (!ar.versionAtLeast(version, 7))
+				state.push_back(0);
 			if (state.size() != expected.size())
 				throw MSXException("Invalid Makoto core state size");
 			ymfm::ymfm_saved_state saved(state, false);
@@ -235,27 +251,22 @@ private:
 		// Keep its combined output for normal playback. MakotoMix splits
 		// that same signal for channel tools (see makoto-mix-test.cc).
 		if (std::ranges::all_of(buffers, [&](auto* b) { return b == buffers[0]; })) {
-			bool audible = false;
+			uint32_t orOutput = 0;
 			for (unsigned i = 0; i < num; ++i) {
 				ymfm::ym2608::output_data output;
 				chip.generate(&output);
 				float ssg = ssgGain * float(output.data[2]);
 				buffers[0][2 * i]     += float(output.data[0]) + ssg;
 				buffers[0][2 * i + 1] += float(output.data[1]) + ssg;
-				// Once active, no more silence comparisons in this buffer.
-				// Cancellation can conservatively mark a zero sum active.
-				if (!audible) {
-					audible = (output.data[0] | output.data[1]) != 0 ||
-					          (ssgGain != 0.0f && output.data[2] != 0);
-				}
+				orOutput |= uint32_t(output.data[0] | output.data[1] | output.data[2]);
 			}
 			std::ranges::fill(buffers.subspan(1), nullptr);
-			if (!audible) buffers[0] = nullptr;
+			// A muted but active SSG conservatively keeps this buffer active.
+			if (orOutput == 0) buffers[0] = nullptr;
 			return;
 		}
 		MakotoMix mix;
 		std::array<int32_t, 3> lastSSG = {};
-		bool audible = false;
 		for (unsigned i = 0; i < num; ++i) {
 			ymfm::ym2608::output_data output;
 			chip.generate(&output);
@@ -267,23 +278,14 @@ private:
 			}
 			if (changed) {
 				mix.update(channelOutput, ssg.data, output.data, ssgGain);
-				// Only test silence when an input changes, and stop looking
-				// after any audible sample. Opposite voices may cancel in
-				// the sum, so separated buffers require checking the voices.
-				if (!audible) {
-					audible = std::ranges::any_of(mix.voices, [](float v) { return v != 0.0f; });
-				}
 			}
 			for (unsigned c = 0; c < 16; ++c) {
 				buffers[c][2 * i]     += mix.voices[2 * c];
 				buffers[c][2 * i + 1] += mix.voices[2 * c + 1];
 			}
 		}
-		// Whole-chip silence avoids downstream resampling. The core still
-		// runs every sample so envelopes, noise and ADPCM cannot freeze.
-		if (!audible) {
-			std::ranges::fill(buffers, nullptr);
-		}
+		// Channel tools usually inspect active output. Avoid a per-voice
+		// silence scan; the host can sum these buffers directly.
 	}
 
 	struct Registers final : SimpleDebuggable {
@@ -314,14 +316,14 @@ private:
 	EmuTime contextTime;
 	EmuTime busyEnd;
 	ymfm::ym2608 chip;
-	std::array<byte, 262144> sampleRAM = {};
+	Ram sampleRAM;
 	std::unique_ptr<Rom> rhythm;
 	Registers registers;
 };
 
 // Versions 1/2 were distributed in the public Makoto preview builds.
-// Version 5 drops analogue filter histories; older fork states remain readable.
-SERIALIZE_CLASS_VERSION(MakotoSound, 5);
+// Version 6 stores sample RAM as a delta-compressed blob; older saves still load.
+SERIALIZE_CLASS_VERSION(MakotoSound, 7);
 
 MSXMakoto::MSXMakoto(DeviceConfig& config)
 	: MSXDevice(config)

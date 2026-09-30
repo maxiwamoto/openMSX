@@ -1,0 +1,155 @@
+{
+  "date": "2026-09-30",
+  "probe": "MKT5",
+  "rom_sha256": "d1a425fc8c76cd605e889c3ceb267a33641cf9c7834cba2ff7d8436a160de91a",
+  "hardware_scope": "Owner-tested Makoto on two MSX hosts; not claimed to be two independent cartridge/chip samples.",
+  "observations": [
+    {
+      "machine": "Sanyo 70FD",
+      "photo_sha256": "4a73bc1396eecdfbdeafb0a06e210ac9d2422c744daa6a53ed12339d8892313a",
+      "initial_status": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "unmasked_status": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "baseline": [
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199,
+        200
+      ],
+      "end_read": [
+        161,
+        162,
+        163,
+        164,
+        255,
+        255,
+        255,
+        255
+      ],
+      "reseed": [
+        177,
+        178,
+        179,
+        180,
+        181,
+        182,
+        183,
+        184
+      ],
+      "limit_read": [
+        177,
+        178,
+        179,
+        180,
+        177,
+        178,
+        179,
+        180
+      ],
+      "error": 0,
+      "checks": [
+        1,
+        1,
+        4
+      ]
+    },
+    {
+      "machine": "Panasonic Turbo-R",
+      "photo_sha256": "024ac5f91cbfe20c7a08c67070157ec6ede5712f7ecade49338d38e2776c9bd9",
+      "initial_status": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "unmasked_status": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "baseline": [
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199,
+        200
+      ],
+      "end_read": [
+        161,
+        162,
+        163,
+        164,
+        255,
+        255,
+        255,
+        255
+      ],
+      "reseed": [
+        177,
+        178,
+        179,
+        180,
+        181,
+        182,
+        183,
+        184
+      ],
+      "limit_read": [
+        177,
+        178,
+        179,
+        180,
+        177,
+        178,
+        179,
+        180
+      ],
+      "error": 0,
+      "checks": [
+        1,
+        1,
+        4
+      ]
+    }
+  ],
+  "conclusions": [
+    "Both normal RAM gates pass, no timeout, four end-test data writes submitted.",
+    "At end register 0000h in x1 mode, all four bytes A1-A4 are stored. Current emulation drops A4.",
+    "At limit register 0000h in x1 mode, reads wrap after B4. Current emulation wraps after B3.",
+    "Observed masked/unmasked status values 00h/08h match emulation.",
+    "No claim about exact EOS timing, writes beyond end, other memory modes, or playback end behavior from this probe."
+  ]
+}

@@ -1,0 +1,1909 @@
+{
+  "scope": "Local Windows x64 development builds; no physical-chip validation yet.",
+  "results": {
+    "ram": {
+      "baseline": {
+        "state_gzip_bytes": 30250,
+        "state_xml_bytes": 7679000,
+        "sample_items": 262144,
+        "rewind_inline_bytes": 5488733,
+        "snapshots": 27
+      },
+      "candidate": {
+        "state_gzip_bytes": 10931,
+        "state_xml_bytes": 77515,
+        "sample_items": 0,
+        "rewind_inline_bytes": 261051,
+        "snapshots": 29
+      },
+      "migration": "v5 array loaded with all 262144 patterned bytes exact; debugger last-byte write and new blob save exact",
+      "rewind": "RAM restored to pre-edit value",
+      "rewind_scope": "Inline snapshot bytes only; delta-block storage is separate and not included by reverse debug."
+    },
+    "clipping": {
+      "rom_sha256": "0342ca280afb3efeea765e37ef01d5aef4ddd406781296313fd9f52b8e853585",
+      "seconds_per_track": 20.0,
+      "tracks": [
+        {
+          "track": 1,
+          "name": "THUNDER",
+          "bank": 12,
+          "samples": 19988331,
+          "fm_updates": 1110463,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 5013,
+          "peak_raw_right": 5013,
+          "mix_updates": 1259670,
+          "hardware_error": 0
+        },
+        {
+          "track": 2,
+          "name": "OPENING THEME A",
+          "bank": 11,
+          "samples": 20025849,
+          "fm_updates": 1112547,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 3811,
+          "peak_raw_right": 3811,
+          "mix_updates": 2094534,
+          "hardware_error": 0
+        },
+        {
+          "track": 3,
+          "name": "OPENING THEME B",
+          "bank": 11,
+          "samples": 20002116,
+          "fm_updates": 1111229,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 2013,
+          "peak_raw_right": 2013,
+          "mix_updates": 2870672,
+          "hardware_error": 0
+        },
+        {
+          "track": 4,
+          "name": "SHOP",
+          "bank": 3,
+          "samples": 20002108,
+          "fm_updates": 1111228,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 4063,
+          "peak_raw_right": 4063,
+          "mix_updates": 2033773,
+          "hardware_error": 0
+        },
+        {
+          "track": 5,
+          "name": "CRISIS AREA",
+          "bank": 3,
+          "samples": 20002131,
+          "fm_updates": 1111230,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 2882,
+          "peak_raw_right": 2882,
+          "mix_updates": 2664417,
+          "hardware_error": 0
+        },
+        {
+          "track": 6,
+          "name": "INDOOR COMBAT",
+          "bank": 2,
+          "samples": 20002104,
+          "fm_updates": 1111228,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 3903,
+          "peak_raw_right": 3903,
+          "mix_updates": 2036414,
+          "hardware_error": 0
+        },
+        {
+          "track": 7,
+          "name": "METAL AREA",
+          "bank": 1,
+          "samples": 20002128,
+          "fm_updates": 1111229,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 4366,
+          "peak_raw_right": 4366,
+          "mix_updates": 2215879,
+          "hardware_error": 0
+        },
+        {
+          "track": 8,
+          "name": "SEWER PIPES",
+          "bank": 3,
+          "samples": 20002117,
+          "fm_updates": 1111229,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 3928,
+          "peak_raw_right": 3928,
+          "mix_updates": 2966319,
+          "hardware_error": 0
+        },
+        {
+          "track": 9,
+          "name": "CAVERN (LABYRINTH)",
+          "bank": 5,
+          "samples": 20001883,
+          "fm_updates": 1111215,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 2746,
+          "peak_raw_right": 2746,
+          "mix_updates": 2016233,
+          "hardware_error": 0
+        },
+        {
+          "track": 10,
+          "name": "BUSTLING TOWN",
+          "bank": 5,
+          "samples": 20002357,
+          "fm_updates": 1111242,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 2966,
+          "peak_raw_right": 2966,
+          "mix_updates": 2039934,
+          "hardware_error": 0
+        },
+        {
+          "track": 11,
+          "name": "NIGHTMARE (DARK DREAM)",
+          "bank": 3,
+          "samples": 20002111,
+          "fm_updates": 1111229,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 3549,
+          "peak_raw_right": 3549,
+          "mix_updates": 2020280,
+          "hardware_error": 0
+        },
+        {
+          "track": 12,
+          "name": "HOME",
+          "bank": 5,
+          "samples": 20002114,
+          "fm_updates": 1111228,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 1161,
+          "peak_raw_right": 1161,
+          "mix_updates": 2056111,
+          "hardware_error": 0
+        },
+        {
+          "track": 13,
+          "name": "XIAO MEI",
+          "bank": 1,
+          "samples": 20002113,
+          "fm_updates": 1111229,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 632,
+          "peak_raw_right": 632,
+          "mix_updates": 2015622,
+          "hardware_error": 0
+        },
+        {
+          "track": 14,
+          "name": "LAO SHI",
+          "bank": 2,
+          "samples": 20002123,
+          "fm_updates": 1111229,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 2118,
+          "peak_raw_right": 2118,
+          "mix_updates": 1997103,
+          "hardware_error": 0
+        },
+        {
+          "track": 15,
+          "name": "DANCING",
+          "bank": 5,
+          "samples": 20002111,
+          "fm_updates": 1111228,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 3385,
+          "peak_raw_right": 3385,
+          "mix_updates": 2708165,
+          "hardware_error": 0
+        },
+        {
+          "track": 16,
+          "name": "VIP ROOM",
+          "bank": 5,
+          "samples": 20002107,
+          "fm_updates": 1111228,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 1360,
+          "peak_raw_right": 1360,
+          "mix_updates": 2029935,
+          "hardware_error": 0
+        },
+        {
+          "track": 17,
+          "name": "LOVERS",
+          "bank": 4,
+          "samples": 20002115,
+          "fm_updates": 1111229,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 1362,
+          "peak_raw_right": 1362,
+          "mix_updates": 2059433,
+          "hardware_error": 0
+        },
+        {
+          "track": 18,
+          "name": "BEING IMPRISONED",
+          "bank": 4,
+          "samples": 20002053,
+          "fm_updates": 1111225,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 2641,
+          "peak_raw_right": 2641,
+          "mix_updates": 2181397,
+          "hardware_error": 0
+        },
+        {
+          "track": 19,
+          "name": "VICTORY",
+          "bank": 4,
+          "samples": 20002199,
+          "fm_updates": 1111233,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 2842,
+          "peak_raw_right": 2842,
+          "mix_updates": 2315488,
+          "hardware_error": 0
+        },
+        {
+          "track": 20,
+          "name": "ILLUSION CASTLE",
+          "bank": 1,
+          "samples": 20002116,
+          "fm_updates": 1111229,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 3157,
+          "peak_raw_right": 3157,
+          "mix_updates": 2021554,
+          "hardware_error": 0
+        },
+        {
+          "track": 21,
+          "name": "INCITEMENT",
+          "bank": 5,
+          "samples": 20002102,
+          "fm_updates": 1111228,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 3119,
+          "peak_raw_right": 3119,
+          "mix_updates": 2004086,
+          "hardware_error": 0
+        },
+        {
+          "track": 22,
+          "name": "MO TIAN SECT",
+          "bank": 5,
+          "samples": 20002130,
+          "fm_updates": 1111229,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 2455,
+          "peak_raw_right": 2455,
+          "mix_updates": 2026769,
+          "hardware_error": 0
+        },
+        {
+          "track": 23,
+          "name": "RITUAL",
+          "bank": 4,
+          "samples": 20002117,
+          "fm_updates": 1111229,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 4024,
+          "peak_raw_right": 4024,
+          "mix_updates": 2002624,
+          "hardware_error": 0
+        },
+        {
+          "track": 24,
+          "name": "CRISIS",
+          "bank": 4,
+          "samples": 20002111,
+          "fm_updates": 1111229,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 3638,
+          "peak_raw_right": 3638,
+          "mix_updates": 2095916,
+          "hardware_error": 0
+        },
+        {
+          "track": 25,
+          "name": "REQUIEM",
+          "bank": 4,
+          "samples": 20002106,
+          "fm_updates": 1111228,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 2427,
+          "peak_raw_right": 2427,
+          "mix_updates": 2130961,
+          "hardware_error": 0
+        },
+        {
+          "track": 26,
+          "name": "NETWORK IMAGE",
+          "bank": 5,
+          "samples": 20002127,
+          "fm_updates": 1111229,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 2586,
+          "peak_raw_right": 2586,
+          "mix_updates": 2050848,
+          "hardware_error": 0
+        },
+        {
+          "track": 27,
+          "name": "REGULAR THEME B",
+          "bank": 2,
+          "samples": 20002113,
+          "fm_updates": 1111228,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 1895,
+          "peak_raw_right": 1895,
+          "mix_updates": 2871831,
+          "hardware_error": 0
+        },
+        {
+          "track": 28,
+          "name": "BATTLE",
+          "bank": 5,
+          "samples": 20002102,
+          "fm_updates": 1111228,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 3246,
+          "peak_raw_right": 3246,
+          "mix_updates": 2068882,
+          "hardware_error": 0
+        },
+        {
+          "track": 29,
+          "name": "MO TIAN EIGHT LEGIONS BATTLE",
+          "bank": 4,
+          "samples": 20002132,
+          "fm_updates": 1111230,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 2967,
+          "peak_raw_right": 2967,
+          "mix_updates": 2255039,
+          "hardware_error": 0
+        },
+        {
+          "track": 30,
+          "name": "HAZARD AREA",
+          "bank": 6,
+          "samples": 20002115,
+          "fm_updates": 1111229,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 1706,
+          "peak_raw_right": 1706,
+          "mix_updates": 2029704,
+          "hardware_error": 0
+        },
+        {
+          "track": 31,
+          "name": "REGULAR THEME A",
+          "bank": 3,
+          "samples": 20002126,
+          "fm_updates": 1111229,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 3789,
+          "peak_raw_right": 3789,
+          "mix_updates": 2093718,
+          "hardware_error": 0
+        },
+        {
+          "track": 32,
+          "name": "MO TIAN WANG BATTLE",
+          "bank": 5,
+          "samples": 20002109,
+          "fm_updates": 1111228,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 2984,
+          "peak_raw_right": 2984,
+          "mix_updates": 2031934,
+          "hardware_error": 0
+        },
+        {
+          "track": 33,
+          "name": "FINAL BATTLE",
+          "bank": 5,
+          "samples": 20002121,
+          "fm_updates": 1111229,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 4841,
+          "peak_raw_right": 4841,
+          "mix_updates": 2440848,
+          "hardware_error": 0
+        },
+        {
+          "track": 34,
+          "name": "DOC'S STORE / RESOURCE 45",
+          "bank": 1,
+          "samples": 20002112,
+          "fm_updates": 1111228,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 1053,
+          "peak_raw_right": 1053,
+          "mix_updates": 2406315,
+          "hardware_error": 0
+        },
+        {
+          "track": 35,
+          "name": "ENDING SHORT CUE",
+          "bank": 10,
+          "samples": 19978385,
+          "fm_updates": 1109911,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 2939,
+          "peak_raw_right": 2939,
+          "mix_updates": 1287626,
+          "hardware_error": 0
+        },
+        {
+          "track": 36,
+          "name": "ENDING THEME A",
+          "bank": 10,
+          "samples": 20025852,
+          "fm_updates": 1112547,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 3798,
+          "peak_raw_right": 3798,
+          "mix_updates": 2093923,
+          "hardware_error": 0
+        },
+        {
+          "track": 37,
+          "name": "LABORATORIES (LUNAR MADNESS)",
+          "bank": 3,
+          "samples": 20002113,
+          "fm_updates": 1111229,
+          "clipped_left": 0,
+          "clipped_right": 0,
+          "peak_raw_left": 3802,
+          "peak_raw_right": 3802,
+          "mix_updates": 2533335,
+          "hardware_error": 0
+        }
+      ]
+    },
+    "initial_workloads": {
+      "seconds": 20.0,
+      "rom_sha256": "0342ca280afb3efeea765e37ef01d5aef4ddd406781296313fd9f52b8e853585",
+      "track": 10,
+      "runs": [
+        {
+          "build": "cached",
+          "case": "no-makoto",
+          "repeat": 0,
+          "cpu_mode": "r800",
+          "cpu_seconds": 1.0,
+          "wall_seconds": 1.2282749000005424
+        },
+        {
+          "build": "cached",
+          "case": "silent-basic",
+          "repeat": 0,
+          "cpu_mode": "r800",
+          "cpu_seconds": 1.71875,
+          "wall_seconds": 1.8358018000144511
+        },
+        {
+          "build": "cached",
+          "case": "music",
+          "repeat": 0,
+          "cpu_mode": "r800",
+          "cpu_seconds": 2.640625,
+          "wall_seconds": 2.941477600019425
+        },
+        {
+          "build": "cached",
+          "case": "channel-tools",
+          "repeat": 0,
+          "cpu_mode": "r800",
+          "cpu_seconds": 3.9375,
+          "wall_seconds": 4.18619179999223
+        },
+        {
+          "build": "branchfree",
+          "case": "no-makoto",
+          "repeat": 0,
+          "cpu_mode": "r800",
+          "cpu_seconds": 1.21875,
+          "wall_seconds": 1.271248699980788
+        },
+        {
+          "build": "branchfree",
+          "case": "silent-basic",
+          "repeat": 0,
+          "cpu_mode": "r800",
+          "cpu_seconds": 1.859375,
+          "wall_seconds": 2.020922399999108
+        },
+        {
+          "build": "branchfree",
+          "case": "music",
+          "repeat": 0,
+          "cpu_mode": "r800",
+          "cpu_seconds": 2.8125,
+          "wall_seconds": 3.078567699994892
+        },
+        {
+          "build": "branchfree",
+          "case": "channel-tools",
+          "repeat": 0,
+          "cpu_mode": "r800",
+          "cpu_seconds": 4.203125,
+          "wall_seconds": 4.723876200034283
+        },
+        {
+          "build": "branchfree",
+          "case": "no-makoto",
+          "repeat": 1,
+          "cpu_mode": "r800",
+          "cpu_seconds": 1.25,
+          "wall_seconds": 1.3940497000003234
+        },
+        {
+          "build": "branchfree",
+          "case": "silent-basic",
+          "repeat": 1,
+          "cpu_mode": "r800",
+          "cpu_seconds": 1.75,
+          "wall_seconds": 1.938139699981548
+        },
+        {
+          "build": "branchfree",
+          "case": "music",
+          "repeat": 1,
+          "cpu_mode": "r800",
+          "cpu_seconds": 3.046875,
+          "wall_seconds": 3.3618069000076503
+        },
+        {
+          "build": "branchfree",
+          "case": "channel-tools",
+          "repeat": 1,
+          "cpu_mode": "r800",
+          "cpu_seconds": 3.875,
+          "wall_seconds": 4.252621299994644
+        },
+        {
+          "build": "cached",
+          "case": "no-makoto",
+          "repeat": 1,
+          "cpu_mode": "r800",
+          "cpu_seconds": 1.328125,
+          "wall_seconds": 1.422239499981515
+        },
+        {
+          "build": "cached",
+          "case": "silent-basic",
+          "repeat": 1,
+          "cpu_mode": "r800",
+          "cpu_seconds": 1.875,
+          "wall_seconds": 2.0592737999977544
+        },
+        {
+          "build": "cached",
+          "case": "music",
+          "repeat": 1,
+          "cpu_mode": "r800",
+          "cpu_seconds": 2.703125,
+          "wall_seconds": 2.9480290000210516
+        },
+        {
+          "build": "cached",
+          "case": "channel-tools",
+          "repeat": 1,
+          "cpu_mode": "r800",
+          "cpu_seconds": 4.46875,
+          "wall_seconds": 4.820653899980243
+        },
+        {
+          "build": "cached",
+          "case": "no-makoto",
+          "repeat": 2,
+          "cpu_mode": "r800",
+          "cpu_seconds": 1.28125,
+          "wall_seconds": 1.323160200030543
+        },
+        {
+          "build": "cached",
+          "case": "silent-basic",
+          "repeat": 2,
+          "cpu_mode": "r800",
+          "cpu_seconds": 1.8125,
+          "wall_seconds": 1.9076743999612518
+        },
+        {
+          "build": "cached",
+          "case": "music",
+          "repeat": 2,
+          "cpu_mode": "r800",
+          "cpu_seconds": 2.921875,
+          "wall_seconds": 3.099730100017041
+        },
+        {
+          "build": "cached",
+          "case": "channel-tools",
+          "repeat": 2,
+          "cpu_mode": "r800",
+          "cpu_seconds": 4.734375,
+          "wall_seconds": 4.961537100025453
+        },
+        {
+          "build": "branchfree",
+          "case": "no-makoto",
+          "repeat": 2,
+          "cpu_mode": "r800",
+          "cpu_seconds": 1.375,
+          "wall_seconds": 1.6150142999831587
+        },
+        {
+          "build": "branchfree",
+          "case": "silent-basic",
+          "repeat": 2,
+          "cpu_mode": "r800",
+          "cpu_seconds": 1.640625,
+          "wall_seconds": 1.7696252999594435
+        },
+        {
+          "build": "branchfree",
+          "case": "music",
+          "repeat": 2,
+          "cpu_mode": "r800",
+          "cpu_seconds": 2.65625,
+          "wall_seconds": 2.8020331999869086
+        },
+        {
+          "build": "branchfree",
+          "case": "channel-tools",
+          "repeat": 2,
+          "cpu_mode": "r800",
+          "cpu_seconds": 3.59375,
+          "wall_seconds": 3.9257821000064723
+        }
+      ],
+      "summary": {
+        "cached": {
+          "median_seconds": {
+            "no-makoto": 1.28125,
+            "silent-basic": 1.8125,
+            "music": 2.703125,
+            "channel-tools": 4.46875
+          },
+          "relative_to_no_makoto": {
+            "no-makoto": 1.0,
+            "silent-basic": 1.4146341463414633,
+            "music": 2.1097560975609757,
+            "channel-tools": 3.4878048780487805
+          }
+        },
+        "branchfree": {
+          "median_seconds": {
+            "no-makoto": 1.25,
+            "silent-basic": 1.75,
+            "music": 2.8125,
+            "channel-tools": 3.875
+          },
+          "relative_to_no_makoto": {
+            "no-makoto": 1.0,
+            "silent-basic": 1.4,
+            "music": 2.25,
+            "channel-tools": 3.1
+          }
+        }
+      }
+    },
+    "audio": {
+      "emulated_seconds_per_run": 2.0,
+      "runs": [
+        {
+          "mode": "combined",
+          "build": "baseline",
+          "repeat": 0,
+          "wall_seconds": 0.12414229998830706,
+          "cpu_seconds": 0.125
+        },
+        {
+          "mode": "combined",
+          "build": "candidate",
+          "repeat": 0,
+          "wall_seconds": 0.14798650000011548,
+          "cpu_seconds": 0.125
+        },
+        {
+          "mode": "channel-tools",
+          "build": "baseline",
+          "repeat": 0,
+          "wall_seconds": 0.27297839999664575,
+          "cpu_seconds": 0.234375
+        },
+        {
+          "mode": "channel-tools",
+          "build": "candidate",
+          "repeat": 0,
+          "wall_seconds": 0.2525650999741629,
+          "cpu_seconds": 0.203125
+        }
+      ],
+      "audio": {
+        "combined": "32768 PCM values and chip state (excluding unused SSG tap slots) match exactly",
+        "combined_vs_channel_tools": {
+          "pcm_values": 32768,
+          "max_delta": 0,
+          "different_values": 0
+        },
+        "channel-tools": "32768 PCM values and chip state (excluding unused SSG tap slots) match exactly"
+      },
+      "summary": {
+        "combined": {
+          "median_seconds": {
+            "baseline": 0.125,
+            "candidate": 0.125
+          },
+          "reduction_percent": 0.0
+        },
+        "channel-tools": {
+          "median_seconds": {
+            "baseline": 0.234375,
+            "candidate": 0.203125
+          },
+          "reduction_percent": 13.33333333333333
+        }
+      }
+    },
+    "integration": {
+      "current-ssg-high": {
+        "rms": [
+          503.0569295285119,
+          503.0569295285119
+        ],
+        "peak": 722.0
+      },
+      "current-ssg-low": {
+        "rms": [
+          552.1270381792673,
+          552.1270381792673
+        ],
+        "peak": 667.0
+      },
+      "current-separate-buffers": {
+        "rms": [
+          552.1207591185229,
+          552.1207591185229
+        ],
+        "peak": 667.0
+      },
+      "channel_tools_output_ratio": 0.9999886275072398,
+      "current-ssg-muted": {
+        "rms": [
+          1.8884951906570568,
+          1.8884951906570568
+        ],
+        "peak": 11.0
+      },
+      "current-other-muted": {
+        "rms": [
+          552.1152860523462,
+          552.1152860523462
+        ],
+        "peak": 675.0
+      },
+      "current-fm-left": {
+        "rms": [
+          158.4034352111075,
+          1.953581751612064
+        ],
+        "peak": 235.0
+      },
+      "current-fm-muted": {
+        "rms": [
+          0.0,
+          0.0
+        ],
+        "peak": 0.0
+      },
+      "current-master-zero": {
+        "rms": [
+          0.0,
+          0.0
+        ],
+        "peak": 0.0
+      },
+      "data_peeks": "ADPCM dummy reads, next RAM byte, IRQ and complete saved chip state preserved",
+      "state_format": "RAM restored; future sound-state version rejected by the native serializer",
+      "channels": "16 voices exposed; SSG/FM isolation and stereo pan passed",
+      "ram": "CPU readback in each 64KB quarter of 256KB x1-mode RAM passed"
+    },
+    "hardware_probe": {
+      "emulator_result": "4d4b54310000ff00ff00ff00ff00ff0000000000000000000808080808080808a1a2a3ffffffffffb1b2b3b1b2b3b1b2",
+      "expected_observations_reproduced": true
+    },
+    "final_workloads": {
+      "seconds": 40.0,
+      "rom_sha256": "0342ca280afb3efeea765e37ef01d5aef4ddd406781296313fd9f52b8e853585",
+      "track": 10,
+      "runs": [
+        {
+          "build": "before",
+          "case": "no-makoto",
+          "repeat": 0,
+          "cpu_mode": "r800",
+          "cpu_seconds": 1.96875,
+          "wall_seconds": 2.167735100025311
+        },
+        {
+          "build": "before",
+          "case": "silent-basic",
+          "repeat": 0,
+          "cpu_mode": "r800",
+          "cpu_seconds": 3.15625,
+          "wall_seconds": 3.289480800041929
+        },
+        {
+          "build": "before",
+          "case": "music",
+          "repeat": 0,
+          "cpu_mode": "r800",
+          "cpu_seconds": 5.203125,
+          "wall_seconds": 5.493495600007009
+        },
+        {
+          "build": "before",
+          "case": "channel-tools",
+          "repeat": 0,
+          "cpu_mode": "r800",
+          "cpu_seconds": 7.3125,
+          "wall_seconds": 7.776487199997064
+        },
+        {
+          "build": "final",
+          "case": "no-makoto",
+          "repeat": 0,
+          "cpu_mode": "r800",
+          "cpu_seconds": 2.140625,
+          "wall_seconds": 2.282948999956716
+        },
+        {
+          "build": "final",
+          "case": "silent-basic",
+          "repeat": 0,
+          "cpu_mode": "r800",
+          "cpu_seconds": 3.015625,
+          "wall_seconds": 3.3511337999952957
+        },
+        {
+          "build": "final",
+          "case": "music",
+          "repeat": 0,
+          "cpu_mode": "r800",
+          "cpu_seconds": 5.109375,
+          "wall_seconds": 5.4473172999569215
+        },
+        {
+          "build": "final",
+          "case": "channel-tools",
+          "repeat": 0,
+          "cpu_mode": "r800",
+          "cpu_seconds": 7.046875,
+          "wall_seconds": 7.395689599972684
+        },
+        {
+          "build": "final",
+          "case": "no-makoto",
+          "repeat": 1,
+          "cpu_mode": "r800",
+          "cpu_seconds": 2.078125,
+          "wall_seconds": 2.2922698999755085
+        },
+        {
+          "build": "final",
+          "case": "silent-basic",
+          "repeat": 1,
+          "cpu_mode": "r800",
+          "cpu_seconds": 3.140625,
+          "wall_seconds": 3.3356113000190817
+        },
+        {
+          "build": "final",
+          "case": "music",
+          "repeat": 1,
+          "cpu_mode": "r800",
+          "cpu_seconds": 5.25,
+          "wall_seconds": 5.612290899967775
+        },
+        {
+          "build": "final",
+          "case": "channel-tools",
+          "repeat": 1,
+          "cpu_mode": "r800",
+          "cpu_seconds": 7.078125,
+          "wall_seconds": 7.449465799960308
+        },
+        {
+          "build": "before",
+          "case": "no-makoto",
+          "repeat": 1,
+          "cpu_mode": "r800",
+          "cpu_seconds": 2.125,
+          "wall_seconds": 2.311336899991147
+        },
+        {
+          "build": "before",
+          "case": "silent-basic",
+          "repeat": 1,
+          "cpu_mode": "r800",
+          "cpu_seconds": 3.140625,
+          "wall_seconds": 3.41082649998134
+        },
+        {
+          "build": "before",
+          "case": "music",
+          "repeat": 1,
+          "cpu_mode": "r800",
+          "cpu_seconds": 5.28125,
+          "wall_seconds": 5.542571899946779
+        },
+        {
+          "build": "before",
+          "case": "channel-tools",
+          "repeat": 1,
+          "cpu_mode": "r800",
+          "cpu_seconds": 7.0625,
+          "wall_seconds": 7.548448099987581
+        },
+        {
+          "build": "before",
+          "case": "no-makoto",
+          "repeat": 2,
+          "cpu_mode": "r800",
+          "cpu_seconds": 2.078125,
+          "wall_seconds": 2.2303108999622054
+        },
+        {
+          "build": "before",
+          "case": "silent-basic",
+          "repeat": 2,
+          "cpu_mode": "r800",
+          "cpu_seconds": 3.296875,
+          "wall_seconds": 3.4814585999702103
+        },
+        {
+          "build": "before",
+          "case": "music",
+          "repeat": 2,
+          "cpu_mode": "r800",
+          "cpu_seconds": 5.0,
+          "wall_seconds": 5.363062999967951
+        },
+        {
+          "build": "before",
+          "case": "channel-tools",
+          "repeat": 2,
+          "cpu_mode": "r800",
+          "cpu_seconds": 7.375,
+          "wall_seconds": 7.969296300027054
+        },
+        {
+          "build": "final",
+          "case": "no-makoto",
+          "repeat": 2,
+          "cpu_mode": "r800",
+          "cpu_seconds": 2.140625,
+          "wall_seconds": 2.3036977000301704
+        },
+        {
+          "build": "final",
+          "case": "silent-basic",
+          "repeat": 2,
+          "cpu_mode": "r800",
+          "cpu_seconds": 3.125,
+          "wall_seconds": 3.381852600025013
+        },
+        {
+          "build": "final",
+          "case": "music",
+          "repeat": 2,
+          "cpu_mode": "r800",
+          "cpu_seconds": 5.328125,
+          "wall_seconds": 5.642291600001045
+        },
+        {
+          "build": "final",
+          "case": "channel-tools",
+          "repeat": 2,
+          "cpu_mode": "r800",
+          "cpu_seconds": 7.15625,
+          "wall_seconds": 7.534178400004748
+        }
+      ],
+      "summary": {
+        "before": {
+          "median_seconds": {
+            "no-makoto": 2.078125,
+            "silent-basic": 3.15625,
+            "music": 5.203125,
+            "channel-tools": 7.3125
+          },
+          "relative_to_no_makoto": {
+            "no-makoto": 1.0,
+            "silent-basic": 1.518796992481203,
+            "music": 2.5037593984962405,
+            "channel-tools": 3.518796992481203
+          }
+        },
+        "final": {
+          "median_seconds": {
+            "no-makoto": 2.140625,
+            "silent-basic": 3.125,
+            "music": 5.25,
+            "channel-tools": 7.078125
+          },
+          "relative_to_no_makoto": {
+            "no-makoto": 1.0,
+            "silent-basic": 1.4598540145985401,
+            "music": 2.4525547445255476,
+            "channel-tools": 3.3065693430656933
+          }
+        }
+      }
+    },
+    "rhythm": {
+      "sample_sha256": "53afd0fa9c62eda3e2be939e23f3adf48a2af8ad37bb1640261726c5d5adeba8",
+      "voices": {
+        "bass": {
+          "peak": [
+            6795.0,
+            6795.0
+          ]
+        },
+        "snare": {
+          "peak": [
+            6741.0,
+            6741.0
+          ]
+        },
+        "cymbal": {
+          "peak": [
+            7575.0,
+            7575.0
+          ]
+        },
+        "hihat": {
+          "peak": [
+            6674.0,
+            6674.0
+          ]
+        },
+        "tom": {
+          "peak": [
+            6339.0,
+            6339.0
+          ]
+        },
+        "rim": {
+          "peak": [
+            6837.0,
+            6837.0
+          ]
+        }
+      },
+      "controls": "All six channel mutes, left/right pan and key-off passed",
+      "save": "Mid-cymbal restoration gives identical full chip state after 60 ms",
+      "external_override": {
+        "restored": true,
+        "rms_ratio_to_builtin": 0.8324733697765528
+      },
+      "wrong_size": "8191-byte external rhythm ROM rejected"
+    },
+    "upstream_timers": {
+      "passed": [
+        "Standard device volume defaults to 75 percent and SSG to 50 percent",
+        "BUSY appears on both status ports and expires",
+        "Timer A period, sticky overflow, acknowledge and reload",
+        "Timer B period and overflow",
+        "Stopping timers cancels scheduled overflows",
+        "Both timers raise MSX CPU IRQ; acknowledge and cancellation release it",
+        "Cancelling timer A leaves independently scheduled timer B running",
+        "Debugger exposes core ID, IRQ mask and effective latched FM registers",
+        "Debugger peeks preserve the entire chip state",
+        "Save/restore resumes the same chip, RAM, BUSY and both active timers",
+        "Native in-memory rewind restores active timers and complete Makoto state",
+        "Native I/O watchpoints and IRQ probe tracing work without device file tracing",
+        "MSX reset stops OPNA timers"
+      ]
+    },
+    "upstream_integration": {
+      "current-ssg-high": {
+        "rms": [
+          503.0798673370702,
+          503.0798673370702
+        ],
+        "peak": 722.0
+      },
+      "current-ssg-low": {
+        "rms": [
+          552.1271543279972,
+          552.1271543279972
+        ],
+        "peak": 667.0
+      },
+      "current-separate-buffers": {
+        "rms": [
+          552.1207591185229,
+          552.1207591185229
+        ],
+        "peak": 667.0
+      },
+      "channel_tools_output_ratio": 0.9999884171437246,
+      "current-ssg-muted": {
+        "rms": [
+          1.9650972349624694,
+          1.9650972349624694
+        ],
+        "peak": 11.0
+      },
+      "current-other-muted": {
+        "rms": [
+          552.1152860523462,
+          552.1152860523462
+        ],
+        "peak": 675.0
+      },
+      "current-fm-left": {
+        "rms": [
+          158.4034352111075,
+          1.953581751612064
+        ],
+        "peak": 235.0
+      },
+      "current-fm-muted": {
+        "rms": [
+          0.0,
+          0.0
+        ],
+        "peak": 0.0
+      },
+      "current-master-zero": {
+        "rms": [
+          0.0,
+          0.0
+        ],
+        "peak": 0.0
+      },
+      "data_peeks": "ADPCM dummy reads, next RAM byte, IRQ and complete saved chip state preserved",
+      "state_format": "RAM restored; future sound-state version rejected by the native serializer",
+      "channels": "16 voices exposed; SSG/FM isolation and stereo pan passed",
+      "ram": "CPU readback in each 64KB quarter of 256KB x1-mode RAM passed"
+    },
+    "hardware_probe_v2_boot": [
+      {
+        "machine": "Philips_NMS_8250",
+        "makoto": false,
+        "display_complete": true,
+        "irq": null,
+        "timeout": 1,
+        "result_bytes": "4d4b54320100ff00ff00ff00ff00ff00ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+      },
+      {
+        "machine": "Philips_NMS_8250",
+        "makoto": true,
+        "display_complete": true,
+        "irq": "0",
+        "timeout": 0,
+        "result_bytes": "4d4b54320000ff00ff00ff00ff00ff0000000000000000000808080808080808a1a2a3ffffffffffb1b2b3b1b2b3b1b2"
+      },
+      {
+        "machine": "Panasonic_FS-A1GT",
+        "makoto": false,
+        "display_complete": true,
+        "irq": null,
+        "timeout": 1,
+        "result_bytes": "4d4b543201ff00ffff00ff0000ff00ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+      },
+      {
+        "machine": "Panasonic_FS-A1GT",
+        "makoto": true,
+        "display_complete": true,
+        "irq": "0",
+        "timeout": 0,
+        "result_bytes": "4d4b543200ff00ffff00ff0000ff00ff00000000000000000808080808080808a1a2a3ffffffffffb1b2b3b1b2b3b1b2"
+      }
+    ],
+    "physical_probe_v2": {
+      "date": "2026-09-29",
+      "probe": "MKT2",
+      "reported_by": "Owner, physical Makoto",
+      "results": [
+        {
+          "machine": "Panasonic Turbo-R",
+          "photo_sha256": "975c8a031d782f451c0bee37a4bc58871b77f6901b676c980ded416ead79c458",
+          "status_before": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "status_after_unmask": [
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8
+          ],
+          "end_read": [
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255
+          ],
+          "limit_read": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "timeout": 0
+        },
+        {
+          "machine": "Sanyo 70FD",
+          "photo_sha256": "092904e625192b07f9868358c905975915418d167e77be440ecec342a7d4618b",
+          "status_before": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "status_after_unmask": [
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8
+          ],
+          "end_read": [
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255
+          ],
+          "limit_read": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "timeout": 0
+        }
+      ],
+      "interpretation": "The two observed flag states match emulation. End/limit results differ, but v2 did not validate baseline RAM transfers and omitted the documented transfer termination/flag/BRDY sequence. Boundary behavior remains inconclusive."
+    },
+    "hardware_probe_v3_boot": [
+      {
+        "machine": "Philips_NMS_8250",
+        "makoto": false,
+        "display_complete": true,
+        "irq": null,
+        "timeout": 1,
+        "result_bytes": "4d4b5433010000000000000000000000ffffffffffffffff0000000000000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "machine": "Philips_NMS_8250",
+        "makoto": true,
+        "display_complete": true,
+        "irq": "0",
+        "timeout": 0,
+        "result_bytes": "4d4b543300010100000000000000000000000000000000000808080808080808a1a2a3ffffffffffb1b2b3b1b2b3b1b2c1c2c3c4c5c6c7c8b1b2b3b4b5b6b7b8ffff0000200804000000000000000000"
+      },
+      {
+        "machine": "Panasonic_FS-A1GT",
+        "makoto": false,
+        "display_complete": true,
+        "irq": null,
+        "timeout": 1,
+        "result_bytes": "4d4b5433010000000000000000000000ffffffffffffffff0000000000000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "machine": "Panasonic_FS-A1GT",
+        "makoto": true,
+        "display_complete": true,
+        "irq": "0",
+        "timeout": 0,
+        "result_bytes": "4d4b543300010100000000000000000000000000000000000808080808080808a1a2a3ffffffffffb1b2b3b1b2b3b1b2c1c2c3c4c5c6c7c8b1b2b3b4b5b6b7b8ffff0000200804000000000000000000"
+      }
+    ],
+    "physical_probe_v3": {
+      "probe": "MKT3",
+      "observed": [
+        {
+          "machine": "Sanyo 70FD",
+          "photo_sha256": "613b306f68ede36ffa4a23067c6acef21293b4dc60eb141f109fb7f0e3049f45",
+          "initial_status": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "unmasked_status": [
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8
+          ],
+          "baseline": [
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            200
+          ],
+          "end": [
+            238,
+            238,
+            238,
+            238,
+            238,
+            238,
+            238,
+            238
+          ],
+          "reseed": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "limit": [
+            238,
+            238,
+            238,
+            238,
+            238,
+            238,
+            238,
+            238
+          ],
+          "error": 0,
+          "checks": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "machine": "Panasonic Turbo-R",
+          "photo_sha256": "40978f45d487119179265ba064e608ecdc01103c1b39a7e853b261f3e267b9d0",
+          "initial_status": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "unmasked_status": [
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8
+          ],
+          "baseline": [
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            200
+          ],
+          "end": [
+            238,
+            238,
+            238,
+            238,
+            238,
+            238,
+            238,
+            238
+          ],
+          "reseed": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "limit": [
+            238,
+            238,
+            238,
+            238,
+            238,
+            238,
+            238,
+            238
+          ],
+          "error": 0,
+          "checks": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "interpretation": "Baseline returns the final written byte C8 in all eight positions. No BUSY/BRDY timeout. Boundary tests correctly skipped; no conclusion about chip end/limit semantics."
+    },
+    "ram_transfer_v4_emulator": [
+      {
+        "machine": "Philips_NMS_8250",
+        "makoto": false,
+        "display_complete": true,
+        "irq": null,
+        "timeout": 1,
+        "result_bytes": "4d4b5434010000000000000000000000ffffffffffffffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101010100000000"
+      },
+      {
+        "machine": "Philips_NMS_8250",
+        "makoto": true,
+        "display_complete": true,
+        "irq": "0",
+        "timeout": 0,
+        "result_bytes": "4d4b543400000000000000000000000000000000000000000808080808080808c1c2c3c4c5c6c7c8c1c2c3c4c5c6c7c8c1c2c3c4c5c6c7c8c1c2c3c4c5c6c7c8ffffffff200800000000000000000000"
+      },
+      {
+        "machine": "Panasonic_FS-A1GT",
+        "makoto": false,
+        "display_complete": true,
+        "irq": null,
+        "timeout": 1,
+        "result_bytes": "4d4b5434010000000000000000000000ffffffffffffffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101010100000000"
+      },
+      {
+        "machine": "Panasonic_FS-A1GT",
+        "makoto": true,
+        "display_complete": true,
+        "irq": "0",
+        "timeout": 0,
+        "result_bytes": "4d4b543400000000000000000000000000000000000000000808080808080808c1c2c3c4c5c6c7c8c1c2c3c4c5c6c7c8c1c2c3c4c5c6c7c8c1c2c3c4c5c6c7c8ffffffff200800000000000000000000"
+      }
+    ],
+    "physical_probe_v4": {
+      "probe": "MKT4",
+      "observed": [
+        {
+          "machine": "Panasonic Turbo-R",
+          "photo_sha256": "0dc4311b8431d71ef5dbe9021c4112a228bbdc31d8436398e219862593731547",
+          "initial_status": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "unmasked_status": [
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8
+          ],
+          "A": [
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            200
+          ],
+          "B": [
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            200
+          ],
+          "C": [
+            193,
+            194,
+            195,
+            196,
+            197,
+            198,
+            199,
+            200
+          ],
+          "D": [
+            193,
+            194,
+            195,
+            196,
+            197,
+            198,
+            199,
+            200
+          ],
+          "errors": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "machine": "Sanyo 70FD",
+          "photo_sha256": "7ff1f9d902a16df7c68fd3bff984bed3be9b3774b0e4a27c5e39399c351bc3a5",
+          "initial_status": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "unmasked_status": [
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8
+          ],
+          "A": [
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            200
+          ],
+          "B": [
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            200
+          ],
+          "C": [
+            193,
+            194,
+            195,
+            196,
+            197,
+            198,
+            199,
+            200
+          ],
+          "D": [
+            193,
+            194,
+            195,
+            196,
+            197,
+            198,
+            199,
+            200
+          ],
+          "errors": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "conclusion": "On the tested Makoto on both hosts, explicit ADPCM reset followed by read mode changes B repeated-last-byte output to C correct sequential data. Both reselected/flag-handshake reads (C) and stream reads (D) work. Reset/read setup is isolated; original end/limit boundary behavior is not yet established. These are two host tests, not evidence of two independent cartridge samples."
+    },
+    "boundary_probe_v5_emulator": [
+      {
+        "machine": "Philips_NMS_8250",
+        "makoto": false,
+        "display_complete": true,
+        "irq": null,
+        "timeout": 1,
+        "result_bytes": "4d4b5435010000000000000000000000ffffffffffffffff0000000000000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "machine": "Philips_NMS_8250",
+        "makoto": true,
+        "display_complete": true,
+        "irq": "0",
+        "timeout": 0,
+        "result_bytes": "4d4b543500010100000000000000000000000000000000000808080808080808a1a2a3ffffffffffb1b2b3b1b2b3b1b2c1c2c3c4c5c6c7c8b1b2b3b4b5b6b7b8ffff0000200804000000000000000000"
+      },
+      {
+        "machine": "Panasonic_FS-A1GT",
+        "makoto": false,
+        "display_complete": true,
+        "irq": null,
+        "timeout": 1,
+        "result_bytes": "4d4b5435010000000000000000000000ffffffffffffffff0000000000000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "machine": "Panasonic_FS-A1GT",
+        "makoto": true,
+        "display_complete": true,
+        "irq": "0",
+        "timeout": 0,
+        "result_bytes": "4d4b543500010100000000000000000000000000000000000808080808080808a1a2a3ffffffffffb1b2b3b1b2b3b1b2c1c2c3c4c5c6c7c8b1b2b3b4b5b6b7b8ffff0000200804000000000000000000"
+      }
+    ],
+    "physical_probe_v5": {
+      "date": "2026-09-30",
+      "probe": "MKT5",
+      "rom_sha256": "d1a425fc8c76cd605e889c3ceb267a33641cf9c7834cba2ff7d8436a160de91a",
+      "hardware_scope": "Owner-tested Makoto on two MSX hosts; not claimed to be two independent cartridge/chip samples.",
+      "observations": [
+        {
+          "machine": "Sanyo 70FD",
+          "photo_sha256": "4a73bc1396eecdfbdeafb0a06e210ac9d2422c744daa6a53ed12339d8892313a",
+          "initial_status": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "unmasked_status": [
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8
+          ],
+          "baseline": [
+            193,
+            194,
+            195,
+            196,
+            197,
+            198,
+            199,
+            200
+          ],
+          "end_read": [
+            161,
+            162,
+            163,
+            164,
+            255,
+            255,
+            255,
+            255
+          ],
+          "reseed": [
+            177,
+            178,
+            179,
+            180,
+            181,
+            182,
+            183,
+            184
+          ],
+          "limit_read": [
+            177,
+            178,
+            179,
+            180,
+            177,
+            178,
+            179,
+            180
+          ],
+          "error": 0,
+          "checks": [
+            1,
+            1,
+            4
+          ]
+        },
+        {
+          "machine": "Panasonic Turbo-R",
+          "photo_sha256": "024ac5f91cbfe20c7a08c67070157ec6ede5712f7ecade49338d38e2776c9bd9",
+          "initial_status": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "unmasked_status": [
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8
+          ],
+          "baseline": [
+            193,
+            194,
+            195,
+            196,
+            197,
+            198,
+            199,
+            200
+          ],
+          "end_read": [
+            161,
+            162,
+            163,
+            164,
+            255,
+            255,
+            255,
+            255
+          ],
+          "reseed": [
+            177,
+            178,
+            179,
+            180,
+            181,
+            182,
+            183,
+            184
+          ],
+          "limit_read": [
+            177,
+            178,
+            179,
+            180,
+            177,
+            178,
+            179,
+            180
+          ],
+          "error": 0,
+          "checks": [
+            1,
+            1,
+            4
+          ]
+        }
+      ],
+      "conclusions": [
+        "Both normal RAM gates pass, no timeout, four end-test data writes submitted.",
+        "At end register 0000h in x1 mode, all four bytes A1-A4 are stored. Current emulation drops A4.",
+        "At limit register 0000h in x1 mode, reads wrap after B4. Current emulation wraps after B3.",
+        "Observed masked/unmasked status values 00h/08h match emulation.",
+        "No claim about exact EOS timing, writes beyond end, other memory modes, or playback end behavior from this probe."
+      ]
+    }
+  },
+  "builds": {
+    "fork": "9262e1defcf754a0f4ae4b1038118b05602602d0c60bccd2e185909da329069f",
+    "upstream_device_harness": "27379c04313827993be6e30af7bf90db3f3cc05a5f28ef8dd9ca71ae8a4be187",
+    "hardware_rom": "d0491f72d490490d3457752ba8e3bd7b6cab6da05e91781fbb53bb818efb2484",
+    "hardware_rom_v2": "75f042e136f48ffe796ffb0b3465c414aaba2f85bdc679ea2b975c53553fd2ad"
+  }
+}
