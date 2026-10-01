@@ -27,7 +27,7 @@ The experimental `MakotoYM2608` control layer belongs to openMSX and reuses
 YMFM synthesis engines. The old wrapper remains available only as a comparison
 reference. The pinned YMFM source and BSD license are under `src/3rdparty/ymfm`.
 Only the OPN/SSG/ADPCM subset is vendored. Local patches initialize an operator
-cache, expose individual channel output, and correct CPU sample-RAM transfers;
+cache, provide safe debugger access, and correct CPU sample-RAM transfers;
 see README.openmsx for exact scope
 and the differential test against the original mixed path.
 

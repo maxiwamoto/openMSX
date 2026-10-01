@@ -142,3 +142,8 @@ The old patched control layer and inherited wrapper now live only in
 compiled into standalone reference tests, never the emulator. The vendored
 `ym2608` class has been restored to the pinned upstream revision. Lower engine
 RAM fixes and debugger helpers remain; see `src/3rdparty/ymfm/README.openmsx`.
+
+The final release timer harness disables VDP IRQs and parks the CPU in a RAM
+DI loop before counting pending interrupts. This avoids BIOS initialization
+changing an unrelated IRQ count during the Makoto timer test. Makoto IRQ,
+status, save/load and rewind assertions remain enabled.
