@@ -1,5 +1,6 @@
+#include "makoto-reference/ReferenceYM2608.hh"
 // Differential test at native chip clock edges, before host resampling.
-#include "MakotoNativeChip.hh"
+#include "makoto-reference/MakotoNativeChip.hh"
 #include "3rdparty/ym2608/fmopn_2608rom.h"
 #include <iostream>
 #include <cstdlib>
@@ -12,12 +13,12 @@ struct Interface : ymfm::ymfm_interface {
 int main() {
  unsigned samples=0, negative=0;
  for(unsigned prescale : {6U, 3U, 2U}) {
- Interface a,b; ymfm::ym2608 original(a); openmsx::MakotoNativeChip native(b);
+ Interface a,b; ymfm::ym2608_reference original(a); openmsx::MakotoNativeChip native(b);
  original.set_fidelity(ymfm::OPN_FIDELITY_MAX);
  original.reset();native.reset();
  std::array<int32_t,32> channels{};native.set_channel_output(channels.data());
  auto write = [&](unsigned reg,uint8_t value) {
-  for(auto* chip : {&original,static_cast<ymfm::ym2608*>(&native)}) {
+  for(auto* chip : {&original,static_cast<ymfm::ym2608_reference*>(&native)}) {
    unsigned port=reg>=256?2:0;chip->write(port,uint8_t(reg));chip->write(port+1,value);
   }
  };
@@ -49,7 +50,7 @@ int main() {
  for(unsigned i=0;i<360000;++i) {
   if(i==100000) { write(7,0);write(6,5);write(8,16);write(11,37);write(12,0);write(13,10); }
   if(i==200000) { write(0x10,0x3f);write(0xa4,0x26);write(0xa0,0x40); }
-  ymfm::ym2608::output_data expected;original.generate(&expected);
+  ymfm::ym2608_reference::output_data expected;original.generate(&expected);
   if(i%fmDiv==0) fm=native.clockFM();
   if(i%ssgDiv==0) ssg=native.clockSSG();
   if(fm[0]!=expected.data[0] || fm[1]!=expected.data[1] ||
@@ -63,7 +64,7 @@ int main() {
  // Negative control: key off all native FM voices; comparison must detect it.
  for(unsigned c=0;c<6;++c) {native.write(0,0x28);native.write(1,uint8_t((c/3)*4+c%3));}
  for(unsigned i=0;i<36000;++i) {
-  ymfm::ym2608::output_data expected; original.generate(&expected);
+  ymfm::ym2608_reference::output_data expected; original.generate(&expected);
   if(i%fmDiv==0) fm=native.clockFM();
   if(fm[0]!=expected.data[0] || fm[1]!=expected.data[1]) ++negative;
  }

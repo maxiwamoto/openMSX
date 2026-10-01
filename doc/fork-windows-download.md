@@ -4,7 +4,7 @@ This is an experimental build of maxiwamoto/openMSX, not an official openMSX rel
 It includes sector-based Flash persistence, Windows ROM replacement, reload/reset,
 no-reset media refresh, and development save-state restore. The Flash format is proposed upstream and may change.
 
-Version **2026.09.30** includes experimental Makoto/YM2608 and V9968 support,
+Version **2026.10.01** includes experimental Makoto/YM2608 and V9968 support,
 alongside the Flash and media-development fixes. Use the complete package,
 including `share/`, when upgrading.
 
@@ -21,15 +21,28 @@ and use the separate `profile/` folder. Supply your own FS-A1GT firmware in
 The six internal rhythm sounds are built in; no external rhythm file is needed.
 Sound registers can be edited in the debugger. This update fixes sample-RAM
 boundaries and no-reset readback, checked against real Makoto V4/V5 results.
-Native RAM storage reduces snapshot size. Sound-state version 7 loads older
-fork states (versions 1-6). Music playback and default volume settings are
-unchanged. See `doc/makoto-review-2026-09-29.md` for evidence and limits.
+Native FM and SSG streams now feed the host resamplers directly. The new
+openMSX-owned YM2608 control layer retains the YMFM synthesis engines and the
+hardware-verified RAM fixes. It removes the old repeated-sample path and
+comparison caches. All 16 voice controls remain available. Sound-state version 9
+loads older fork states; older executables cannot load new version-9 states.
 
-Master now uses the standard Makoto device-volume slider. New profiles use
-`set Makoto_volume 75` and `set makoto_psg_volume 50`; adjusted normalization
-preserves the former default listening level. Existing device-volume preferences
-are retained. Scripts using the removed `makoto_master_volume` setting need to
-use `Makoto_volume` instead; see the conversion formula in `doc/makoto.md`.
+FM and SSG now use the standard mixer controls. The extra `Makoto_psg_volume`
+trim is removed. To preserve an existing balance, use:
+`new SSG_volume = old SSG_volume * old psg_volume / 100`.
+For the previous 75/75/50 listening setup, use these console commands:
+
+```tcl
+set Makoto_volume 75
+set {Makoto SSG_volume} 38
+save_settings
+```
+
+This is our tested listening balance; 38 rounds 37.5 to the nearest integer.
+The generic mixer defaults are 75 for each device. Existing standard volume
+preferences remain in your profile, so check the SSG level when upgrading.
+See `doc/makoto-owned-core-experiment.md` for exact audio comparisons and the
+measured CPU reduction against the preserved native-stream experiment.
 
 Makoto uses the pinned BSD-licensed YMFM sound core. Its designer confirmed the
 8 MHz clock, direct timer IRQ wiring, 256 KB RAM and nominal FM/SSG gain. The

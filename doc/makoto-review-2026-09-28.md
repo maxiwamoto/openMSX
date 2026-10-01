@@ -103,3 +103,8 @@ and timer/IRQ/save-continuation checks.
 Benchmark state comparison ignores only unused SSG scratch slots 12–17 of the
 host channel cache. Actual SSG state is compared in the core blob; FM/ADPCM voice
 cache entries and all other saved chip fields remain checked.
+
+Reference-test build note (2026-10-01): the historical patched wrapper is now
+`Contrib/makoto-reference/ReferenceYM2608.cc`. Include this source when building
+the standalone core/peek/prescaler/native/unclipped tests. It is not part of
+the emulator. See `Contrib/makoto-reference/README.md`.

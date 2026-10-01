@@ -5,8 +5,8 @@ This follows [Wouter’s control-layer proposal](https://github.com/openMSX/open
 This is a local experiment on `codex/makoto-owned-ym2608`. The working reference
 is preserved at `e7f7afaae404905178d65176aba0f618a8afb424`, on
 `codex/makoto-native-streams`, with a separate executable/runtime copy under
-`derived/owned-core-baseline`. The upstream PR branch and public release are
-not changed by this experiment.
+`derived/owned-core-baseline`. The experiment was subsequently selected for integration into the fork and
+upstream PR; the measurements below describe the preserved experiment builds.
 
 ## Implementation
 
@@ -31,9 +31,9 @@ selection, repeated-sample machinery or SSG resampler.
 
 The lower engines retain the verified CPU sample-RAM fixes and debugger/cache
 patches. The old modified `ymfm::ym2608` and `MakotoNativeChip` are retained as
-comparison references during this experiment. The vendor tree is **not** claimed
-to be pristine; pruning those reference adapters is separate from proving this
-control-layer replacement. No synthesis algorithm was rewritten.
+comparison references in `Contrib/makoto-reference/`. The vendored YM2608 class
+is restored to the pinned revision, while the listed lower-engine patches remain.
+No synthesis algorithm was rewritten.
 
 True silence skipping is still deferred: clocks and status continue advancing
 while output is silent. Zero-filled power-on sample RAM remains a deterministic
@@ -96,7 +96,8 @@ Build with the normal openMSX build system (the MSVC project includes the new
 source). The local build command is `derived/build-owned-core.cmd`.
 
 The new source test is `Contrib/makoto-owned-core-test.cc`; compile as C++20
-with `src/sound/MakotoYM2608.cc` and the vendored `ymfm_opn.cpp`, `ymfm_ssg.cpp`
+with `src/sound/MakotoYM2608.cc`, `Contrib/makoto-reference/ReferenceYM2608.cc`
+and the vendored `ymfm_opn.cpp`, `ymfm_ssg.cpp`
 and `ymfm_adpcm.cpp`, using include paths `src`, `src/sound`, `src/3rdparty/ymfm`.
 
 The existing `makoto-audio-state-compare.py` and `makoto-workload-benchmark.py`
@@ -133,3 +134,11 @@ true silent-engine suspension or demonstrate accuracy on every chip feature.
 
 [Machine-readable measurements and regression evidence](makoto-owned-core-results.json)
 include executable SHA256 values, both benchmark sessions and audio differences.
+
+## Integration cleanup
+
+The old patched control layer and inherited wrapper now live only in
+`Contrib/makoto-reference/`, with their original BSD attribution. They are
+compiled into standalone reference tests, never the emulator. The vendored
+`ym2608` class has been restored to the pinned upstream revision. Lower engine
+RAM fixes and debugger helpers remain; see `src/3rdparty/ymfm/README.openmsx`.

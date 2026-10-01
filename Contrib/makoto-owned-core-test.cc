@@ -1,3 +1,4 @@
+#include "makoto-reference/ReferenceYM2608.hh"
 // Differential test at native chip clock edges, before host resampling.
 #include "MakotoYM2608.hh"
 #include "3rdparty/ym2608/fmopn_2608rom.h"
@@ -12,7 +13,7 @@ struct Interface : ymfm::ymfm_interface {
 int main() {
  unsigned samples=0, negative=0;
  for(unsigned prescale : {6U, 3U, 2U}) {
- Interface a,b; ymfm::ym2608 original(a); openmsx::MakotoYM2608 native(b);
+ Interface a,b; ymfm::ym2608_reference original(a); openmsx::MakotoYM2608 native(b);
  original.set_fidelity(ymfm::OPN_FIDELITY_MAX);
  original.reset();native.reset();
  std::array<int32_t,32> channels{};original.set_channel_output(channels.data());
@@ -52,7 +53,7 @@ int main() {
  for(unsigned i=0;i<360000;++i) {
   if(i==100000) { write(7,0);write(6,5);write(8,16);write(11,37);write(12,0);write(13,10); }
   if(i==200000) { write(0x10,0x3f);write(0xa4,0x26);write(0xa0,0x40); }
-  ymfm::ym2608::output_data expected;original.generate(&expected);
+  ymfm::ym2608_reference::output_data expected;original.generate(&expected);
   if(i%fmDiv==0) {
    std::vector<uint8_t> saved;
    const bool checkMixed=(i%1024==0);
@@ -92,7 +93,7 @@ int main() {
  // Negative control: key off all native FM voices; comparison must detect it.
  for(unsigned c=0;c<6;++c) {native.write(0,0x28);native.write(1,uint8_t((c/3)*4+c%3));}
  for(unsigned i=0;i<36000;++i) {
-  ymfm::ym2608::output_data expected; original.generate(&expected);
+  ymfm::ym2608_reference::output_data expected; original.generate(&expected);
   if(i%fmDiv==0) {
    std::array<float,2> values{};
    std::array<float*,13> out;out.fill(values.data());

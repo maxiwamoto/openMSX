@@ -1,16 +1,16 @@
 # openMSX: Makoto, V9968 and ROM/disk development
 
-**Makoto / YM2608: hardware-verified ADPCM transfer fixes.** Sample-RAM writes
-include the final byte, reads wrap after the complete limit block, and an
-unfinished writer retains its buffer when switched to reading without reset.
-These cases match a real Makoto tested in Sanyo MSX2+ and Panasonic Turbo-R hosts.
+**Makoto / YM2608: native audio streams and a simpler control layer.**
+FM and SSG now run at their own sample rates. An openMSX-owned adaptation of
+the YMFM control layer writes directly to the host mixer, retaining the proven
+FM/SSG/ADPCM synthesis engines and hardware-verified sample-RAM corrections.
 
-Native RAM storage makes snapshots more compact. Mixing avoids unnecessary
-scaling when unclipped. Earlier fork saves remain readable and audio regression
-output is unchanged. The six built-in rhythm sounds, independent timers,
-debugger controls and filter-free playback remain available.
-[Hardware results and validation](doc/makoto-review-2026-09-29.md) ·
-[Setup](doc/makoto.md) · [Earlier filter comparison](doc/makoto-filter-comparison.md).
+The final extraction used about 7% less whole-emulator CPU during the measured
+music workload than our previous native-stream experiment. Four tested music
+excerpts match exactly at equivalent levels. All 16 voice controls, independent
+timers, debugger controls and filter-free playback remain available.
+[Measurements and limits](doc/makoto-owned-core-experiment.md) ·
+[Setup](doc/makoto.md) · [Hardware results](doc/makoto-review-2026-09-29.md).
 Analogue clipping and headphone-load response remain uncalibrated.
 
 **Experimental V9968 support:** integrates buppu3's V9968 emulation, including
@@ -23,14 +23,14 @@ Use **Start-openMSX-Makoto.cmd** for a Turbo-R with Makoto, or
 public fork also lets Windows developers rebuild an inserted ROM and return
 to a saved test point with updated graphics or text.
 
-**[Download the Windows x64 build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.09.30)**
+**[Download the Windows x64 build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.10.01)**
 for this fork. Extract the ZIP and run **Start-openMSX.cmd**; it uses a separate
 profile beside the executable. [Setup and shortcuts](doc/fork-windows-download.md).
 
-Version **2026.09.30** retains Makoto, V9968, Flash persistence and the development
-reload features. Master now uses the normal **Makoto device volume** slider;
-SSG remains separate. New profiles use device volume 75 / SSG 50, with adjusted
-normalization to preserve the previous default level.
+Version **2026.10.01** retains Makoto, V9968, Flash persistence and development
+reload features. FM and SSG use standard mixer sliders; the extra SSG trim is
+removed. Our tested listening balance is FM 75 / SSG 38. See the
+[volume conversion and upgrade instructions](doc/fork-windows-download.md).
 
 The source is available in this fork's `master` branch. These changes are proposed
 upstream, and the Flash persistence format is still experimental.
@@ -82,7 +82,7 @@ This is selective storage, not compression of the game ROM.
 
 ## Trying it and keeping existing saves
 
-[Download the Windows build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.09.30)
+[Download the Windows build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.10.01)
 and use its **Start-openMSX.cmd** launcher for a separate test profile. Other
 platforms can [build from source](doc/manual/compile.html). Load the game
 with the appropriate mapperâ€”`ASCII16-X` for an ASCII16-X cartridgeâ€”then save

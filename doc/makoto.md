@@ -422,3 +422,8 @@ The first cartridge's SSG setting is now `Makoto_psg_volume` (capital M);
 older custom startup scripts using `makoto_psg_volume` need that spelling update.
 Each cartridge retains its own RAM, timers and state. Real Makoto uses 14h-17h;
 a copied test configuration can map another instance to a different aligned range.
+
+Reference-test build note (2026-10-01): the historical patched wrapper is now
+`Contrib/makoto-reference/ReferenceYM2608.cc`. Include this source when building
+the standalone core/peek/prescaler/native/unclipped tests. It is not part of
+the emulator. See `Contrib/makoto-reference/README.md`.
