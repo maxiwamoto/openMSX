@@ -13,16 +13,19 @@ an experimental implementation.
 - 256 KiB sample RAM (256K x 16 DRAM, low byte wired, x1-bit DRAM mode).
 - Native openMSX stereo audio, recording, register inspection and save states.
 - Separate `Makoto_volume` (FM/rhythm/ADPCM) and `{Makoto SSG_volume}` controls.
-  Equal values preserve the calibrated balance; `Makoto_psg_volume` is the
-  additional linear SSG trim (50% default).
+  The old extra `Makoto_psg_volume` trim is removed in this experiment. Convert
+  an old SSG setting with `new = old * trim / 100`; see the experiment report.
 - All 16 voices exposed to openMSX's existing mute/record/channel-viewer tools.
 - Standard host resampling; the cartridge summer filter is omitted after a
   [blind listening and CPU comparison](makoto-filter-comparison.md).
 - Native debugger watchpoints and probe traces for I/O and IRQ analysis.
 - Blob-backed sample RAM, exposed as `Makoto ADPCM RAM` in the debugger.
-  Current fork sound-state version 8 retains older fork-state migration (versions 1-7).
+  Current experimental sound-state version 9 retains older fork-state migration.
+  Version 8 music states and current version 9 continuation are tested.
 
-The pinned YMFM source and BSD license are under `src/3rdparty/ymfm`.
+The experimental `MakotoYM2608` control layer belongs to openMSX and reuses
+YMFM synthesis engines. The old wrapper remains available only as a comparison
+reference. The pinned YMFM source and BSD license are under `src/3rdparty/ymfm`.
 Only the OPN/SSG/ADPCM subset is vendored. Local patches initialize an operator
 cache, expose individual channel output, and correct CPU sample-RAM transfers;
 see README.openmsx for exact scope
@@ -40,15 +43,14 @@ Console controls:
 
 ```
 set Makoto_volume 75
-set {Makoto SSG_volume} 75
-set Makoto_psg_volume 50
+set {Makoto SSG_volume} 38
 soundlog start makoto.wav
 soundlog stop
 ```
 
 FM/rhythm/ADPCM runs at approximately 55.56 kHz stereo and SSG at 250 kHz mono.
 The standard mixer combines the two resampled streams. See the
-[latest review results](makoto-review-2026-09-30.md) for the current changes.
+[owned-control-layer experiment](makoto-owned-core-experiment.md) for the current changes.
 The `Makoto registers` debuggable reads effective registers directly from YMFM.
 It is not a log of the last bytes written: for example, a pending FM frequency
 high byte takes effect only when the corresponding low byte is written. Use an

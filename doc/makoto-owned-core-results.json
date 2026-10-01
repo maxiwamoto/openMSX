@@ -1,0 +1,1006 @@
+{
+  "date": "2026-10-01",
+  "baseline_commit": "e7f7afaae404905178d65176aba0f618a8afb424",
+  "branch": "codex/makoto-owned-ym2608",
+  "source_comparison": {
+    "samples": 1080000,
+    "negative_control_differences": 107967
+  },
+  "binaries": {
+    "baseline": {
+      "sha256": "35446faae381e9e5a8ee6c20a56fd39e8ea11a5e3eeb858e14f3d0459d9a9de6"
+    },
+    "first_experiment": {
+      "sha256": "1442af013a433f9c31c547bd60121e8686938885f5d181d569fafcb1a3e34bff"
+    },
+    "final": {
+      "sha256": "ea275929cc385a1955541c5429eaf88c7757d7809d9e95eedd2d285312263aac"
+    }
+  },
+  "first_benchmark": {
+    "seconds": 60.0,
+    "rom_sha256": "0342ca280afb3efeea765e37ef01d5aef4ddd406781296313fd9f52b8e853585",
+    "track": 10,
+    "runs": [
+      {
+        "build": "baseline",
+        "case": "no-makoto",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 2.859375,
+        "wall_seconds": 3.014547400001902
+      },
+      {
+        "build": "baseline",
+        "case": "silent-basic",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.84375,
+        "wall_seconds": 4.076876500039361
+      },
+      {
+        "build": "baseline",
+        "case": "music",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.640625,
+        "wall_seconds": 5.86641239997698
+      },
+      {
+        "build": "baseline",
+        "case": "channel-tools",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.984375,
+        "wall_seconds": 6.27576260000933
+      },
+      {
+        "build": "candidate",
+        "case": "no-makoto",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 2.921875,
+        "wall_seconds": 3.1352434000000358
+      },
+      {
+        "build": "candidate",
+        "case": "silent-basic",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.890625,
+        "wall_seconds": 4.15198549994966
+      },
+      {
+        "build": "candidate",
+        "case": "music",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.5,
+        "wall_seconds": 5.9517980000237
+      },
+      {
+        "build": "candidate",
+        "case": "channel-tools",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.875,
+        "wall_seconds": 6.129657500016037
+      },
+      {
+        "build": "candidate",
+        "case": "no-makoto",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 2.96875,
+        "wall_seconds": 3.207431099959649
+      },
+      {
+        "build": "candidate",
+        "case": "silent-basic",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.984375,
+        "wall_seconds": 4.208547899965197
+      },
+      {
+        "build": "candidate",
+        "case": "music",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.546875,
+        "wall_seconds": 5.979847699985839
+      },
+      {
+        "build": "candidate",
+        "case": "channel-tools",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.65625,
+        "wall_seconds": 5.994344500009902
+      },
+      {
+        "build": "baseline",
+        "case": "no-makoto",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 2.96875,
+        "wall_seconds": 3.1951304000103846
+      },
+      {
+        "build": "baseline",
+        "case": "silent-basic",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.21875,
+        "wall_seconds": 4.454405800031964
+      },
+      {
+        "build": "baseline",
+        "case": "music",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.84375,
+        "wall_seconds": 6.2033563000150025
+      },
+      {
+        "build": "baseline",
+        "case": "channel-tools",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 6.078125,
+        "wall_seconds": 6.301210800011177
+      },
+      {
+        "build": "baseline",
+        "case": "no-makoto",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.03125,
+        "wall_seconds": 3.22653139999602
+      },
+      {
+        "build": "baseline",
+        "case": "silent-basic",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.984375,
+        "wall_seconds": 4.268569600011688
+      },
+      {
+        "build": "baseline",
+        "case": "music",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.671875,
+        "wall_seconds": 6.01818660000572
+      },
+      {
+        "build": "baseline",
+        "case": "channel-tools",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 6.0,
+        "wall_seconds": 6.437381700030528
+      },
+      {
+        "build": "candidate",
+        "case": "no-makoto",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.0,
+        "wall_seconds": 3.2006550999940373
+      },
+      {
+        "build": "candidate",
+        "case": "silent-basic",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.875,
+        "wall_seconds": 4.207610099983867
+      },
+      {
+        "build": "candidate",
+        "case": "music",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.796875,
+        "wall_seconds": 6.173202299978584
+      },
+      {
+        "build": "candidate",
+        "case": "channel-tools",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.765625,
+        "wall_seconds": 6.157468200020958
+      },
+      {
+        "build": "candidate",
+        "case": "no-makoto",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.046875,
+        "wall_seconds": 3.238632900000084
+      },
+      {
+        "build": "candidate",
+        "case": "silent-basic",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.921875,
+        "wall_seconds": 4.182103200000711
+      },
+      {
+        "build": "candidate",
+        "case": "music",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.53125,
+        "wall_seconds": 5.968593499972485
+      },
+      {
+        "build": "candidate",
+        "case": "channel-tools",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.96875,
+        "wall_seconds": 6.396831799997017
+      },
+      {
+        "build": "baseline",
+        "case": "no-makoto",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.0625,
+        "wall_seconds": 3.2710796000319533
+      },
+      {
+        "build": "baseline",
+        "case": "silent-basic",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.0,
+        "wall_seconds": 4.37745690002339
+      },
+      {
+        "build": "baseline",
+        "case": "music",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.890625,
+        "wall_seconds": 6.2461972999735735
+      },
+      {
+        "build": "baseline",
+        "case": "channel-tools",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.9375,
+        "wall_seconds": 6.407950899971183
+      },
+      {
+        "build": "baseline",
+        "case": "no-makoto",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 2.984375,
+        "wall_seconds": 3.261963900004048
+      },
+      {
+        "build": "baseline",
+        "case": "silent-basic",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.15625,
+        "wall_seconds": 4.366488300031051
+      },
+      {
+        "build": "baseline",
+        "case": "music",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.734375,
+        "wall_seconds": 6.015401499986183
+      },
+      {
+        "build": "baseline",
+        "case": "channel-tools",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.984375,
+        "wall_seconds": 6.381687599990983
+      },
+      {
+        "build": "candidate",
+        "case": "no-makoto",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 2.9375,
+        "wall_seconds": 3.2025897999992594
+      },
+      {
+        "build": "candidate",
+        "case": "silent-basic",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.921875,
+        "wall_seconds": 4.251954199979082
+      },
+      {
+        "build": "candidate",
+        "case": "music",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.859375,
+        "wall_seconds": 6.164508100016974
+      },
+      {
+        "build": "candidate",
+        "case": "channel-tools",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.703125,
+        "wall_seconds": 6.122538099996746
+      }
+    ],
+    "summary": {
+      "baseline": {
+        "median_seconds": {
+          "no-makoto": 2.984375,
+          "silent-basic": 4.0,
+          "music": 5.734375,
+          "channel-tools": 5.984375
+        },
+        "relative_to_no_makoto": {
+          "no-makoto": 1.0,
+          "silent-basic": 1.3403141361256545,
+          "music": 1.9214659685863875,
+          "channel-tools": 2.005235602094241
+        }
+      },
+      "candidate": {
+        "median_seconds": {
+          "no-makoto": 2.96875,
+          "silent-basic": 3.921875,
+          "music": 5.546875,
+          "channel-tools": 5.765625
+        },
+        "relative_to_no_makoto": {
+          "no-makoto": 1.0,
+          "silent-basic": 1.3210526315789475,
+          "music": 1.868421052631579,
+          "channel-tools": 1.9421052631578948
+        }
+      }
+    }
+  },
+  "audio": [
+    {
+      "track": 1,
+      "name": "THUNDER",
+      "max_pcm_difference": 0.0,
+      "rms_pcm_difference": 0.0,
+      "baseline_rms": 66.44284758452108,
+      "candidate_rms": 66.44284758452108,
+      "clipped_samples": 0
+    },
+    {
+      "track": 4,
+      "name": "SHOP",
+      "max_pcm_difference": 0.0,
+      "rms_pcm_difference": 0.0,
+      "baseline_rms": 248.68784510678216,
+      "candidate_rms": 248.68784510678216,
+      "clipped_samples": 0
+    },
+    {
+      "track": 10,
+      "name": "BUSTLING TOWN",
+      "max_pcm_difference": 0.0,
+      "rms_pcm_difference": 0.0,
+      "baseline_rms": 196.31606394141883,
+      "candidate_rms": 196.31606394141883,
+      "clipped_samples": 0
+    },
+    {
+      "track": 14,
+      "name": "LAO SHI",
+      "max_pcm_difference": 0.0,
+      "rms_pcm_difference": 0.0,
+      "baseline_rms": 118.06882649645263,
+      "candidate_rms": 118.06882649645263,
+      "clipped_samples": 0
+    }
+  ],
+  "timers": {
+    "passed": [
+      "Standard device volume defaults to 75 percent and SSG to 50 percent",
+      "BUSY appears on both status ports and expires",
+      "Timer A period, sticky overflow, acknowledge and reload",
+      "Timer B period and overflow",
+      "Stopping timers cancels scheduled overflows",
+      "Both timers raise MSX CPU IRQ; acknowledge and cancellation release it",
+      "Cancelling timer A leaves independently scheduled timer B running",
+      "Debugger exposes core ID, IRQ mask and effective latched FM registers",
+      "Debugger peeks preserve the entire chip state",
+      "Save/restore resumes the same chip, RAM, BUSY and both active timers",
+      "Native in-memory rewind restores active timers and complete Makoto state",
+      "Native I/O watchpoints and IRQ probe tracing work without device file tracing",
+      "MSX reset stops OPNA timers"
+    ]
+  },
+  "instances": [
+    "Two identical extensions coexist with unique settings, debuggers and IRQ probes",
+    "Separate I/O ranges preserve independent registers, RAM and simultaneous IRQs",
+    "Two-instance state restores both independent devices",
+    "Removing one cartridge leaves the other usable"
+  ],
+  "integration": {
+    "current-ssg-high": {
+      "rms": [
+        505.48144889179184,
+        505.48144889179184
+      ],
+      "peak": 725.0
+    },
+    "current-ssg-low": {
+      "rms": [
+        552.2519605396473,
+        552.2519605396473
+      ],
+      "peak": 668.0
+    },
+    "current-separate-buffers": {
+      "rms": [
+        552.2375823589799,
+        552.2375823589799
+      ],
+      "peak": 668.0
+    },
+    "channel_tools_output_ratio": 0.9999739644551858,
+    "current-ssg-muted": {
+      "rms": [
+        1.9654655986063505,
+        1.9654655986063505
+      ],
+      "peak": 11.0
+    },
+    "current-other-muted": {
+      "rms": [
+        552.2654560341172,
+        552.2654560341172
+      ],
+      "peak": 679.0
+    },
+    "current-fm-left": {
+      "rms": [
+        158.37200498915746,
+        1.9701868186509879
+      ],
+      "peak": 235.0
+    },
+    "current-fm-muted": {
+      "rms": [
+        0.0,
+        0.0
+      ],
+      "peak": 0.0
+    },
+    "current-master-zero": {
+      "rms": [
+        0.0,
+        0.0
+      ],
+      "peak": 0.0
+    },
+    "data_peeks": "ADPCM dummy reads, next RAM byte, IRQ and complete saved chip state preserved",
+    "state_format": "RAM restored; future sound-state version rejected by the native serializer",
+    "unfinished_write_state": "stale A7 buffer survives device save/restore; RESET releases it",
+    "channels": "16 voices exposed; SSG/FM isolation and stereo pan passed",
+    "ram": "CPU readback in each 64KB quarter of 256KB x1-mode RAM passed"
+  },
+  "prescalers": {
+    "6-0": {
+      "prescaler": 6,
+      "frequency_hz": 976.6118726490923,
+      "expected_hz": 976.5625,
+      "peak": 1180.0,
+      "save_restore": "exact chip/clock continuation"
+    },
+    "3-1": {
+      "prescaler": 3,
+      "frequency_hz": 1953.0617040447517,
+      "expected_hz": 1953.125,
+      "peak": 676.0,
+      "save_restore": "exact chip/clock continuation"
+    },
+    "2-2": {
+      "prescaler": 2,
+      "frequency_hz": 3906.6784712687795,
+      "expected_hz": 3906.25,
+      "peak": 681.0,
+      "save_restore": "exact chip/clock continuation"
+    },
+    "6-3": {
+      "prescaler": 6,
+      "frequency_hz": 976.6134328201136,
+      "expected_hz": 976.5625,
+      "peak": 703.0,
+      "save_restore": "exact chip/clock continuation"
+    },
+    "rewind": "exact chip/clock restore across live prescaler change"
+  },
+  "rhythm": {
+    "sample_sha256": "53afd0fa9c62eda3e2be939e23f3adf48a2af8ad37bb1640261726c5d5adeba8",
+    "voices": {
+      "bass": {
+        "peak": [
+          6801.0,
+          6801.0
+        ]
+      },
+      "snare": {
+        "peak": [
+          6905.0,
+          6905.0
+        ]
+      },
+      "cymbal": {
+        "peak": [
+          8147.0,
+          8147.0
+        ]
+      },
+      "hihat": {
+        "peak": [
+          7003.0,
+          7003.0
+        ]
+      },
+      "tom": {
+        "peak": [
+          6341.0,
+          6341.0
+        ]
+      },
+      "rim": {
+        "peak": [
+          6735.0,
+          6735.0
+        ]
+      }
+    },
+    "controls": "All six channel mutes, left/right pan and key-off passed",
+    "save": "Mid-cymbal restoration gives identical full chip state after 60 ms",
+    "external_override": {
+      "restored": true,
+      "rms_ratio_to_builtin": 0.8323480483261303
+    },
+    "wrong_size": "8191-byte external rhythm ROM rejected"
+  },
+  "hardware_v4": [
+    {
+      "machine": "Philips_NMS_8250",
+      "makoto": false,
+      "display_complete": true,
+      "irq": null,
+      "timeout": 1,
+      "result_bytes": "4d4b5434010000000000000000000000ffffffffffffffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101010100000000"
+    },
+    {
+      "machine": "Philips_NMS_8250",
+      "makoto": true,
+      "display_complete": true,
+      "irq": "0",
+      "timeout": 0,
+      "result_bytes": "4d4b543400000000000000000000000000000000000000000808080808080808c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c1c2c3c4c5c6c7c8c1c2c3c4c5c6c7c8ffffffff200800000000000000000000"
+    },
+    {
+      "machine": "Panasonic_FS-A1GT",
+      "makoto": false,
+      "display_complete": true,
+      "irq": null,
+      "timeout": 1,
+      "result_bytes": "4d4b5434010000000000000000000000ffffffffffffffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101010100000000"
+    },
+    {
+      "machine": "Panasonic_FS-A1GT",
+      "makoto": true,
+      "display_complete": true,
+      "irq": "0",
+      "timeout": 0,
+      "result_bytes": "4d4b543400000000000000000000000000000000000000000808080808080808c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c1c2c3c4c5c6c7c8c1c2c3c4c5c6c7c8ffffffff200800000000000000000000"
+    }
+  ],
+  "hardware_v5": [
+    {
+      "machine": "Philips_NMS_8250",
+      "makoto": false,
+      "display_complete": true,
+      "irq": null,
+      "timeout": 1,
+      "result_bytes": "4d4b5435010000000000000000000000ffffffffffffffff0000000000000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "machine": "Philips_NMS_8250",
+      "makoto": true,
+      "display_complete": true,
+      "irq": "0",
+      "timeout": 0,
+      "result_bytes": "4d4b543500010100000000000000000000000000000000000808080808080808a1a2a3a4ffffffffb1b2b3b4b1b2b3b4c1c2c3c4c5c6c7c8b1b2b3b4b5b6b7b8ffff0000200804000000000000000000"
+    },
+    {
+      "machine": "Panasonic_FS-A1GT",
+      "makoto": false,
+      "display_complete": true,
+      "irq": null,
+      "timeout": 1,
+      "result_bytes": "4d4b5435010000000000000000000000ffffffffffffffff0000000000000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "machine": "Panasonic_FS-A1GT",
+      "makoto": true,
+      "display_complete": true,
+      "irq": "0",
+      "timeout": 0,
+      "result_bytes": "4d4b543500010100000000000000000000000000000000000808080808080808a1a2a3a4ffffffffb1b2b3b4b1b2b3b4c1c2c3c4c5c6c7c8b1b2b3b4b5b6b7b8ffff0000200804000000000000000000"
+    }
+  ],
+  "final_benchmark": {
+    "seconds": 60.0,
+    "rom_sha256": "0342ca280afb3efeea765e37ef01d5aef4ddd406781296313fd9f52b8e853585",
+    "track": 10,
+    "runs": [
+      {
+        "build": "baseline",
+        "case": "no-makoto",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 2.875,
+        "wall_seconds": 3.0126600000075996
+      },
+      {
+        "build": "baseline",
+        "case": "silent-basic",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.75,
+        "wall_seconds": 4.073100000037812
+      },
+      {
+        "build": "baseline",
+        "case": "music",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.71875,
+        "wall_seconds": 6.00451569998404
+      },
+      {
+        "build": "baseline",
+        "case": "channel-tools",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.796875,
+        "wall_seconds": 6.336287300044205
+      },
+      {
+        "build": "candidate",
+        "case": "no-makoto",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 2.859375,
+        "wall_seconds": 3.134672899963334
+      },
+      {
+        "build": "candidate",
+        "case": "silent-basic",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.796875,
+        "wall_seconds": 4.147405499999877
+      },
+      {
+        "build": "candidate",
+        "case": "music",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.3125,
+        "wall_seconds": 5.66600169998128
+      },
+      {
+        "build": "candidate",
+        "case": "channel-tools",
+        "repeat": 0,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.890625,
+        "wall_seconds": 6.199238000030164
+      },
+      {
+        "build": "candidate",
+        "case": "no-makoto",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 2.984375,
+        "wall_seconds": 3.2013690000167117
+      },
+      {
+        "build": "candidate",
+        "case": "silent-basic",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.75,
+        "wall_seconds": 3.924388099985663
+      },
+      {
+        "build": "candidate",
+        "case": "music",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.3125,
+        "wall_seconds": 5.547321200021543
+      },
+      {
+        "build": "candidate",
+        "case": "channel-tools",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.703125,
+        "wall_seconds": 6.092839400051162
+      },
+      {
+        "build": "baseline",
+        "case": "no-makoto",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 2.96875,
+        "wall_seconds": 3.2468044999986887
+      },
+      {
+        "build": "baseline",
+        "case": "silent-basic",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.046875,
+        "wall_seconds": 4.440408999973442
+      },
+      {
+        "build": "baseline",
+        "case": "music",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.65625,
+        "wall_seconds": 5.971284899977036
+      },
+      {
+        "build": "baseline",
+        "case": "channel-tools",
+        "repeat": 1,
+        "cpu_mode": "r800",
+        "cpu_seconds": 6.1875,
+        "wall_seconds": 6.560159199987538
+      },
+      {
+        "build": "baseline",
+        "case": "no-makoto",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.1875,
+        "wall_seconds": 3.381540500035044
+      },
+      {
+        "build": "baseline",
+        "case": "silent-basic",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.234375,
+        "wall_seconds": 4.423991399991792
+      },
+      {
+        "build": "baseline",
+        "case": "music",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.78125,
+        "wall_seconds": 6.092337500012945
+      },
+      {
+        "build": "baseline",
+        "case": "channel-tools",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 6.03125,
+        "wall_seconds": 6.353180399979465
+      },
+      {
+        "build": "candidate",
+        "case": "no-makoto",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.03125,
+        "wall_seconds": 3.192315199994482
+      },
+      {
+        "build": "candidate",
+        "case": "silent-basic",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.734375,
+        "wall_seconds": 3.905949599982705
+      },
+      {
+        "build": "candidate",
+        "case": "music",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.234375,
+        "wall_seconds": 5.605302099953406
+      },
+      {
+        "build": "candidate",
+        "case": "channel-tools",
+        "repeat": 2,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.890625,
+        "wall_seconds": 6.359358399990015
+      },
+      {
+        "build": "candidate",
+        "case": "no-makoto",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.109375,
+        "wall_seconds": 3.37075379997259
+      },
+      {
+        "build": "candidate",
+        "case": "silent-basic",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.8125,
+        "wall_seconds": 4.101548900012858
+      },
+      {
+        "build": "candidate",
+        "case": "music",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.375,
+        "wall_seconds": 5.682922699954361
+      },
+      {
+        "build": "candidate",
+        "case": "channel-tools",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.609375,
+        "wall_seconds": 6.0377008999930695
+      },
+      {
+        "build": "baseline",
+        "case": "no-makoto",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 2.953125,
+        "wall_seconds": 3.200829000037629
+      },
+      {
+        "build": "baseline",
+        "case": "silent-basic",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.96875,
+        "wall_seconds": 4.275076700025238
+      },
+      {
+        "build": "baseline",
+        "case": "music",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.71875,
+        "wall_seconds": 6.072575099999085
+      },
+      {
+        "build": "baseline",
+        "case": "channel-tools",
+        "repeat": 3,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.984375,
+        "wall_seconds": 6.422016399970744
+      },
+      {
+        "build": "baseline",
+        "case": "no-makoto",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.25,
+        "wall_seconds": 3.4703535999869928
+      },
+      {
+        "build": "baseline",
+        "case": "silent-basic",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 4.078125,
+        "wall_seconds": 4.333204300026409
+      },
+      {
+        "build": "baseline",
+        "case": "music",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.578125,
+        "wall_seconds": 5.986591399996541
+      },
+      {
+        "build": "baseline",
+        "case": "channel-tools",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 6.03125,
+        "wall_seconds": 6.381641699990723
+      },
+      {
+        "build": "candidate",
+        "case": "no-makoto",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.078125,
+        "wall_seconds": 3.2333487000432797
+      },
+      {
+        "build": "candidate",
+        "case": "silent-basic",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 3.609375,
+        "wall_seconds": 3.887644700007513
+      },
+      {
+        "build": "candidate",
+        "case": "music",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.3125,
+        "wall_seconds": 5.839275699981954
+      },
+      {
+        "build": "candidate",
+        "case": "channel-tools",
+        "repeat": 4,
+        "cpu_mode": "r800",
+        "cpu_seconds": 5.859375,
+        "wall_seconds": 6.196319000038784
+      }
+    ],
+    "summary": {
+      "baseline": {
+        "median_seconds": {
+          "no-makoto": 2.96875,
+          "silent-basic": 4.046875,
+          "music": 5.71875,
+          "channel-tools": 6.03125
+        },
+        "relative_to_no_makoto": {
+          "no-makoto": 1.0,
+          "silent-basic": 1.3631578947368421,
+          "music": 1.9263157894736842,
+          "channel-tools": 2.031578947368421
+        }
+      },
+      "candidate": {
+        "median_seconds": {
+          "no-makoto": 3.03125,
+          "silent-basic": 3.75,
+          "music": 5.3125,
+          "channel-tools": 5.859375
+        },
+        "relative_to_no_makoto": {
+          "no-makoto": 1.0,
+          "silent-basic": 1.2371134020618557,
+          "music": 1.7525773195876289,
+          "channel-tools": 1.9329896907216495
+        }
+      }
+    }
+  }
+}

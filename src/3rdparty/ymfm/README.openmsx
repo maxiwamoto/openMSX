@@ -72,3 +72,11 @@ from a byte array to native Ram; the two migrations are independent.
    overdriven material differs from the old 16-bit internal clamp; final host
    output can still clip. Contrib/makoto-unclipped-mix-test.cc checks both
    ordinary levels and a coherent six-voice stress signal. No state fields change.
+
+2026-10-01 owned-control-layer experiment:
+Production Makoto now uses src/sound/MakotoYM2608.{hh,cc}, without inheriting
+ymfm::ym2608. The old ym2608 host adapters remain here as a differential-test
+reference during the experiment, not as the active device implementation.
+The lower FM/SSG/ADPCM engines still include the cache initialization, debugger
+access and hardware-verified RAM corrections described above. This extraction
+does NOT yet make all vendored code pristine. See doc/makoto-owned-core-experiment.md.

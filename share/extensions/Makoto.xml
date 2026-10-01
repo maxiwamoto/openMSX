@@ -12,7 +12,7 @@
   <Makoto id="Makoto">
    <io base="0x14" num="4"/>
    <!-- Native-stream experiment: FM and SSG have separate device volumes.
-        Equal device volumes retain the calibrated balance and SSG control. -->
+        Use the standard SSG volume to set cartridge balance; no extra trim. -->
    <sound><volume>96000</volume></sound>
    <!-- Internal rhythm samples are built in. Optional 8192-byte override: <rom><filename>ym2608_adpcm_rom.bin</filename></rom> -->
   </Makoto>
