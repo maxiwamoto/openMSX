@@ -97,8 +97,8 @@ source). The local build command is `derived/build-owned-core.cmd`.
 
 The new source test is `Contrib/makoto-owned-core-test.cc`; compile as C++20
 with `src/sound/MakotoYM2608.cc`, `Contrib/makoto-reference/ReferenceYM2608.cc`
-and the vendored `ymfm_opn.cpp`, `ymfm_ssg.cpp`
-and `ymfm_adpcm.cpp`, using include paths `src`, `src/sound`, `src/3rdparty/ymfm`.
+and the vendored `ymfm_opn.cc`, `ymfm_ssg.cc`
+and `ymfm_adpcm.cc`, using include paths `src`, `src/sound`, `src/3rdparty/ymfm`.
 
 The existing `makoto-audio-state-compare.py` and `makoto-workload-benchmark.py`
 accept `--baseline`/`--candidate` or paired `--build` arguments respectively,

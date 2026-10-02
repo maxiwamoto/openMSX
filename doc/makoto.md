@@ -274,7 +274,7 @@ It requires NumPy; use `--openmsx` and `--firmware-dir`, with optional
 executables use the same extension configuration for the filter comparison.
 
 `Contrib/makoto-core-test.cc` needs no MSX firmware. Compile it as C++17 or newer
-with `src/3rdparty/ymfm/ymfm_opn.cpp`, `ymfm_ssg.cpp`, `ymfm_adpcm.cpp`, and that
+with `src/3rdparty/ymfm/ymfm_opn.cc`, `ymfm_ssg.cc`, `ymfm_adpcm.cc`, and that
 directory on the include path. It exercises all voices with synthetic data.
 The checks use synthetic programs, plus the public internal rhythm reconstruction;
 no game assets are included.

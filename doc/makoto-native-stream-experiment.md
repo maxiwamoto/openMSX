@@ -108,8 +108,8 @@ and tested locally on Windows only.
 
 ## Reproduction
 
-`Contrib/makoto-native-core-test.cc` links with `ymfm_opn.cpp`, `ymfm_ssg.cpp`
-and `ymfm_adpcm.cpp`, using include paths `src` and `src/sound`.
+`Contrib/makoto-native-core-test.cc` links with `ymfm_opn.cc`, `ymfm_ssg.cc`
+and `ymfm_adpcm.cc`, using include paths `src` and `src/sound`.
 `Contrib/makoto-native-stream-test.py` accepts `--openmsx` and `--firmware-dir`.
 The existing integration, V4/V5 and timer tests use the same executable.
 
