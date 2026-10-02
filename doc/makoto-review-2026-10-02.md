@@ -30,3 +30,37 @@ Timer/state/rewind, prescaler continuation and channel/RAM integration tests pas
 The standalone engine comparison still matches 1,080,000 samples, with the
 negative key-off control detecting 107,967 mismatches. Performance experiments
 and final audio comparisons are recorded below when complete.
+
+
+## Loop and ownership experiments
+
+Five alternating-order runs, each measuring 60 emulated seconds, gave these
+median whole-process CPU seconds on Windows/MSVC Release:
+
+| Build | No Makoto | Silent BASIC | Music | Channel tools |
+| --- | ---: | ---: | ---: | ---: |
+| Cleanup baseline | 4.250 | 6.594 | 11.359 | 12.688 |
+| Separate FM/B/rhythm loops | 4.281 | 6.641 | 11.203 | 12.813 |
+| Engines inside audio parts | 4.125 | 6.438 | 11.469 | 12.813 |
+
+These differences are not convincing performance gains. Run-to-run scatter
+exceeds the roughly 1% median changes; one split-loop music run was an outlier.
+Desktop scheduling and independently booted playback phases limit small
+percentage comparisons. These are host costs, not MSX driver frame time.
+We keep the separate loops for clarity. The larger ownership experiment stays
+on codex/makoto-merged-experiment rather than becoming part of this PR update.
+
+The merged experiment moves FM/ADPCM engines into FmPart and SSG into SsgPart,
+and keeps the exact native state layout through a lightweight serialization
+view. It passes all runtime hardware/state/prescaler/channel/RAM and failed-
+construction tests. Real v8/v9 saves migrate exactly. Four 20-second excerpts
+from the preserved release (Thunder, Shop, Bustling Town, Lao Shi) produce
+zero PCM difference and zero clipped samples after 0.2 s resampler warm-up.
+Its retained standalone MakotoYM2608 test exercises the pre-merge class only;
+merged production coverage comes from the full emulator checks above.
+
+Raw runs, executable hashes and audio results are in the adjacent results JSON.
+The GitHub build matrix for 860a75d91 passed Linux, both macOS targets, both
+Windows toolchains and unit tests. SonarCloud's quality gate reports duplicated
+lines (6%, threshold 3%), not a failed security/reliability rating. Vendor and
+reference code have not been rewritten merely to silence that metric.

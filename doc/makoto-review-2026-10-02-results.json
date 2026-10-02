@@ -1,0 +1,585 @@
+{
+  "seconds": 60.0,
+  "rom_sha256": "0342ca280afb3efeea765e37ef01d5aef4ddd406781296313fd9f52b8e853585",
+  "track": 10,
+  "runs": [
+    {
+      "build": "baseline",
+      "case": "no-makoto",
+      "repeat": 0,
+      "cpu_mode": "r800",
+      "cpu_seconds": 4.40625,
+      "wall_seconds": 4.8100472000660375
+    },
+    {
+      "build": "baseline",
+      "case": "silent-basic",
+      "repeat": 0,
+      "cpu_mode": "r800",
+      "cpu_seconds": 6.34375,
+      "wall_seconds": 6.753595900023356
+    },
+    {
+      "build": "baseline",
+      "case": "music",
+      "repeat": 0,
+      "cpu_mode": "r800",
+      "cpu_seconds": 11.359375,
+      "wall_seconds": 12.010656900005415
+    },
+    {
+      "build": "baseline",
+      "case": "channel-tools",
+      "repeat": 0,
+      "cpu_mode": "r800",
+      "cpu_seconds": 12.59375,
+      "wall_seconds": 13.595300000044517
+    },
+    {
+      "build": "split",
+      "case": "no-makoto",
+      "repeat": 0,
+      "cpu_mode": "r800",
+      "cpu_seconds": 5.046875,
+      "wall_seconds": 5.45358590001706
+    },
+    {
+      "build": "split",
+      "case": "silent-basic",
+      "repeat": 0,
+      "cpu_mode": "r800",
+      "cpu_seconds": 6.78125,
+      "wall_seconds": 7.162199700018391
+    },
+    {
+      "build": "split",
+      "case": "music",
+      "repeat": 0,
+      "cpu_mode": "r800",
+      "cpu_seconds": 7.5625,
+      "wall_seconds": 8.176817000028677
+    },
+    {
+      "build": "split",
+      "case": "channel-tools",
+      "repeat": 0,
+      "cpu_mode": "r800",
+      "cpu_seconds": 12.71875,
+      "wall_seconds": 13.760106700006872
+    },
+    {
+      "build": "merged",
+      "case": "no-makoto",
+      "repeat": 0,
+      "cpu_mode": "r800",
+      "cpu_seconds": 4.125,
+      "wall_seconds": 4.471652299980633
+    },
+    {
+      "build": "merged",
+      "case": "silent-basic",
+      "repeat": 0,
+      "cpu_mode": "r800",
+      "cpu_seconds": 5.96875,
+      "wall_seconds": 6.48359210009221
+    },
+    {
+      "build": "merged",
+      "case": "music",
+      "repeat": 0,
+      "cpu_mode": "r800",
+      "cpu_seconds": 11.796875,
+      "wall_seconds": 12.578641399974003
+    },
+    {
+      "build": "merged",
+      "case": "channel-tools",
+      "repeat": 0,
+      "cpu_mode": "r800",
+      "cpu_seconds": 12.515625,
+      "wall_seconds": 13.345182899967767
+    },
+    {
+      "build": "merged",
+      "case": "no-makoto",
+      "repeat": 1,
+      "cpu_mode": "r800",
+      "cpu_seconds": 4.3125,
+      "wall_seconds": 4.601754000061192
+    },
+    {
+      "build": "merged",
+      "case": "silent-basic",
+      "repeat": 1,
+      "cpu_mode": "r800",
+      "cpu_seconds": 6.3125,
+      "wall_seconds": 6.84796629997436
+    },
+    {
+      "build": "merged",
+      "case": "music",
+      "repeat": 1,
+      "cpu_mode": "r800",
+      "cpu_seconds": 11.46875,
+      "wall_seconds": 12.40361700009089
+    },
+    {
+      "build": "merged",
+      "case": "channel-tools",
+      "repeat": 1,
+      "cpu_mode": "r800",
+      "cpu_seconds": 13.046875,
+      "wall_seconds": 13.88517869997304
+    },
+    {
+      "build": "split",
+      "case": "no-makoto",
+      "repeat": 1,
+      "cpu_mode": "r800",
+      "cpu_seconds": 4.46875,
+      "wall_seconds": 4.7144275000318885
+    },
+    {
+      "build": "split",
+      "case": "silent-basic",
+      "repeat": 1,
+      "cpu_mode": "r800",
+      "cpu_seconds": 6.625,
+      "wall_seconds": 7.100951600004919
+    },
+    {
+      "build": "split",
+      "case": "music",
+      "repeat": 1,
+      "cpu_mode": "r800",
+      "cpu_seconds": 11.484375,
+      "wall_seconds": 12.253432599944063
+    },
+    {
+      "build": "split",
+      "case": "channel-tools",
+      "repeat": 1,
+      "cpu_mode": "r800",
+      "cpu_seconds": 13.390625,
+      "wall_seconds": 14.320994399953634
+    },
+    {
+      "build": "baseline",
+      "case": "no-makoto",
+      "repeat": 1,
+      "cpu_mode": "r800",
+      "cpu_seconds": 4.09375,
+      "wall_seconds": 4.378736700047739
+    },
+    {
+      "build": "baseline",
+      "case": "silent-basic",
+      "repeat": 1,
+      "cpu_mode": "r800",
+      "cpu_seconds": 6.015625,
+      "wall_seconds": 6.466044600005262
+    },
+    {
+      "build": "baseline",
+      "case": "music",
+      "repeat": 1,
+      "cpu_mode": "r800",
+      "cpu_seconds": 12.53125,
+      "wall_seconds": 13.340235999901779
+    },
+    {
+      "build": "baseline",
+      "case": "channel-tools",
+      "repeat": 1,
+      "cpu_mode": "r800",
+      "cpu_seconds": 13.421875,
+      "wall_seconds": 14.261594700044952
+    },
+    {
+      "build": "baseline",
+      "case": "no-makoto",
+      "repeat": 2,
+      "cpu_mode": "r800",
+      "cpu_seconds": 4.203125,
+      "wall_seconds": 4.410996299935505
+    },
+    {
+      "build": "baseline",
+      "case": "silent-basic",
+      "repeat": 2,
+      "cpu_mode": "r800",
+      "cpu_seconds": 6.59375,
+      "wall_seconds": 6.917111900052987
+    },
+    {
+      "build": "baseline",
+      "case": "music",
+      "repeat": 2,
+      "cpu_mode": "r800",
+      "cpu_seconds": 12.03125,
+      "wall_seconds": 12.898316400009207
+    },
+    {
+      "build": "baseline",
+      "case": "channel-tools",
+      "repeat": 2,
+      "cpu_mode": "r800",
+      "cpu_seconds": 12.6875,
+      "wall_seconds": 13.915072800009511
+    },
+    {
+      "build": "split",
+      "case": "no-makoto",
+      "repeat": 2,
+      "cpu_mode": "r800",
+      "cpu_seconds": 4.203125,
+      "wall_seconds": 4.4680943000130355
+    },
+    {
+      "build": "split",
+      "case": "silent-basic",
+      "repeat": 2,
+      "cpu_mode": "r800",
+      "cpu_seconds": 6.640625,
+      "wall_seconds": 7.061150700086728
+    },
+    {
+      "build": "split",
+      "case": "music",
+      "repeat": 2,
+      "cpu_mode": "r800",
+      "cpu_seconds": 11.265625,
+      "wall_seconds": 12.037911099963821
+    },
+    {
+      "build": "split",
+      "case": "channel-tools",
+      "repeat": 2,
+      "cpu_mode": "r800",
+      "cpu_seconds": 12.8125,
+      "wall_seconds": 13.84668800001964
+    },
+    {
+      "build": "merged",
+      "case": "no-makoto",
+      "repeat": 2,
+      "cpu_mode": "r800",
+      "cpu_seconds": 3.875,
+      "wall_seconds": 4.18174520006869
+    },
+    {
+      "build": "merged",
+      "case": "silent-basic",
+      "repeat": 2,
+      "cpu_mode": "r800",
+      "cpu_seconds": 6.5625,
+      "wall_seconds": 7.012493800022639
+    },
+    {
+      "build": "merged",
+      "case": "music",
+      "repeat": 2,
+      "cpu_mode": "r800",
+      "cpu_seconds": 11.515625,
+      "wall_seconds": 12.50755650002975
+    },
+    {
+      "build": "merged",
+      "case": "channel-tools",
+      "repeat": 2,
+      "cpu_mode": "r800",
+      "cpu_seconds": 12.25,
+      "wall_seconds": 12.906348599935882
+    },
+    {
+      "build": "merged",
+      "case": "no-makoto",
+      "repeat": 3,
+      "cpu_mode": "r800",
+      "cpu_seconds": 4.109375,
+      "wall_seconds": 4.362641500076279
+    },
+    {
+      "build": "merged",
+      "case": "silent-basic",
+      "repeat": 3,
+      "cpu_mode": "r800",
+      "cpu_seconds": 6.640625,
+      "wall_seconds": 7.0536944000050426
+    },
+    {
+      "build": "merged",
+      "case": "music",
+      "repeat": 3,
+      "cpu_mode": "r800",
+      "cpu_seconds": 10.15625,
+      "wall_seconds": 11.102235600003041
+    },
+    {
+      "build": "merged",
+      "case": "channel-tools",
+      "repeat": 3,
+      "cpu_mode": "r800",
+      "cpu_seconds": 12.8125,
+      "wall_seconds": 13.802633999963291
+    },
+    {
+      "build": "split",
+      "case": "no-makoto",
+      "repeat": 3,
+      "cpu_mode": "r800",
+      "cpu_seconds": 4.03125,
+      "wall_seconds": 4.267770100035705
+    },
+    {
+      "build": "split",
+      "case": "silent-basic",
+      "repeat": 3,
+      "cpu_mode": "r800",
+      "cpu_seconds": 6.828125,
+      "wall_seconds": 7.360367399989627
+    },
+    {
+      "build": "split",
+      "case": "music",
+      "repeat": 3,
+      "cpu_mode": "r800",
+      "cpu_seconds": 11.203125,
+      "wall_seconds": 11.97605089994613
+    },
+    {
+      "build": "split",
+      "case": "channel-tools",
+      "repeat": 3,
+      "cpu_mode": "r800",
+      "cpu_seconds": 12.96875,
+      "wall_seconds": 13.89958139997907
+    },
+    {
+      "build": "baseline",
+      "case": "no-makoto",
+      "repeat": 3,
+      "cpu_mode": "r800",
+      "cpu_seconds": 4.25,
+      "wall_seconds": 4.592665900010616
+    },
+    {
+      "build": "baseline",
+      "case": "silent-basic",
+      "repeat": 3,
+      "cpu_mode": "r800",
+      "cpu_seconds": 6.6875,
+      "wall_seconds": 7.070324099971913
+    },
+    {
+      "build": "baseline",
+      "case": "music",
+      "repeat": 3,
+      "cpu_mode": "r800",
+      "cpu_seconds": 11.140625,
+      "wall_seconds": 11.966565300012007
+    },
+    {
+      "build": "baseline",
+      "case": "channel-tools",
+      "repeat": 3,
+      "cpu_mode": "r800",
+      "cpu_seconds": 12.84375,
+      "wall_seconds": 13.717056500026956
+    },
+    {
+      "build": "baseline",
+      "case": "no-makoto",
+      "repeat": 4,
+      "cpu_mode": "r800",
+      "cpu_seconds": 4.453125,
+      "wall_seconds": 4.598972199950367
+    },
+    {
+      "build": "baseline",
+      "case": "silent-basic",
+      "repeat": 4,
+      "cpu_mode": "r800",
+      "cpu_seconds": 6.75,
+      "wall_seconds": 7.120291200000793
+    },
+    {
+      "build": "baseline",
+      "case": "music",
+      "repeat": 4,
+      "cpu_mode": "r800",
+      "cpu_seconds": 11.0625,
+      "wall_seconds": 11.946937600034289
+    },
+    {
+      "build": "baseline",
+      "case": "channel-tools",
+      "repeat": 4,
+      "cpu_mode": "r800",
+      "cpu_seconds": 12.625,
+      "wall_seconds": 13.286150200059637
+    },
+    {
+      "build": "split",
+      "case": "no-makoto",
+      "repeat": 4,
+      "cpu_mode": "r800",
+      "cpu_seconds": 4.28125,
+      "wall_seconds": 4.449996000039391
+    },
+    {
+      "build": "split",
+      "case": "silent-basic",
+      "repeat": 4,
+      "cpu_mode": "r800",
+      "cpu_seconds": 6.5625,
+      "wall_seconds": 6.9675337000517175
+    },
+    {
+      "build": "split",
+      "case": "music",
+      "repeat": 4,
+      "cpu_mode": "r800",
+      "cpu_seconds": 11.09375,
+      "wall_seconds": 11.834247499937192
+    },
+    {
+      "build": "split",
+      "case": "channel-tools",
+      "repeat": 4,
+      "cpu_mode": "r800",
+      "cpu_seconds": 12.640625,
+      "wall_seconds": 13.466611000010744
+    },
+    {
+      "build": "merged",
+      "case": "no-makoto",
+      "repeat": 4,
+      "cpu_mode": "r800",
+      "cpu_seconds": 4.40625,
+      "wall_seconds": 4.679560599965043
+    },
+    {
+      "build": "merged",
+      "case": "silent-basic",
+      "repeat": 4,
+      "cpu_mode": "r800",
+      "cpu_seconds": 6.4375,
+      "wall_seconds": 7.049389800056815
+    },
+    {
+      "build": "merged",
+      "case": "music",
+      "repeat": 4,
+      "cpu_mode": "r800",
+      "cpu_seconds": 10.625,
+      "wall_seconds": 11.277861300040968
+    },
+    {
+      "build": "merged",
+      "case": "channel-tools",
+      "repeat": 4,
+      "cpu_mode": "r800",
+      "cpu_seconds": 13.546875,
+      "wall_seconds": 14.440074700047262
+    }
+  ],
+  "summary": {
+    "baseline": {
+      "median_seconds": {
+        "no-makoto": 4.25,
+        "silent-basic": 6.59375,
+        "music": 11.359375,
+        "channel-tools": 12.6875
+      },
+      "relative_to_no_makoto": {
+        "no-makoto": 1.0,
+        "silent-basic": 1.5514705882352942,
+        "music": 2.672794117647059,
+        "channel-tools": 2.985294117647059
+      }
+    },
+    "split": {
+      "median_seconds": {
+        "no-makoto": 4.28125,
+        "silent-basic": 6.640625,
+        "music": 11.203125,
+        "channel-tools": 12.8125
+      },
+      "relative_to_no_makoto": {
+        "no-makoto": 1.0,
+        "silent-basic": 1.551094890510949,
+        "music": 2.616788321167883,
+        "channel-tools": 2.9927007299270074
+      }
+    },
+    "merged": {
+      "median_seconds": {
+        "no-makoto": 4.125,
+        "silent-basic": 6.4375,
+        "music": 11.46875,
+        "channel-tools": 12.8125
+      },
+      "relative_to_no_makoto": {
+        "no-makoto": 1.0,
+        "silent-basic": 1.5606060606060606,
+        "music": 2.7803030303030303,
+        "channel-tools": 3.106060606060606
+      }
+    }
+  },
+  "comparison": "Five alternating-order repetitions, 60 emulated seconds per case. Whole-process host CPU, not MSX driver frame time.",
+  "builds": {
+    "baseline": {
+      "source_commit": "bb28e3e87",
+      "exe_sha256": "b435c824969287b475ddb6b45ae649e73b7a5ecc8f733a03eb7409c4044a428a"
+    },
+    "split": {
+      "source_commit": "577efe109",
+      "exe_sha256": "70fe0b4e58d14bc936815e89f60d7997f2df7d78e88395531b762a9aa696cd4f"
+    },
+    "merged": {
+      "source_commit": "7b57ef426",
+      "exe_sha256": "c2dbd4526e1110f1b6bc7e1b51e781b99ed5be945f47c8b9befa73db4b79a4d3"
+    }
+  },
+  "audio_merged_vs_release": [
+    {
+      "track": 1,
+      "name": "THUNDER",
+      "max_pcm_difference": 0.0,
+      "rms_pcm_difference": 0.0,
+      "baseline_rms": 66.52819196325228,
+      "candidate_rms": 66.52819196325228,
+      "clipped_samples": 0
+    },
+    {
+      "track": 4,
+      "name": "SHOP",
+      "max_pcm_difference": 0.0,
+      "rms_pcm_difference": 0.0,
+      "baseline_rms": 248.69990711562343,
+      "candidate_rms": 248.69990711562343,
+      "clipped_samples": 0
+    },
+    {
+      "track": 10,
+      "name": "BUSTLING TOWN",
+      "max_pcm_difference": 0.0,
+      "rms_pcm_difference": 0.0,
+      "baseline_rms": 196.62406364047695,
+      "candidate_rms": 196.62406364047695,
+      "clipped_samples": 0
+    },
+    {
+      "track": 14,
+      "name": "LAO SHI",
+      "max_pcm_difference": 0.0,
+      "rms_pcm_difference": 0.0,
+      "baseline_rms": 118.0586531272964,
+      "candidate_rms": 118.0586531272964,
+      "clipped_samples": 0
+    }
+  ],
+  "conclusion": "No convincing performance benefit: changes near 1 percent, with larger run-to-run scatter. Keep split loops for clarity; retain merge as a separate experiment. Uncontrolled desktop scheduling and independently booted playback phases limit small percentage comparisons."
+}
