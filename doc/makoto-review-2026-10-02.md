@@ -30,3 +30,22 @@ Timer/state/rewind, prescaler continuation and channel/RAM integration tests pas
 The standalone engine comparison still matches 1,080,000 samples, with the
 negative key-off control detecting 107,967 mismatches. Performance experiments
 and final audio comparisons are recorded below when complete.
+
+
+## Optional merged-engine experiment
+
+Branch codex/makoto-merged-experiment moves the FM/ADPCM engines into FmPart,
+the SSG engine into SsgPart, and the control registers into MakotoSound. It
+removes the rendering delegation. A lightweight serialization view retains
+exactly the same native chip subrecord and old-state reader.
+
+This branch is an experiment, not a replacement release. The separate
+MakotoYM2608 files remain for the pre-merge standalone differential test;
+that test does not exercise the merged production device. The merged device
+passes the runtime timer/IRQ/BUSY/debugger/state/rewind, native-prescaler,
+RAM-transfer, channel-isolation and failed-construction suites. Actual fork
+version-8 and version-9 states convert byte-exactly and resume. Four 20-second
+excerpts restored from the preserved release (Thunder, Shop, Bustling Town,
+Lao Shi) have zero PCM difference and no clipped samples after 0.2 s warm-up.
+
+Benchmark results are recorded separately after the alternating runs finish.
