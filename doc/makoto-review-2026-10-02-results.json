@@ -581,5 +581,66 @@
       "clipped_samples": 0
     }
   ],
-  "conclusion": "No convincing performance benefit: changes near 1 percent, with larger run-to-run scatter. Keep split loops for clarity; retain merge as a separate experiment. Uncontrolled desktop scheduling and independently booted playback phases limit small percentage comparisons."
+  "conclusion": "No convincing performance benefit: changes near 1 percent, with larger run-to-run scatter. Keep split loops for clarity; retain merge as a separate experiment. Uncontrolled desktop scheduling and independently booted playback phases limit small percentage comparisons.",
+  "final_cleanup": {
+    "source_commit": "1cf89c887",
+    "exe_sha256": "fb819b833660090be48a59446e98df9d4b90dd69e1be285000d20e8ba151537a",
+    "native_sample_comparison": {
+      "matched": 1080000,
+      "negative_control_differences": 107967
+    },
+    "optimized_clang_link_probe": "passed",
+    "state_layout": {
+      "passed": [
+        "Failed FM and SSG registration leaves no device settings; subsequent insertion/removal succeeds",
+        "Every engine blob rejects a truncated payload",
+        "Legacy sound version 9 converts exact control/engine/RAM/timer values and resumes",
+        "Legacy sound version 8 converts exact control/engine/RAM/timer values and resumes"
+      ],
+      "engine_bytes": {
+        "fm": 804,
+        "ssg": 56,
+        "adpcmA": 192,
+        "adpcmB": 54
+      }
+    },
+    "audio_vs_release": [
+      {
+        "track": 1,
+        "name": "THUNDER",
+        "max_pcm_difference": 0.0,
+        "rms_pcm_difference": 0.0,
+        "baseline_rms": 66.52848838304858,
+        "candidate_rms": 66.52848838304858,
+        "clipped_samples": 0
+      },
+      {
+        "track": 4,
+        "name": "SHOP",
+        "max_pcm_difference": 0.0,
+        "rms_pcm_difference": 0.0,
+        "baseline_rms": 248.69575631632836,
+        "candidate_rms": 248.69575631632836,
+        "clipped_samples": 0
+      },
+      {
+        "track": 10,
+        "name": "BUSTLING TOWN",
+        "max_pcm_difference": 0.0,
+        "rms_pcm_difference": 0.0,
+        "baseline_rms": 195.8092862902719,
+        "candidate_rms": 195.8092862902719,
+        "clipped_samples": 0
+      },
+      {
+        "track": 14,
+        "name": "LAO SHI",
+        "max_pcm_difference": 0.0,
+        "rms_pcm_difference": 0.0,
+        "baseline_rms": 118.0677220584165,
+        "candidate_rms": 118.0677220584165,
+        "clipped_samples": 0
+      }
+    ]
+  }
 }

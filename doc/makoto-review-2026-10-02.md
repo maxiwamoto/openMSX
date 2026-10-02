@@ -64,3 +64,16 @@ The GitHub build matrix for 860a75d91 passed Linux, both macOS targets, both
 Windows toolchains and unit tests. SonarCloud's quality gate reports duplicated
 lines (6%, threshold 3%), not a failed security/reliability rating. Vendor and
 reference code have not been rewritten merely to silence that metric.
+
+
+## Final cleanup validation
+
+The final cleanup build from 1cf89c887 passes the optimized Clang link probe,
+the 1,080,000-sample native comparison (negative control: 107,967 differences),
+and legacy v8/v9 migration and malformed-blob/failed-construction checks.
+Thunder, Shop, Bustling Town and Lao Shi each match the released build exactly
+for the recorded 20-second excerpt, with no clipped samples. The independent
+upstream build passes its timer/BUSY/IRQ/state/rewind and native-layout tests.
+
+The final Windows executable is derived/review-oct02-final-build/openmsx.exe.
+It is a local test build; the published October 1 release remains unchanged.
