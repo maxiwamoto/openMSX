@@ -79,6 +79,7 @@ def main():
                           'doc/v9968-integration.md', 'doc/v9968-upstream-readme.md',
                           'doc/makoto.md', 'doc/makoto-filter-comparison.md',
                           'doc/makoto-owned-core-experiment.md', 'doc/makoto-owned-core-results.json',
+                          'doc/makoto-review-2026-10-02.md', 'doc/makoto-review-2026-10-02-results.json',
                           'doc/makoto-review-2026-09-30.md', 'doc/makoto-review-2026-09-30-results.json',
                           'doc/makoto-filter-listening-results.json',
                           'doc/makoto-review-2026-09-29.md', 'doc/makoto-review-2026-09-29-results.json',

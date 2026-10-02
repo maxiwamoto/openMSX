@@ -4,7 +4,7 @@ This is an experimental build of maxiwamoto/openMSX, not an official openMSX rel
 It includes sector-based Flash persistence, Windows ROM replacement, reload/reset,
 no-reset media refresh, and development save-state restore. The Flash format is proposed upstream and may change.
 
-Version **2026.10.01** includes experimental Makoto/YM2608 and V9968 support,
+Version **2026.10.02** includes experimental Makoto/YM2608 and V9968 support,
 alongside the Flash and media-development fixes. Use the complete package,
 including `share/`, when upgrading.
 
@@ -24,8 +24,13 @@ boundaries and no-reset readback, checked against real Makoto V4/V5 results.
 Native FM and SSG streams now feed the host resamplers directly. The new
 openMSX-owned YM2608 control layer retains the YMFM synthesis engines and the
 hardware-verified RAM fixes. It removes the old repeated-sample path and
-comparison caches. All 16 voice controls remain available. Sound-state version 9
-loads older fork states; older executables cannot load new version-9 states.
+comparison caches. All 16 voice controls remain available. Sound-state version 10
+loads older fork states; older executables cannot load new version-10 states.
+Version 10 stores native control fields and four length-checked YMFM engine
+blobs. Actual v8/v9 migrations and current save/rewind are tested. This release
+also simplifies audio-device lifetime handling and separates the channel
+rendering loops by engine, preserving the approved playback. See
+`doc/makoto-review-2026-10-02.md` for checks and benchmark limitations.
 
 FM and SSG now use the standard mixer controls. The extra `Makoto_psg_volume`
 trim is removed. To preserve an existing balance, use:

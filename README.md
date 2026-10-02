@@ -1,6 +1,6 @@
 # openMSX: Makoto, V9968 and ROM/disk development
 
-**Makoto / YM2608: native audio streams and a simpler control layer.**
+**Makoto / YM2608: tested playback and review cleanup.**
 FM and SSG now run at their own sample rates. An openMSX-owned adaptation of
 the YMFM control layer writes directly to the host mixer, retaining the proven
 FM/SSG/ADPCM synthesis engines and hardware-verified sample-RAM corrections.
@@ -13,6 +13,11 @@ timers, debugger controls and filter-free playback remain available.
 [Setup](doc/makoto.md) · [Hardware results](doc/makoto-review-2026-09-29.md).
 Analogue clipping and headphone-load response remain uncalibrated.
 
+The October 2 update cleans up device lifetime handling and uses native
+control-field serialization with four checked engine-state blobs. Older fork
+saves remain supported. The approved playback is preserved; this cleanup
+does not claim an additional speed gain. [Validation and experiments](doc/makoto-review-2026-10-02.md).
+
 **Experimental V9968 support:** integrates buppu3's V9968 emulation, including
 S16 (16 sprites per scanline), alongside this fork's development features.
 [Setup, attribution and validation](doc/v9968-integration.md).
@@ -23,11 +28,11 @@ Use **Start-openMSX-Makoto.cmd** for a Turbo-R with Makoto, or
 public fork also lets Windows developers rebuild an inserted ROM and return
 to a saved test point with updated graphics or text.
 
-**[Download the Windows x64 build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.10.01)**
+**[Download the Windows x64 build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.10.02)**
 for this fork. Extract the ZIP and run **Start-openMSX.cmd**; it uses a separate
 profile beside the executable. [Setup and shortcuts](doc/fork-windows-download.md).
 
-Version **2026.10.01** retains Makoto, V9968, Flash persistence and development
+Version **2026.10.02** retains Makoto, V9968, Flash persistence and development
 reload features. FM and SSG use standard mixer sliders; the extra SSG trim is
 removed. Our tested listening balance is FM 75 / SSG 38. See the
 [volume conversion and upgrade instructions](doc/fork-windows-download.md).
@@ -82,7 +87,7 @@ This is selective storage, not compression of the game ROM.
 
 ## Trying it and keeping existing saves
 
-[Download the Windows build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.10.01)
+[Download the Windows build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.10.02)
 and use its **Start-openMSX.cmd** launcher for a separate test profile. Other
 platforms can [build from source](doc/manual/compile.html). Load the game
 with the appropriate mapperâ€”`ASCII16-X` for an ASCII16-X cartridgeâ€”then save

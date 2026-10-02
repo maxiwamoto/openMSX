@@ -20,8 +20,9 @@ an experimental implementation.
   [blind listening and CPU comparison](makoto-filter-comparison.md).
 - Native debugger watchpoints and probe traces for I/O and IRQ analysis.
 - Blob-backed sample RAM, exposed as `Makoto ADPCM RAM` in the debugger.
-  Current experimental sound-state version 9 retains older fork-state migration.
-  Version 8 music states and current version 9 continuation are tested.
+  Current experimental sound-state version 10 retains older fork-state migration.
+  Actual version 8/9 states and current version 10 continuation are tested.
+  Control fields are native; the four YMFM engines use length-checked blobs.
 
 The experimental `MakotoYM2608` control layer belongs to openMSX and reuses
 YMFM synthesis engines. The old wrapper remains available only as a comparison
