@@ -48,7 +48,7 @@ public:
 	void reset();
 	// Fork-only reader for the previously published packed core layout.
 	void restoreLegacyState(ymfm::ymfm_saved_state& state);
-	template <typename Archive> void serialize(Archive& ar, unsigned /*version*/)
+	template<typename Archive> void serialize(Archive& ar, unsigned /*version*/)
 	{
 		ar.serialize("address", address, "irqEnable", irqEnable, "flagControl", flagControl);
 		serializeEngine(ar, "fm", fm);
@@ -75,7 +75,7 @@ public:
 	void generateSSG(std::span<float*> buffers, unsigned num);
 
 private:
-	template <typename Archive, typename Engine>
+	template<typename Archive, typename Engine>
 	static void serializeEngine(Archive& ar, const char* name, Engine& engine)
 	{
 		// Obtain the pinned engine's exact byte count. The archive's blob reader
@@ -99,8 +99,8 @@ private:
 	void writeData(uint8_t data);
 	void writeDataHi(uint8_t data);
 	void updatePrescale(uint8_t prescale);
-	template <bool Combined> void generateFMImpl(std::span<float*> buffers, unsigned num);
-	template <bool Combined> void generateSSGImpl(std::span<float*> buffers, unsigned num);
+	template<bool Combined> void generateFMImpl(std::span<float*> buffers, unsigned num);
+	template<bool Combined> void generateSSGImpl(std::span<float*> buffers, unsigned num);
 	uint16_t address;
 	uint8_t irqEnable;
 	uint8_t flagControl;

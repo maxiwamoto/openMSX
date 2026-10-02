@@ -36,7 +36,13 @@ namespace openmsx {
 using namespace ymfm;
 
 MakotoYM2608::MakotoYM2608(ymfm_interface& intf)
-    : address(0), irqEnable(0x1f), flagControl(0x1c), fm(intf), ssg(intf), adpcmA(intf, 0), adpcmB(intf)
+	: address(0)
+	, irqEnable(0x1f)
+	, flagControl(0x1c)
+	, fm(intf)
+	, ssg(intf)
+	, adpcmA(intf, 0)
+	, adpcmB(intf)
 {
 	updatePrescale(fm.clock_prescale());
 }
@@ -332,7 +338,7 @@ void MakotoYM2608::updatePrescale(uint8_t prescale)
 	ssg.prescale_changed();
 }
 
-template <bool Combined> void MakotoYM2608::generateFMImpl(std::span<float*> buffers, unsigned num)
+template<bool Combined> void MakotoYM2608::generateFMImpl(std::span<float*> buffers, unsigned num)
 {
 	uint32_t orOutput = 0;
 	const uint32_t fmMask = bitfield(irqEnable, 7) ? 0x3f : 0x07;
@@ -389,7 +395,7 @@ void MakotoYM2608::generateFM(std::span<float*> buffers, unsigned num)
 	}
 }
 
-template <bool Combined> void MakotoYM2608::generateSSGImpl(std::span<float*> buffers, unsigned num)
+template<bool Combined> void MakotoYM2608::generateSSGImpl(std::span<float*> buffers, unsigned num)
 {
 	uint32_t orOutput = 0;
 	for (unsigned i = 0; i < num; ++i) {
@@ -401,8 +407,9 @@ template <bool Combined> void MakotoYM2608::generateSSGImpl(std::span<float*> bu
 			buffers[0][i] += float(total);
 			orOutput |= uint32_t(total);
 		} else {
-			for (unsigned c = 0; c < 3; ++c)
+			for (unsigned c = 0; c < 3; ++c) {
 				buffers[c][i] += float(s.data[c]);
+			}
 		}
 	}
 	if constexpr (Combined) {
