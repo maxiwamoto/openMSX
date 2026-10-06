@@ -1,4 +1,12 @@
-# openMSX: Makoto, V9968 and ROM/disk development
+# openMSX: Makoto, V9968, mouse capture and ROM/disk development
+
+**October 5 combined release:** the published Makoto engine and V9968 now
+include click-to-capture MSX mouse control. Click the MSX display to capture;
+middle-click or **Ctrl+F10** releases it for menus and other windows. The first
+click only captures, and moving over a menu or screen edge keeps capture active.
+The October 2 Makoto playback and sound-state format are retained.
+Use **Start-openMSX-Makoto-V9968.cmd** for both hardware extensions, then connect
+an MSX mouse through the Input menu or with `plug joyporta mouse` in the console.
 
 **Makoto / YM2608: tested playback and review cleanup.**
 FM and SSG now run at their own sample rates. An openMSX-owned adaptation of
@@ -28,11 +36,11 @@ Use **Start-openMSX-Makoto.cmd** for a Turbo-R with Makoto, or
 public fork also lets Windows developers rebuild an inserted ROM and return
 to a saved test point with updated graphics or text.
 
-**[Download the Windows x64 build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.10.02)**
+**[Download the Windows x64 build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.10.05)**
 for this fork. Extract the ZIP and run **Start-openMSX.cmd**; it uses a separate
 profile beside the executable. [Setup and shortcuts](doc/fork-windows-download.md).
 
-Version **2026.10.02** retains Makoto, V9968, Flash persistence and development
+Version **2026.10.05** combines mouse capture with Makoto, V9968, Flash persistence and development
 reload features. FM and SSG use standard mixer sliders; the extra SSG trim is
 removed. Our tested listening balance is FM 75 / SSG 38. See the
 [volume conversion and upgrade instructions](doc/fork-windows-download.md).

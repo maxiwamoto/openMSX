@@ -58,10 +58,16 @@ def prepare_msvc():
 
 
 class Emulator:
-    def __init__(self, exe, out, synthetic_focus=False):
+    def __init__(self, exe, out, synthetic_focus=False, machine='C-BIOS_MSX2+', firmware=None, makoto=False):
         self.out, self.log = out, []
         user = out / 'home/share'
         shutil.copytree(ROOT / 'Contrib/cbios', user / 'machines')
+        if machine == 'Panasonic_FS-A1GT_V9968':
+            if firmware is None:
+                raise ValueError('--firmware-dir is required for the V9968 machine')
+            (user / 'systemroms').mkdir()
+            for filename in ('fs-a1gt_firmware.rom', 'fs-a1gt_kanjifont.rom'):
+                shutil.copy2(firmware / filename, user / 'systemroms' / filename)
         (user / 'imgui.ini').write_text('[openmsx][machine]\nshowQuickSetupEditor=0\n', encoding='utf-8')
         start = out / 'start.tcl'
         start.write_text('''set save_settings_on_exit false
@@ -90,7 +96,10 @@ after realtime 0.01 poll_mouse_test
         if synthetic_focus:
             env['MOUSE_TEST_SYNTHETIC_FOCUS'] = '1'
         self.stderr = (out / 'stderr.txt').open('w')
-        self.process = subprocess.Popen([str(exe), '-machine', 'C-BIOS_MSX2+', '-script', str(start)],
+        args = [str(exe), '-machine', machine, '-script', str(start)]
+        if makoto:
+            args += ['-ext', 'Makoto']
+        self.process = subprocess.Popen(args,
             env=env, stdout=self.stderr, stderr=self.stderr,
             creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
 
@@ -172,12 +181,17 @@ after realtime 0.01 poll_mouse_test
         (self.out / 'commands.json').write_text(json.dumps(self.log, indent=2), encoding='utf-8')
 
 
-def run(exe, synthetic_focus=False):
+def run(exe, synthetic_focus=False, machine='C-BIOS_MSX2+', firmware=None, makoto=False):
     out = Path(tempfile.mkdtemp(prefix='mouse-capture-', dir=ROOT / 'derived'))
-    e = Emulator(exe, out, synthetic_focus)
+    e = Emulator(exe, out, synthetic_focus, machine, firmware, makoto)
     passed = []
     try:
         e.command('set power on; set pause off')
+        if makoto:
+            assert e.command('info exists Makoto_volume') == '1'
+            assert e.command('info exists {Makoto SSG_volume}') == '1'
+        if machine == 'Panasonic_FS-A1GT_V9968':
+            assert e.command('debug size {physical VRAM}') == '262144'
         e.settle(0.5)
         assert e.state()['capture'] == 'disabled'
         e.command('plug joyporta mouse')
@@ -317,7 +331,8 @@ def run(exe, synthetic_focus=False):
         print(json.dumps(passed, indent=2))
     finally:
         e.close()
-        (out / 'results.json').write_text(json.dumps({'synthetic_focus': synthetic_focus, 'passed': passed}, indent=2), encoding='utf-8')
+        (out / 'results.json').write_text(json.dumps({'machine': machine, 'makoto': makoto,
+            'synthetic_focus': synthetic_focus, 'passed': passed}, indent=2), encoding='utf-8')
         print('Results:', out)
 
 
@@ -326,10 +341,13 @@ if __name__ == '__main__':
     parser.add_argument('--prepare-msvc', action='store_true')
     parser.add_argument('--openmsx', type=Path, help='Executable containing the test-only driver')
     parser.add_argument('--synthetic-focus', action='store_true', help='Inject SDL focus for noninteractive build desktops; does not validate native OS focus behavior')
+    parser.add_argument('--machine', choices=['C-BIOS_MSX2+', 'Panasonic_FS-A1GT_V9968'], default='C-BIOS_MSX2+')
+    parser.add_argument('--firmware-dir', type=Path, help='Private firmware directory for the V9968 machine')
+    parser.add_argument('--makoto', action='store_true', help='Run with the published Makoto engine connected')
     args = parser.parse_args()
     if args.prepare_msvc:
         prepare_msvc()
     elif args.openmsx:
-        run(args.openmsx.resolve(strict=True), args.synthetic_focus)
+        run(args.openmsx.resolve(strict=True), args.synthetic_focus, args.machine, args.firmware_dir, args.makoto)
     else:
         parser.error('Specify --prepare-msvc or --openmsx')

@@ -36,3 +36,8 @@ pause/focus release, legacy mode, undocked menu/status bar, fullscreen,
 `escape_grab`, machine switching, and mouse unplugging. Each run writes its
 command log and passed groups below `derived/mouse-capture-*`. It creates its
 own user profile and leaves existing profiles untouched.
+
+For the combined fork, append `--machine Panasonic_FS-A1GT_V9968 --makoto
+--firmware-dir PATH` to run all fifteen groups with both features active.
+The firmware directory must contain your `fs-a1gt_firmware.rom` and
+`fs-a1gt_kanjifont.rom`. These files are copied only to the isolated test profile.

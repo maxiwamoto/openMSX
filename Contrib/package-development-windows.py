@@ -101,6 +101,7 @@ def main():
         copy(ROOT / 'Contrib' / launcher, stage / launcher)
     copy(ROOT / 'doc/fork-windows-download.md', stage / 'START-HERE.md')
     copy(ROOT / 'README.md', stage / 'README.md')
+    copy(ROOT / 'Contrib/mouse-capture-test.md', stage / 'doc/mouse-capture-test.md')
     for dependency, (_, licenses) in DEPENDENCIES.items():
         for license_file in licenses:
             copy(args.third_party / 'src' / dependency / license_file,
