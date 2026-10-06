@@ -5,7 +5,6 @@
 
 #include "FloatSetting.hh"
 #include "SimpleDebuggable.hh"
-#include "TclCallback.hh"
 
 #include <array>
 #include <cstdint>
@@ -22,8 +21,15 @@ class DeviceConfig;
 class AY8910 final : public ResampledSoundDevice
 {
 public:
+	enum class Type : uint8_t { AY8910, YM2149 };
+
+	static constexpr uint8_t PORT_A_DIRECTION = 0x40;
+	static constexpr uint8_t PORT_B_DIRECTION = 0x80;
+
+public:
 	AY8910(const std::string& name, AY8910Periphery& periphery,
-	       const DeviceConfig& config, EmuTime time);
+	       const DeviceConfig& config, EmuTime time, Type type,
+	       float frequency = 3579545.0f / 2.0f);
 	~AY8910();
 
 	[[nodiscard]] uint8_t readRegister(unsigned reg, EmuTime time);
@@ -120,14 +126,14 @@ private:
 
 	class Amplitude {
 	public:
-		explicit Amplitude(const DeviceConfig& config);
+		explicit Amplitude(Type type);
 		[[nodiscard]] auto getEnvVolTable() const { return envVolTable; }
 		[[nodiscard]] float getVolume(unsigned chan) const;
 		void setChannelVolume(unsigned chan, unsigned value);
 		[[nodiscard]] bool followsEnvelope(unsigned chan) const;
 
 	private:
-		const bool isAY8910; // must come before envVolTable
+		bool isAY8910; // must come before envVolTable
 		std::span<const float, 32> envVolTable;
 		std::array<float, 3> vol;
 		std::array<bool, 3> envChan;
@@ -184,14 +190,13 @@ private:
 	FloatSetting vibratoFrequency;
 	FloatSetting detunePercent;
 	FloatSetting detuneFrequency;
-	TclCallback directionsCallback;
 	std::array<ToneGenerator, 3> tone;
 	NoiseGenerator noise;
 	Amplitude amplitude;
 	Envelope envelope;
 	std::array<uint8_t, 16> regs;
-	const bool isAY8910;
-	const bool ignorePortDirections;
+	float outputFreq;
+	bool isAY8910;
 	bool doDetune;
 };
 

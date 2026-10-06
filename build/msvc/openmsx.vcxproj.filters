@@ -76,8 +76,8 @@
     <Filter Include="serial">
       <UniqueIdentifier>{8fe6dae8-765e-428c-abf4-662e83a99385}</UniqueIdentifier>
     </Filter>
-    <Filter Include="unapinet">
-      <UniqueIdentifier>{5a21c62d-f283-48c5-81c1-dca7dfe3dd2c}</UniqueIdentifier>
+    <Filter Include="network">
+      <UniqueIdentifier>{d33b52b5-2c15-4a02-9435-2854e5f1a7c3}</UniqueIdentifier>
     </Filter>
     <Filter Include="security">
       <UniqueIdentifier>{ce8126f9-f849-4f95-85bf-f6919a3a4e9a}</UniqueIdentifier>
@@ -274,6 +274,9 @@
       <Filter>debugger</Filter>
     </ClCompile>
     <ClCompile Include="$(OpenMSXSrcDir)\events\AfterCommand.cc">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OpenMSXSrcDir)\events\AnalogInput.cc">
       <Filter>events</Filter>
     </ClCompile>
     <ClCompile Include="$(OpenMSXSrcDir)\events\BooleanInput.cc">
@@ -1002,9 +1005,6 @@
     <ClCompile Include="$(OpenMSXSrcDir)\sound\AY8910.cc">
       <Filter>sound</Filter>
     </ClCompile>
-    <ClCompile Include="$(OpenMSXSrcDir)\sound\AY8910Periphery.cc">
-      <Filter>sound</Filter>
-    </ClCompile>
     <ClCompile Include="$(OpenMSXSrcDir)\sound\BlipBuffer.cc">
       <Filter>sound</Filter>
     </ClCompile>
@@ -1152,8 +1152,14 @@
     <ClCompile Include="$(OpenMSXSrcDir)\thread\Timer.cc">
       <Filter>thread</Filter>
     </ClCompile>
-    <ClCompile Include="$(OpenMSXSrcDir)\unapinet\UnapiNet.cc">
-      <Filter>unapinet</Filter>
+    <ClCompile Include="$(OpenMSXSrcDir)\network\EmulatedEsp32.cc">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OpenMSXSrcDir)\network\SMXWiFi.cc">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OpenMSXSrcDir)\network\UnapiNet.cc">
+      <Filter>network</Filter>
     </ClCompile>
     <ClCompile Include="$(OpenMSXSrcDir)\utils\Base64.cc">
       <Filter>utils</Filter>
@@ -1512,6 +1518,9 @@
     <ClCompile Include="$(OpenMSXSrcDir)\utils\SerialPort.cc">
       <Filter>utils</Filter>
     </ClCompile>
+    <ClCompile Include="$(OpenMSXSrcDir)\utils\OpenSSL.cc">
+      <Filter>utils</Filter>
+    </ClCompile>
     <ClCompile Include="$(OpenMSXSrcDir)\memory\MegaFlashRomSCCPlus.cc">
       <Filter>memory</Filter>
     </ClCompile>
@@ -1523,6 +1532,7 @@
     <ClCompile Include="$(OpenMSXSrcDir)\fdc\RawTrack.cc" />
     <ClCompile Include="$(OpenMSXSrcDir)\fdc\DMKDiskImage.cc" />
     <ClCompile Include="$(OpenMSXSrcDir)\input\JoyMega.cc" />
+    <ClCompile Include="$(OpenMSXSrcDir)\input\JoyHandle.cc" />
     <ClCompile Include="$(OpenMSXSrcDir)\memory\RomDooly.cc" />
     <ClCompile Include="$(OpenMSXSrcDir)\sound\ResampledSoundDevice.cc" />
     <ClCompile Include="$(OpenMSXSrcDir)\video\scalers\GLHQScaler.cc" />
@@ -1801,6 +1811,9 @@
       <Filter>debugger</Filter>
     </None>
     <None Include="$(OpenMSXSrcDir)\events\AfterCommand.hh">
+      <Filter>events</Filter>
+    </None>
+    <None Include="$(OpenMSXSrcDir)\events\AnalogInput.hh">
       <Filter>events</Filter>
     </None>
     <None Include="$(OpenMSXSrcDir)\events\BooleanInput.hh">
@@ -2742,11 +2755,17 @@
     <None Include="$(OpenMSXSrcDir)\thread\Timer.hh">
       <Filter>thread</Filter>
     </None>
-    <None Include="$(OpenMSXSrcDir)\unapinet\UnapiNet.hh">
-      <Filter>unapinet</Filter>
+    <None Include="$(OpenMSXSrcDir)\network\EmulatedEsp32.hh">
+      <Filter>network</Filter>
     </None>
-    <None Include="$(OpenMSXSrcDir)\unapinet\UnapiNetWire.hh">
-      <Filter>unapinet</Filter>
+    <None Include="$(OpenMSXSrcDir)\network\SMXWiFi.hh">
+      <Filter>network</Filter>
+    </None>
+    <None Include="$(OpenMSXSrcDir)\network\UnapiNet.hh">
+      <Filter>network</Filter>
+    </None>
+    <None Include="$(OpenMSXSrcDir)\network\UnapiNetWire.hh">
+      <Filter>network</Filter>
     </None>
     <None Include="$(OpenMSXSrcDir)\utils\Aligned.hh">
       <Filter>utils</Filter>
@@ -2857,6 +2876,9 @@
       <Filter>utils</Filter>
     </None>
     <None Include="$(OpenMSXSrcDir)\utils\SerialPort.hh">
+      <Filter>utils</Filter>
+    </None>
+    <None Include="$(OpenMSXSrcDir)\utils\OpenSSL.hh">
       <Filter>utils</Filter>
     </None>
     <None Include="$(OpenMSXSrcDir)\utils\utf8_core.hh">

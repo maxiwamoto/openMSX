@@ -2,16 +2,16 @@
 
 #include "FileException.hh"
 #include "LocalFile.hh"
-#include "systemfuncs.hh"
-
-#if HAVE_MMAP
-#  include <sys/mman.h>
-#  include <unistd.h>
-#endif
 
 #include <bit>
 #include <cstdlib>
 #include <memory>
+
+#if HAVE_MMAP
+#  include <sys/mman.h>
+#  include <sys/stat.h>
+#  include <unistd.h>
+#endif
 
 namespace openmsx {
 
@@ -19,6 +19,12 @@ namespace openmsx {
 static size_t getPageSize()
 {
 	return static_cast<size_t>(sysconf(_SC_PAGE_SIZE));
+
+	// This code path does not trigger on windows,
+	// but if we ever need it in the future:
+	//SYSTEM_INFO sysInfo;
+	//GetSystemInfo(&sysInfo);
+	//return static_cast<size_t>(sysInfo.dwPageSize);
 }
 #endif
 
@@ -27,24 +33,11 @@ MappedFileImpl::MappedFileImpl(LocalFile& file, size_t extra, bool is_const)
 	auto fileSize = file.getSize();
 	sz = fileSize + extra;
 
-#if !HAVE_MMAP
-	// Buffered snapshot on Windows and other platforms without mmap().
-	// Unlike a Windows file mapping, this does not lock the backing file.
-	(void)is_const;
-	std::unique_ptr<void, decltype(&free)> buffer(malloc(sz ? sz : 1), &free);
-	if (!buffer) throw std::bad_alloc();
-	auto pos = file.getPos();
-	file.seek(0);
-	file.read({static_cast<uint8_t*>(buffer.get()), fileSize});
-	file.seek(pos);
-	memset(static_cast<uint8_t*>(buffer.get()) + fileSize, 0, extra);
-	ptr = buffer.release();
-	alloc = true;
-#else
-
+#if HAVE_MMAP
 	// Step 0: empty file (cannot be mmap()'ed).
 	if (fileSize == 0) {
 		ptr = calloc(extra, 1);
+		alloc = true;
 		return;
 	}
 
@@ -66,7 +59,7 @@ MappedFileImpl::MappedFileImpl(LocalFile& file, size_t extra, bool is_const)
 		return;
 	}
 
-	// Step 2: Try to extend with anonymous pages
+	// Step 2: Try to extend with anonymous pages (Unix only)
 	auto additionalBytesNeeded = extra - bytesAvailableInPage;
 	auto extraPagesNeeded = (additionalBytesNeeded + pageSize - 1) / pageSize; // round up
 	auto extraMappingSize = extraPagesNeeded * pageSize;
@@ -99,6 +92,20 @@ MappedFileImpl::MappedFileImpl(LocalFile& file, size_t extra, bool is_const)
 	mapped = false;
 	alloc = true; // we're using malloc now
 	ptr = buffer;
+
+#else
+	// Fallback, OS without mmap() (including Windows)
+	(void)is_const;
+	std::unique_ptr<void, decltype(&free)> buffer(malloc(sz ? sz : 1), &free);
+	if (!buffer) throw std::bad_alloc();
+	// Like mmap(), read from the start without changing the file position.
+	auto oldPosition = file.getPos();
+	file.seek(0);
+	file.read({static_cast<uint8_t*>(buffer.get()), fileSize});
+	file.seek(oldPosition);
+	memset(static_cast<uint8_t*>(buffer.get()) + fileSize, 0, extra);
+	ptr = buffer.release();
+	alloc = true;
 #endif
 }
 

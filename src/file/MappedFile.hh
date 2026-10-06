@@ -1,6 +1,8 @@
 #ifndef MAPPED_FILE_HH
 #define MAPPED_FILE_HH
 
+#include "systemfuncs.hh"
+
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
@@ -61,19 +63,23 @@ private:
 		ptr = std::exchange(other.ptr, nullptr);
 		sz = std::exchange(other.sz, 0);
 		alloc = std::exchange(other.alloc, false);
+#if HAVE_MMAP
 		mapped = std::exchange(other.mapped, false);
+#endif
 	}
 
 	void release() noexcept;
-
-	void mapFile(LocalFile& file, bool is_const);
-	void unmapFile(void* p, size_t size);
 
 private:
 	void* ptr = nullptr;
 	size_t sz = 0;
 	bool alloc = false;
+
+#if HAVE_MMAP
+	void mapFile(LocalFile& file, bool is_const);
+	void unmapFile(void* p, size_t size);
 	bool mapped = false;
+#endif
 };
 
 template<typename T> class MappedFile
