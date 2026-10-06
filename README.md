@@ -1,9 +1,11 @@
 # openMSX: Makoto, V9968, mouse capture and ROM/disk development
 
-**October 5 combined release:** the published Makoto engine and V9968 now
-include click-to-capture MSX mouse control. Click the MSX display to capture;
-middle-click or **Ctrl+F10** releases it for menus and other windows. The first
-click only captures, and moving over a menu or screen edge keeps capture active.
+**October 6 combined release:** current upstream through `def1b744e`, the
+published Makoto engine, V9968, ROM/disk reload support, and the latest mouse
+capture fixes are included together. Click the MSX display to capture;
+middle-click releases it for menus and other windows. While released,
+middle-click on the display retains clipboard paste or your custom binding.
+The first click only captures, and moving over a menu or screen edge keeps capture active.
 The October 2 Makoto playback and sound-state format are retained.
 Use **Start-openMSX-Makoto-V9968.cmd** for both hardware extensions, then connect
 an MSX mouse through the Input menu or with `plug joyporta mouse` in the console.
@@ -36,11 +38,11 @@ Use **Start-openMSX-Makoto.cmd** for a Turbo-R with Makoto, or
 public fork also lets Windows developers rebuild an inserted ROM and return
 to a saved test point with updated graphics or text.
 
-**[Download the Windows x64 build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.10.05)**
+**[Download the Windows x64 build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.10.06)**
 for this fork. Extract the ZIP and run **Start-openMSX.cmd**; it uses a separate
 profile beside the executable. [Setup and shortcuts](doc/fork-windows-download.md).
 
-Version **2026.10.05** combines mouse capture with Makoto, V9968, Flash persistence and development
+Version **2026.10.06** combines mouse capture with Makoto, V9968, Flash persistence and development
 reload features. FM and SSG use standard mixer sliders; the extra SSG trim is
 removed. Our tested listening balance is FM 75 / SSG 38. See the
 [volume conversion and upgrade instructions](doc/fork-windows-download.md).

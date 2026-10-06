@@ -4,8 +4,9 @@ This is an experimental build of maxiwamoto/openMSX, not an official openMSX rel
 It includes sector-based Flash persistence, Windows ROM replacement, reload/reset,
 no-reset media refresh, and development save-state restore. The Flash format is proposed upstream and may change.
 
-Version **2026.10.05** combines experimental Makoto/YM2608, V9968, and explicit
-MSX mouse capture, alongside the Flash and media-development fixes. It retains
+Version **2026.10.06** combines upstream changes through `def1b744e`, experimental
+Makoto/YM2608, V9968, and the latest MSX mouse capture fixes, alongside Flash
+persistence and ROM/disk reload support. It retains
 the published October 2 Makoto engine and save compatibility. Use the complete package,
 including `share/`, when upgrading.
 
@@ -13,15 +14,25 @@ including `share/`, when upgrading.
 
 Connect an MSX mouse using the Input menu or `plug joyporta mouse` in the F10
 console. Click inside the MSX display to capture movement and hide the host
-pointer. The first click only captures. Middle-click or **Ctrl+F10** releases
+pointer. The first click only captures. Middle-click releases
 capture and shows the pointer for menus and other windows. Hovering a menu,
 status bar, or edge cannot release capture. Console, debugger break, pause,
 and loss of window focus also release it.
 
 Use Settings > Input > Capture MSX mouse on click, or
-`set auto_mouse_capture off`, to restore legacy behavior. The release shortcut
-is configurable with `bind`, for example `bind "keyb CTRL+F8" release_mouse`.
+`set auto_mouse_capture off`, to restore legacy behavior. No default keyboard
+release shortcut is added. Optional user bindings can use `escape_grab`.
+While captured, middle-click only releases and never pastes. While released,
+middle-click inside the display retains clipboard paste or your custom binding.
 Mouse capture works with the normal, Makoto, V9968, and combined launchers.
+
+Capture controls pointer visibility independently of `pointer_hide_delay` and
+takes precedence over `grabinput` and fullscreen grabbing for a connected MSX
+mouse. Regaining window focus does not recapture until you click the display.
+
+The upstream sprite collision and overflow timing fixes are adapted to the
+fork's internal VDP clock, retaining S16 collision limits. Experimental V9968
+sprite-plane shuffling and sprite mode 3 retain their previous status timing.
 
 ## Makoto and V9968 launchers
 

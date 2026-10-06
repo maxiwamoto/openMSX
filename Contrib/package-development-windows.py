@@ -76,7 +76,7 @@ def main():
                           'doc/release-history.txt', 'doc/flash-persistence.md',
                           'doc/windows-rom-replacement.md', 'doc/development-state-restore.md',
                           'doc/yamanooto-validation.md', 'doc/development-hard-reset.md',
-                          'doc/v9968-integration.md', 'doc/v9968-upstream-readme.md',
+                          'doc/v9968-integration.md', 'doc/v9968-upstream-readme.md', 'doc/smxwifi.md',
                           'doc/makoto.md', 'doc/makoto-filter-comparison.md',
                           'doc/makoto-owned-core-experiment.md', 'doc/makoto-owned-core-results.json',
                           'doc/makoto-review-2026-10-02.md', 'doc/makoto-review-2026-10-02-results.json',
