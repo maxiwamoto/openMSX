@@ -42,6 +42,17 @@ def hard_reset(emu):
         emu.command('foreach media $::traced_media {trace remove execution $media enter ::record_media_power}')
 
 
+def expect_boot_marker(emu, expected):
+    # BIOS boot duration can vary; the requirement is the resulting ROM snapshot.
+    for _ in range(8):
+        actual = int(emu.command('debug read memory 0xc000'))
+        pc = int(emu.command('reg PC'))
+        if actual == expected and 0x4020 <= pc <= 0x402a:
+            return
+        emu.advance(1)
+    raise AssertionError(f'Boot marker {actual:#x}, expected {expected:#x}; PC={pc:#x}')
+
+
 def stamp(path):
     future = time.time() + 3
     os.utime(path, (future, future))
@@ -85,10 +96,10 @@ def main():
             stamp(rom)
             emu.command('set power off; set power on')
             emu.advance(3)
-            assert int(emu.command('debug read memory 0xc000')) == (0x33 if patch else 0x11)
+            expect_boot_marker(emu, 0x33 if patch else 0x11)
             hard_reset(emu)
             emu.advance(3)
-            assert int(emu.command('debug read memory 0xc000')) == expected
+            expect_boot_marker(emu, expected)
             assert emu.command('dict get [machine_info media carta] mappertype') == mapper
             if patch:
                 assert emu.command('lindex [dict get [machine_info media carta] patches] 0').replace('\\','/') == patch.as_posix()

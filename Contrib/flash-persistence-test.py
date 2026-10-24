@@ -20,6 +20,7 @@ import zlib
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
+CHIP = 'S29GL064S70TFI040'
 MAGIC = b'OMSXFLS\x01'
 SIZES = [0x2000] * 8 + [0x10000] * 127
 helpers = runpy.run_path(str(ROOT / 'Contrib/rom-test-utils.py'))
@@ -39,11 +40,11 @@ def image(version):
     return data
 
 
-def flash_document(content, flags=None, chip='S29GL064S70TFI040', sizes=SIZES):
+def flash_document(content, flags=None, chip=None, sizes=SIZES):
     """Independent fixture writer using openMSX's documented archive fields."""
     root = ET.Element('serial')
     flash = ET.SubElement(root, 'flash', version='1')
-    ET.SubElement(flash, 'chipType').text = chip
+    ET.SubElement(flash, 'chipType').text = chip or CHIP
     for name, values in [('sectorSizes', sizes),
                          ('modifiedSectors', flags if flags is not None else [0] * len(sizes))]:
         field = ET.SubElement(flash, name)
@@ -61,7 +62,7 @@ def encode_document(root):
 def decode_flash(path: Path):
     flash = ET.fromstring(gzip.decompress(path.read_bytes())).find('flash')
     assert flash is not None and flash.get('version', '1') == '1'
-    assert flash.findtext('chipType') == 'S29GL064S70TFI040'
+    assert flash.findtext('chipType') == CHIP
     sizes = [int(e.text) for e in flash.find('sectorSizes')]
     flags = [int(e.text) for e in flash.find('modifiedSectors')]
     assert sizes == SIZES and len(flags) == len(SIZES) and set(flags) <= {0, 1}
@@ -153,6 +154,7 @@ def check_sparse_migration(flash: Path, run, marker, profile):
 
 
 def main():
+    global CHIP
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--openmsx', type=executable_path, default=ROOT/'derived/x64-VC-Release/install/openmsx.exe')
     firmware_source = parser.add_mutually_exclusive_group(required=True)
@@ -164,6 +166,7 @@ def main():
     parser.add_argument('--ram-routines', type=Path, help='Assembled flash-persistence-ram.asm, loaded at C200h')
     parser.add_argument('--legacy-fixtures', type=Path, help='Artifact directory from a --baseline run')
     args = parser.parse_args()
+    CHIP = 'S29GL064N90TFI04' if args.mapper == 'Yamanooto' else 'S29GL064S70TFI040'
     out = Path(tempfile.mkdtemp(prefix='flash-baseline-' if args.baseline else 'flash-regression-', dir=ROOT/'derived'))
     profile = out/'home'
     user = profile/'share'

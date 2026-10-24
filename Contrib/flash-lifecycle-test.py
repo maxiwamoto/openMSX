@@ -46,7 +46,11 @@ def idle_in_ram(emu):
 def persisted(flash, values):
     if not flash.is_file():
         return False
-    sectors = formats['decode_flash'](flash)
+    try:
+        sectors = formats['decode_flash'](flash)
+    except (FileNotFoundError, PermissionError):
+        # Windows can briefly deny readers during atomic file replacement.
+        return False
     data = sectors.get(9)
     return data is not None and all(data[address - 0x20000] == value
                                     for address, value in values.items())

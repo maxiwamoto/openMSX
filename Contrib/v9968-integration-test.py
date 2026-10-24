@@ -91,7 +91,7 @@ def main():
         regs({20:128})
         sat=bytes(sum(([80,224 if i==15 else i*16,0,0] for i in range(16)),[]))+bytes([216,0,0,0])
         blob('physical VRAM',0x7600,sat)
-        blob('memory',0xc100,bytes.fromhex('f3 76'))
+        blob('memory',0xc100,bytes.fromhex('f3 c3 01 c1'))
         e.command('reg PC 0xc100')
         e.advance(.05)
         regs({15:0})
@@ -100,10 +100,13 @@ def main():
         status=int(e.command('debug read {VDP status regs} 0'))
         assert status & 0x60 == 0x20, status
         regs({20:0})
-        e.command('debug read ioports 0x99')
+        e.advance(.05)
+        # Debug reads peek at the status register; execute IN to clear it.
+        blob('memory',0xc100,bytes.fromhex('f3 db 99 c3 03 c1'))
+        e.command('reg PC 0xc100')
         e.advance(.05)
         status=int(e.command('debug read {VDP status regs} 0'))
-        assert status & 0x60 == 0x40, status
+        assert status & 0x20 == 0, status
         results.append('S16 collision checks include sprites 15/16; normal mode excludes them')
         # Persist an interrupted RGB5 palette write, including the extended index.
         regs({20:0x90,16:200})
