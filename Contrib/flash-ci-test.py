@@ -26,6 +26,8 @@ def main():
         ['Contrib/flash-device-test.py', '--synthetic-firmware'],
         ['Contrib/flash-lifecycle-test.py'],
     ]
+    commands.append(['Contrib/dev-restore-test.py', '--synthetic-firmware',
+                     '--release-rom-before-rebuild'])
     for command in commands:
         if command[0] != 'Contrib/rom-harness-validation-test.py':
             command += ['--openmsx', str(executable)]
