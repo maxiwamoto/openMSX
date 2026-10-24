@@ -6,7 +6,7 @@ no-reset media refresh, and development save-state restore. The Flash format is 
 
 Version **2026.10.24** includes experimental Makoto/YM2608 and V9968 support,
 alongside Flash-save retry recovery and the media-development fixes. See
-`doc/all-additions-2026-10-24.md` for this local build. Use the complete package,
+`doc/all-additions-2026-10-24.md` for this build. Use the complete package,
 including `share/`, when upgrading.
 
 ## Makoto and V9968 launchers
@@ -124,3 +124,9 @@ python build/thirdparty_download.py windows; use the upstream MSVC build instruc
 for preparation/build order. Package the resulting clean checkout with
 Contrib/package-development-windows.py --help. Supply ogg.dll and the Microsoft x64
 vcruntime140.dll from your Visual Studio VC/Redist installation.
+
+## Mouse capture
+
+Connect an MSX mouse using the Input menu or `plug joyporta mouse` in the console. Click the MSX display to capture it; the activation click is consumed. Middle-click releases capture without pasting. While released, middle-click retains clipboard paste and custom bindings. Console, debugger break, pause, focus loss, machine switching and mouse disconnect release capture. There is no default Ctrl+F10 release binding; `escape_grab` is available for a personal binding. `set auto_mouse_capture off` restores the older behavior.
+
+Mouse automation uses synthetic SDL events and focus. Physical mouse motion and native OS focus transitions still require manual confirmation.

@@ -479,104 +479,6 @@ inline void SpriteChecker::checkSprites2(int minLine, int maxLine)
 	}
 }
 
-std::optional<int> SpriteChecker::findCollision2(int line) const
-{
-	bool can0collide = vdp.canSpriteColor0Collide();
-	int magSize = (vdp.isSpriteMag() + 1) * vdp.getSpriteSize();
-	int minXCollision = 999; // no collision
-	std::span<const SpriteInfo, 32 + 1> visibleSprites = spriteBuffer[line];
-	for (int i = std::min<int>(vdp.isS16() ? 16 : 8, spriteCount[line]); --i >= 1; /**/) {
-		auto colorAttrib1 = visibleSprites[i].colorAttrib;
-		if (!can0collide && ((colorAttrib1 & 0xf) == 0)) continue;
-		// If CC or IC is set, this sprite cannot collide.
-		if (colorAttrib1 & 0x60) continue;
-
-		int x_i = visibleSprites[i].x;
-		SpritePattern pattern_i = visibleSprites[i].pattern;
-		for (int j = i; --j >= 0; /**/) {
-			auto colorAttrib2 = visibleSprites[j].colorAttrib;
-			if (!can0collide && ((colorAttrib2 & 0xf) == 0)) continue;
-			// If CC or IC is set, this sprite cannot collide.
-			if (colorAttrib2 & 0x60) continue;
-
-			// Do sprite i and sprite j collide?
-			int x_j = visibleSprites[j].x;
-			int dist = x_j - x_i;
-			if ((-magSize < dist) && (dist < magSize)) {
-				SpritePattern pattern_j = visibleSprites[j].pattern;
-				if (dist < 0) {
-					pattern_j <<= -dist;
-				} else {
-					pattern_j >>= dist;
-				}
-				SpritePattern colPat = pattern_i & pattern_j;
-				if (x_i < 0) {
-					assert(x_i >= -32);
-					colPat &= (1 << (32 + x_i)) - 1;
-				}
-				if (colPat) {
-					int xCollision = x_i + std::countl_zero(colPat);
-					assert(xCollision >= 0);
-					minXCollision = std::min(minXCollision, xCollision);
-				}
-			}
-		}
-	}
-	if (minXCollision >= 256) return std::nullopt;
-	return minXCollision;
-}
-
-void SpriteChecker::checkStatusEarly(EmuTime time)
-{
-	// Not measured on the TMS99xx, so it keeps flagging at the end of the
-	// line.
-	if (vdp.isMSX1VDP()) return;
-	bool mode1 = updateSpritesMethod == &SpriteChecker::updateSprites1;
-	if (!mode1 && updateSpritesMethod != &SpriteChecker::updateSprites2) return;
-	if (!vdp.spritesEnabledFast()) return;
-	int ticks = narrow<int>(frameStartTime.getTicksTill(time));
-	int line = ticks / VDP::TICKS_PER_LINE;
-	if (line != currentLine) return;
-	// as updateSprites1/2(): in the border only the last line of the top
-	// border is checked (for the first display line)
-	if (!vdp.isDisplayEnabled() && (line != vdp.getLineZero() - 1)) return;
-	uint8_t status = vdp.getStatusReg0();
-	bool wantSprite    = !(status & 0xC0) && (line != earlySpriteLine);
-	bool wantCollision = !(status & 0x20) && (line != earlyCollisionLine);
-	if (!wantSprite && !wantCollision) return;
-
-	int nthSprite = mode1 ? fillSprites1(line, line + 1).nthSprite
-	                      : fillSprites2(line, line + 1).nthSprite;
-	std::optional<int> minXCollision = mode1 ? findCollision1(line)
-	                                         : findCollision2(line);
-	spriteCount[line] = 0; // updateSprites1/2() fill this line again
-	int cycle = ticks % VDP::TICKS_PER_LINE;
-
-	// The VDP reads the y-coordinates of the 32 sprites one by one during
-	// the line, sprite n at cycle 182 + 32n in bitmap modes and at
-	// 226 + 32n in character modes, each read taking 6 cycles (see
-	// doc/internal/vdp-vram-timing). The 5th/9th sprite flag goes up once
-	// it has read the sprite that doesn't fit.
-	int firstRead = vdp.getDisplayMode().isBitmapMode() ? 182 : 226;
-	if (wantSprite && (nthSprite != -1) &&
-	    (cycle >= (firstRead + 32 * nthSprite + 6) * VDP::CLK_MUL)) {
-		vdp.setSpriteStatus(uint8_t(0x40 | (vdp.getStatusReg0() & 0x20) | nthSprite));
-		earlySpriteLine = line;
-	}
-
-	// Measured on a V9958 with the sprite-collision loop the MSX2+ boot
-	// logo uses: the collision flag goes up when the beam is about 5 pixels
-	// past the colliding pixel.
-	static constexpr int COLLISION_DELAY = 5; // pixels
-	int x = (cycle - vdp.getLeftSprites()) / VDP::TICKS_DIV_DLCLK - COLLISION_DELAY;
-	if (wantCollision && minXCollision && (*minXCollision <= x)) {
-		vdp.setSpriteStatus(vdp.getStatusReg0() | 0x20);
-		collisionX = *minXCollision + 12;
-		collisionY = line - vdp.getLineZero() + 8;
-		earlyCollisionLine = line;
-	}
-}
-
 void SpriteChecker::updateSprites3(int limit)
 {
 	if (vdp.spritesEnabledFast()) {
@@ -745,6 +647,107 @@ inline void SpriteChecker::checkSprites3(int minLine, int maxLine)
 				ofs_x++;
 			}
 		}
+	}
+}
+
+std::optional<int> SpriteChecker::findCollision2(int line) const
+{
+	bool can0collide = vdp.canSpriteColor0Collide();
+	int magSize = (vdp.isSpriteMag() + 1) * vdp.getSpriteSize();
+	int minXCollision = 999; // no collision
+	std::span<const SpriteInfo, 32 + 1> visibleSprites = spriteBuffer[line];
+	for (int i = std::min<int>(vdp.isS16() ? 16 : 8, spriteCount[line]); --i >= 1; /**/) {
+		auto colorAttrib1 = visibleSprites[i].colorAttrib;
+		if (!can0collide && ((colorAttrib1 & 0xf) == 0)) continue;
+		// If CC or IC is set, this sprite cannot collide.
+		if (colorAttrib1 & 0x60) continue;
+
+		int x_i = visibleSprites[i].x;
+		SpritePattern pattern_i = visibleSprites[i].pattern;
+		for (int j = i; --j >= 0; /**/) {
+			auto colorAttrib2 = visibleSprites[j].colorAttrib;
+			if (!can0collide && ((colorAttrib2 & 0xf) == 0)) continue;
+			// If CC or IC is set, this sprite cannot collide.
+			if (colorAttrib2 & 0x60) continue;
+
+			// Do sprite i and sprite j collide?
+			int x_j = visibleSprites[j].x;
+			int dist = x_j - x_i;
+			if ((-magSize < dist) && (dist < magSize)) {
+				SpritePattern pattern_j = visibleSprites[j].pattern;
+				if (dist < 0) {
+					pattern_j <<= -dist;
+				} else {
+					pattern_j >>= dist;
+				}
+				SpritePattern colPat = pattern_i & pattern_j;
+				if (x_i < 0) {
+					assert(x_i >= -32);
+					colPat &= (1 << (32 + x_i)) - 1;
+				}
+				if (colPat) {
+					int xCollision = x_i + std::countl_zero(colPat);
+					assert(xCollision >= 0);
+					minXCollision = std::min(minXCollision, xCollision);
+				}
+			}
+		}
+	}
+	if (minXCollision >= 256) return std::nullopt;
+	return minXCollision;
+}
+
+void SpriteChecker::checkStatusEarly(EmuTime time)
+{
+	// Not measured on the TMS99xx, so it keeps flagging at the end of the
+	// line.
+	if (vdp.isMSX1VDP()) return;
+	// The measured scan order does not cover V9968 sprite-plane shuffling.
+	// Keep its existing end-of-line status behavior.
+	if (vdp.isSPS()) return;
+	bool mode1 = updateSpritesMethod == &SpriteChecker::updateSprites1;
+	if (!mode1 && updateSpritesMethod != &SpriteChecker::updateSprites2) return;
+	if (!vdp.spritesEnabledFast()) return;
+	int ticks = narrow<int>(frameStartTime.getTicksTill(time));
+	int line = ticks / VDP::TICKS_PER_LINE;
+	if (line != currentLine) return;
+	// as updateSprites1/2(): in the border only the last line of the top
+	// border is checked (for the first display line)
+	if (!vdp.isDisplayEnabled() && (line != vdp.getLineZero() - 1)) return;
+	uint8_t status = vdp.getStatusReg0();
+	bool wantSprite    = !(status & 0xC0) && (line != earlySpriteLine);
+	bool wantCollision = !(status & 0x20) && (line != earlyCollisionLine);
+	if (!wantSprite && !wantCollision) return;
+
+	int nthSprite = mode1 ? fillSprites1(line, line + 1).nthSprite
+	                      : fillSprites2(line, line + 1).nthSprite;
+	std::optional<int> minXCollision = mode1 ? findCollision1(line)
+	                                         : findCollision2(line);
+	spriteCount[line] = 0; // updateSprites1/2() fill this line again
+	int cycle = ticks % VDP::TICKS_PER_LINE;
+
+	// The VDP reads the y-coordinates of the 32 sprites one by one during
+	// the line, sprite n at cycle 182 + 32n in bitmap modes and at
+	// 226 + 32n in character modes, each read taking 6 cycles (see
+	// doc/internal/vdp-vram-timing). The 5th/9th sprite flag goes up once
+	// it has read the sprite that doesn't fit.
+	int firstRead = vdp.getDisplayMode().isBitmapMode() ? 182 : 226;
+	if (wantSprite && (nthSprite != -1) &&
+	    (cycle >= (firstRead + 32 * nthSprite + 6) * VDP::CLK_MUL)) {
+		vdp.setSpriteStatus(uint8_t(0x40 | (vdp.getStatusReg0() & 0x20) | nthSprite));
+		earlySpriteLine = line;
+	}
+
+	// Measured on a V9958 with the sprite-collision loop the MSX2+ boot
+	// logo uses: the collision flag goes up when the beam is about 5 pixels
+	// past the colliding pixel.
+	static constexpr int COLLISION_DELAY = 5; // pixels
+	int x = (cycle - vdp.getLeftSprites()) / VDP::TICKS_DIV_DLCLK - COLLISION_DELAY;
+	if (wantCollision && minXCollision && (*minXCollision <= x)) {
+		vdp.setSpriteStatus(vdp.getStatusReg0() | 0x20);
+		collisionX = *minXCollision + 12;
+		collisionY = line - vdp.getLineZero() + 8;
+		earlyCollisionLine = line;
 	}
 }
 

@@ -79,7 +79,7 @@ def main():
                           'doc/release-history.txt', 'doc/all-additions-2026-10-24.md', 'doc/flash-persistence.md',
                           'doc/windows-rom-replacement.md', 'doc/development-state-restore.md',
                           'doc/yamanooto-validation.md', 'doc/development-hard-reset.md',
-                          'doc/v9968-integration.md', 'doc/v9968-upstream-readme.md',
+                          'doc/v9968-integration.md', 'doc/v9968-upstream-readme.md', 'doc/smxwifi.md',
                           'doc/makoto.md', 'doc/makoto-filter-comparison.md',
                           'doc/makoto-owned-core-experiment.md', 'doc/makoto-owned-core-results.json',
                           'doc/makoto-review-2026-10-02.md', 'doc/makoto-review-2026-10-02-results.json',
@@ -104,6 +104,7 @@ def main():
         copy(ROOT / 'Contrib' / launcher, stage / launcher)
     copy(ROOT / 'doc/fork-windows-download.md', stage / 'START-HERE.md')
     copy(ROOT / 'README.md', stage / 'README.md')
+    copy(ROOT / 'Contrib/mouse-capture-test.md', stage / 'doc/mouse-capture-test.md')
     for dependency, (_, licenses) in DEPENDENCIES.items():
         for license_file in licenses:
             copy(args.third_party / 'src' / dependency / license_file,
@@ -115,7 +116,7 @@ def main():
         'the Universal CRT system components.\n', encoding='utf-8')
     metadata = {
         'release': args.version, 'commit': commit,
-        'source': 'Matching source archive supplied with this local build',
+        'source': 'https://github.com/maxiwamoto/openMSX/commit/' + commit,
         'platform': 'Windows x64', 'configuration': 'Release', 'toolset': 'MSVC v145',
         'experimental': True, 'third_party_versions': list(DEPENDENCIES),
         'sha256': {p.name: hashlib.sha256(p.read_bytes()).hexdigest()

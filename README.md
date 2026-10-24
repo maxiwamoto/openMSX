@@ -28,14 +28,14 @@ Use **Start-openMSX-Makoto.cmd** for a Turbo-R with Makoto, or
 public fork also lets Windows developers rebuild an inserted ROM and return
 to a saved test point with updated graphics or text.
 
-**Local Windows x64 build: 2026.10.24.** See `doc/all-additions-2026-10-24.md` for the integrated features and validation.
+**[Windows x64 build: 2026.10.24](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.10.24).** See `doc/all-additions-2026-10-24.md` for the integrated features and validation.
 
 Version **2026.10.24** retains Makoto, V9968, Flash persistence and development
 reload features. FM and SSG use standard mixer sliders; the extra SSG trim is
 removed. Our tested listening balance is FM 75 / SSG 38. See the
 [volume conversion and upgrade instructions](doc/fork-windows-download.md).
 
-The matching source is supplied in the local source ZIP. These changes are proposed
+The matching source is supplied in the matching source ZIP. These changes are proposed
 upstream, and the Flash persistence format is still experimental.
 
 ## What problem does this solve?
@@ -75,7 +75,7 @@ Use the complete local package and **Start-openMSX.cmd** for its separate profil
 
 The load order is the new `.flash` archive, the previous `.sparse` prototype, then legacy raw `.SRAM`. Earlier files remain untouched. Sparse modification flags are preserved; raw images lack history, so all writable sectors are conservatively treated as modified and may still hide updated ROM code. Older builds cannot read the new archive: do not alternate versions against the same profile.
 
-See [Flash persistence](doc/flash-persistence.md) for format, migration and test details, and [this local build](doc/all-additions-2026-10-24.md) for validation.
+See [Flash persistence](doc/flash-persistence.md) for format, migration and test details, and [this build](doc/all-additions-2026-10-24.md) for validation.
 
 ## Faster graphics and translation testing
 

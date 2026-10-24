@@ -398,12 +398,13 @@ private:
 	  * @effect Fills in the spriteBuffer and spriteCount arrays.
 	  */
 	void checkSprites2(int minLine, int maxLine);
-	void checkSprites3(int minLine, int maxLine);
 
 	/** X of the leftmost colliding pixel on a line in sprite mode 2, or
 	  * nullopt if none. The line must have been filled by fillSprites2().
 	  */
 	[[nodiscard]] std::optional<int> findCollision2(int line) const;
+
+	void checkSprites3(int minLine, int maxLine);
 
 private:
 	using UpdateSpritesMethod = void (SpriteChecker::*)(int limit);
