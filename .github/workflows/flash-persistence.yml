@@ -7,6 +7,10 @@ on:
       - codex/developer-state-restore
   pull_request:
     paths:
+      - 'Contrib/dev-restore-test.py'
+      - 'share/scripts/_savestate.tcl'
+      - 'src/debugger/Debugger.cc'
+      - 'src/memory/RomAscii16X.*'
       - 'src/memory/AmdFlash.*'
       - 'src/file/FileContext.*'
       - 'src/file/FileOperations.*'
@@ -100,4 +104,5 @@ jobs:
             derived/flash-regression-*
             derived/flash-lifecycle-*
             derived/flash-device-*
+            derived/dev-restore-*
           if-no-files-found: ignore
