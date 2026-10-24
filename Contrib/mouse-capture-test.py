@@ -15,6 +15,7 @@ import subprocess
 import tempfile
 import time
 from xml.sax.saxutils import escape
+import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -29,6 +30,14 @@ def prepare_msvc():
     source = source.replace(anchor, '\t\t\tMouseCaptureTestDriver mouseTest(reactor);\n' + anchor)
     (out / 'mouse-capture-main.cc').write_text(source, encoding='utf-8')
     p = lambda path: escape(str(path), {'"': '&quot;'})
+    # Use only current production inputs, not stale objects from older builds.
+    tree = ET.parse(ROOT / 'build/msvc/openmsx.vcxproj')
+    names = [Path(item.get('Include').replace('\\', '/')).stem
+             for item in tree.iter('{http://schemas.microsoft.com/developer/msbuild/2003}ClCompile')
+             if item.get('Include') and Path(item.get('Include').replace('\\', '/')).stem != 'main']
+    assert len(names) == len(set(names)), 'Ambiguous production object names'
+    objects = '\n'.join(f'    <Object Include="{p(ROOT / "derived/x64-VC-Release/build" / (name + ".obj"))}" />'
+                        for name in names)
     project = f'''<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="{p(ROOT / 'build/msvc/openmsx.vcxproj')}" />
   <PropertyGroup><TargetName>openmsx</TargetName></PropertyGroup>
@@ -36,8 +45,7 @@ def prepare_msvc():
     <ClCompile Remove="@(ClCompile)" />
     <ResourceCompile Remove="@(ResourceCompile)" />
     <ClCompile Include="{p(out / 'mouse-capture-main.cc')}" />
-    <Object Include="{p(ROOT / 'derived/x64-VC-Release/build/*.obj')}"
-            Exclude="{p(ROOT / 'derived/x64-VC-Release/build/main.obj')}" />
+{objects}
   </ItemGroup>
   <ItemDefinitionGroup>
     <Manifest><AdditionalManifestFiles>{p(ROOT / 'build/msvc/ActiveCodePageUTF8.manifest')}</AdditionalManifestFiles></Manifest>
