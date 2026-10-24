@@ -1,12 +1,16 @@
 # Restore a test point with current ROM assets
 
+This dependent change is separated from [Flash persistence PR #2206](https://github.com/openMSX/openMSX/pull/2206). It remains experimental: upstream review should decide the generic ROM-refresh architecture before this is proposed for merging there. It adds no default key binding.
+
 `loadstate_dev [name]` restores a saved machine without resetting it, then
 refreshes untouched ASCII16-X Flash sectors from the current ROM image before
-execution resumes. The default state is `quicksave`. A default **Ctrl+Shift+F7**
-binding invokes it; normal `loadstate` and reverse/replay are unchanged.
+execution resumes. The default state is `quicksave`. Normal `loadstate` and
+reverse/replay are unchanged. There is no default keyboard binding; developers
+can opt in with `bind CTRL+SHIFT+F7 loadstate_dev`.
 
 On Windows, save a test point with **Alt+F8**, rebuild the ROM at the same path,
-and press **Ctrl+Shift+F7**. Save before the image/text is unpacked: RAM, VRAM,
+and run `loadstate_dev` (or your chosen shortcut). Save before the image/text
+is unpacked: RAM, VRAM,
 CPU registers and mapper banks are restored exactly, so already-decoded assets
 remain old. The code, bank and RAM layouts must still be compatible.
 
@@ -45,7 +49,8 @@ is used only to clean up a rejected inactive machine. Neither helper is
 recorded for reverse/replay. Their API shape is proposed for review.
 
 ```text
-python Contrib/dev-restore-test.py --openmsx /path/to/openmsx --firmware-dir /path/to/systemroms
+python Contrib/dev-restore-test.py --openmsx /path/to/openmsx --synthetic-firmware
+# Or use --firmware-dir /path/to/systemroms for full-machine coverage.
 ```
 
 On Windows without the ROM snapshot fix, add `--release-rom-before-rebuild`.
@@ -53,4 +58,4 @@ The test runs a tiny RAM-based graphics decoder after restoration and verifies
 new pixels, preserved registers/RAM/VRAM/banks and saved Flash bytes. It covers
 ASCII16, ASCII16-X, IPS, gzip, named/default states, unchanged ordinary restore,
 missing states, busy Flash and legacy rejection without persistent-save damage.
-It uses only generated ROMs and isolated profiles; supply firmware locally.
+It uses generated ROMs and isolated profiles. The synthetic mode generates original minimal boot code, requires no commercial firmware and runs in the three-platform CI workflow. It exercises the restore path, not BIOS compatibility.

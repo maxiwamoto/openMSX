@@ -13,7 +13,7 @@ import time
 READ_ROM_PIXEL = 'debug read memory 0x5000'
 
 ROOT = Path(__file__).resolve().parents[1]
-helpers = runpy.run_path(str(ROOT / 'Contrib/rom-replacement-test.py'))
+helpers = runpy.run_path(str(ROOT / 'Contrib/rom-test-utils.py'))
 Emulator, image, tcl_path = (helpers[n] for n in ('Emulator', 'image', 'tcl_path'))
 
 def check_rejected_states(emu, folder, rom, state):
@@ -26,7 +26,7 @@ def check_rejected_states(emu, folder, rom, state):
     emu.command('carta eject; carta ' + tcl_path(rom) + ' -romtype ASCII16-X; reset')  # Flush progress.
     emu.advance(3)
     current = emu.command('machine')
-    save_files = list((folder / 'home').rglob('*.sparse'))
+    save_files = list((folder / 'home').rglob('*.flash'))
     assert save_files
     disk_before = {str(p): p.read_bytes() for p in save_files}
     error = emu.command('catch {loadstate_dev busy_flash} reason; set reason')
@@ -57,6 +57,8 @@ def run_case(args, out, name, mapper):
         patch.write_bytes(b'PATCH\x00\x10\x00\x00\x01\x33EOF')
     emu = Emulator(args.openmsx, folder, args.firmware_dir, rom, mapper, patch)
     try:
+        assert emu.command('catch {bind CTRL+SHIFT+F7}') == '1'
+        emu.command('bind CTRL+SHIFT+F7 loadstate_dev')
         assert 'loadstate_dev' in emu.command('bind CTRL+SHIFT+F7')
         # CPU waits in RAM immediately before an RLE graphics decoder.
         emu.command('debug write_block memory 0xc100 [binary format H* 18fe]; reg PC 0xc100; reg SP 0xff00; debug write ioports 0xa8 0xd4; debug write memory 0x6000 0; debug write memory 0x7000 8')
@@ -118,11 +120,15 @@ def run_case(args, out, name, mapper):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--firmware-dir', type=Path, required=True)
-    parser.add_argument('--openmsx', type=Path, default=ROOT / 'derived/x64-VC-Release/install/openmsx.exe')
+    firmware_source = parser.add_mutually_exclusive_group(required=True)
+    firmware_source.add_argument('--firmware-dir', type=Path)
+    firmware_source.add_argument('--synthetic-firmware', action='store_true')
+    parser.add_argument('--openmsx', type=helpers['executable_path'], default=ROOT / 'derived/x64-VC-Release/install/openmsx.exe')
     parser.add_argument('--release-rom-before-rebuild', action='store_true', help='Release the host ROM before writing on Windows without the ROM snapshot patch')
     args = parser.parse_args()
     out = Path(tempfile.mkdtemp(prefix='dev-restore-', dir=ROOT / 'derived'))
+    if args.synthetic_firmware:
+        args.firmware_dir = helpers['synthetic_firmware'](out/'synthetic-firmware')
     print('Artifacts:', out, flush=True)
     reports = {}
     for name, mapper in [('flash', 'ASCII16-X'), ('plain', 'ASCII16'), ('ips', 'ASCII16-X'), ('gzip', 'ASCII16-X')]:

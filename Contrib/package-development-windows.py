@@ -40,6 +40,7 @@ def copy(src, dst):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--validation', type=Path, help='Validation report to include in the binary package')
     parser.add_argument('--version', required=True, help='Release label, e.g. 2026.09.24')
     parser.add_argument('--exe', type=Path, required=True)
     parser.add_argument('--ogg', type=Path, required=True)
@@ -56,6 +57,8 @@ def main():
     name = 'openmsx-rom-dev-' + args.version + '-windows-x64'
     stage = args.out / name
     stage.mkdir()
+    if args.validation:
+        copy(args.validation, stage / 'VALIDATION.json')
     copy(args.exe, stage / 'openmsx.exe')
     copy(args.ogg, stage / 'ogg.dll')
     copy(args.vcruntime, stage / 'vcruntime140.dll')
@@ -73,7 +76,7 @@ def main():
         elif filename.startswith('doc/manual/') and path.suffix in ('.html', '.css', '.png'):
             target = filename
         elif filename in ('doc/GPL.txt', 'doc/authors.txt', 'doc/release-notes.txt',
-                          'doc/release-history.txt', 'doc/flash-persistence.md',
+                          'doc/release-history.txt', 'doc/all-additions-2026-10-24.md', 'doc/flash-persistence.md',
                           'doc/windows-rom-replacement.md', 'doc/development-state-restore.md',
                           'doc/yamanooto-validation.md', 'doc/development-hard-reset.md',
                           'doc/v9968-integration.md', 'doc/v9968-upstream-readme.md',
@@ -112,7 +115,7 @@ def main():
         'the Universal CRT system components.\n', encoding='utf-8')
     metadata = {
         'release': args.version, 'commit': commit,
-        'source': 'https://github.com/maxiwamoto/openMSX/commit/' + commit,
+        'source': 'Matching source archive supplied with this local build',
         'platform': 'Windows x64', 'configuration': 'Release', 'toolset': 'MSVC v145',
         'experimental': True, 'third_party_versions': list(DEPENDENCIES),
         'sha256': {p.name: hashlib.sha256(p.read_bytes()).hexdigest()

@@ -28,16 +28,14 @@ Use **Start-openMSX-Makoto.cmd** for a Turbo-R with Makoto, or
 public fork also lets Windows developers rebuild an inserted ROM and return
 to a saved test point with updated graphics or text.
 
-**[Download the Windows x64 build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.10.02)**
-for this fork. Extract the ZIP and run **Start-openMSX.cmd**; it uses a separate
-profile beside the executable. [Setup and shortcuts](doc/fork-windows-download.md).
+**Local Windows x64 build: 2026.10.24.** See `doc/all-additions-2026-10-24.md` for the integrated features and validation.
 
-Version **2026.10.02** retains Makoto, V9968, Flash persistence and development
+Version **2026.10.24** retains Makoto, V9968, Flash persistence and development
 reload features. FM and SSG use standard mixer sliders; the extra SSG trim is
 removed. Our tested listening balance is FM 75 / SSG 38. See the
 [volume conversion and upgrade instructions](doc/fork-windows-download.md).
 
-The source is available in this fork's `master` branch. These changes are proposed
+The matching source is supplied in the local source ZIP. These changes are proposed
 upstream, and the Flash persistence format is still experimental.
 
 ## What problem does this solve?
@@ -65,51 +63,19 @@ sectors**, not merely separate mapper banks.
 
 ## How saving works
 
-Use the game's own save function as usual; no new save command is required.
-This implements persistence for games that already write to emulated Flashâ€”it
-does not add an in-game save feature to games that lack one.
+Use the game's own Flash-save function. The emulator records which erase sectors the guest has modified. On restart, those sectors come from the save and untouched sectors come from the current ROM.
 
-- Only guest-programmed or erased sectors are persisted. An erased sector
-  remains erased across restarts, even if a newer ROM contains data there.
-- Dirty data is written after a five-second real-time delay and when the
-  cartridge is removed or the emulator closes normally. A fresh profile that
-  has never written Flash does not create a save file.
-- The host ROM file is left unchanged. Saves live in the active openMSX
-  profile's persistence directory, with `.sparse` added to the usual filename,
-  for example `game.rom.SRAM.sparse`.
-- Sector metadata and data share one checksummed file. The loader validates it
-  before applying it; corrupt data produces an error instead of silently
-  starting with an empty save. Writes use a temporary file and replacement.
+Persistence now uses a compressed openMSX XML archive containing the full chip image, chip identifier, sector geometry and modification flags. The usual cartridge filename is `game.rom.SRAM.flash`. Keeping a full image also permits factory-ROM fallback where supported; it does not override newer ROM content in untouched sectors.
 
-For the emulated 8 MiB ASCII16-X chip, one modified 64 KiB sector needs
-**66,231 bytes** of persistent storage instead of an entire 8 MiB chip image.
-This is selective storage, not compression of the game ROM.
+Dirty data is written after five seconds and on normal cartridge removal or exit. Failed timed writes retry every five seconds without requiring another guest write. Writes use a temporary file followed by replacement. Corrupt or incompatible files prevent mounting, preserving the existing data.
 
 ## Trying it and keeping existing saves
 
-[Download the Windows build](https://github.com/maxiwamoto/openMSX/releases/tag/rom-dev-2026.10.02)
-and use its **Start-openMSX.cmd** launcher for a separate test profile. Other
-platforms can [build from source](doc/manual/compile.html). Load the game
-with the appropriate mapperâ€”`ASCII16-X` for an ASCII16-X cartridgeâ€”then save
-inside the game. Close and reopen it to check persistence. After replacing the
-ROM at the same path, reopen/reload the cartridge to run the new build.
+Use the complete local package and **Start-openMSX.cmd** for its separate profile. Select `ASCII16-X` or `Yamanooto` as appropriate. Game code and save data must occupy different erase sectors.
 
-**Existing full-chip `.SRAM` saves are preserved, but are not automatically
-converted into a known set of save-only sectors.** They have no modification
-history, so this build conservatively treats every writable sector as saved.
-They can therefore still hide updated ROM content. Writing them in the new
-file format does not recover that missing history.
+The load order is the new `.flash` archive, the previous `.sparse` prototype, then legacy raw `.SRAM`. Earlier files remain untouched. Sparse modification flags are preserved; raw images lack history, so all writable sectors are conservatively treated as modified and may still hide updated ROM code. Older builds cannot read the new archive: do not alternate versions against the same profile.
 
-Keep your existing saves; do not delete a persistence folder just to try this
-feature. A separate fresh profile allows testing the new behavior without
-altering the old data. Older builds do not understand this fork's sparse files
-or newer Flash state metadata, so do not share one profile between old and new
-builds. If both `.SRAM` and `.SRAM.sparse` exist, the sparse file takes precedence.
-
-The changes use the shared AmdFlash implementation, but automated validation
-covers **ASCII16-X and Yamanooto on Windows**, with 30 Flash sessions for each.
-Other Flash cartridges and platforms still need broader testing. See the [Flash persistence documentation](doc/flash-persistence.md)
-for sector geometry, file format, legacy compatibility and test commands.
+See [Flash persistence](doc/flash-persistence.md) for format, migration and test details, and [this local build](doc/all-additions-2026-10-24.md) for validation.
 
 ## Faster graphics and translation testing
 

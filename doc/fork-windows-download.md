@@ -4,8 +4,9 @@ This is an experimental build of maxiwamoto/openMSX, not an official openMSX rel
 It includes sector-based Flash persistence, Windows ROM replacement, reload/reset,
 no-reset media refresh, and development save-state restore. The Flash format is proposed upstream and may change.
 
-Version **2026.10.02** includes experimental Makoto/YM2608 and V9968 support,
-alongside the Flash and media-development fixes. Use the complete package,
+Version **2026.10.24** includes experimental Makoto/YM2608 and V9968 support,
+alongside Flash-save retry recovery and the media-development fixes. See
+`doc/all-additions-2026-10-24.md` for this local build. Use the complete package,
 including `share/`, when upgrading.
 
 ## Makoto and V9968 launchers
@@ -76,7 +77,7 @@ update that personal copy if you installed one previously.
    Use the game's save function, close openMSX normally, and reopen through the launcher.
 
 Back up valuable saves. Do not share this profile with older openMSX builds: they do
-not understand the experimental sparse Flash format. You can copy compatible older
+not understand the new serialized Flash format. You can copy compatible older
 saves into this separate profile, keeping the originals. Legacy full-chip saves remain
 conservative full-chip snapshots and can still hide ROM updates; see the Flash guide.
 
