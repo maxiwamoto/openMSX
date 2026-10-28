@@ -1,4 +1,6 @@
-# openMSX: Makoto, V9968 and ROM/disk development
+# openMSX 22.0 with Makoto, V9968, mouse capture and ROM/disk development
+
+**October 28, 2026:** based on official openMSX 22.0, retaining all October 24 fork additions, including the approved Makoto engine, V9968, mouse capture, Flash-save recovery and development tools. The new generic bitmap viewer is adapted to our extended V9968 palette. [Release details](doc/all-additions-2026-10-28.md).
 
 **Makoto / YM2608: tested playback and review cleanup.**
 FM and SSG now run at their own sample rates. An openMSX-owned adaptation of
@@ -9,8 +11,8 @@ The final extraction used about 7% less whole-emulator CPU during the measured
 music workload than our previous native-stream experiment. Four tested music
 excerpts match exactly at equivalent levels. All 16 voice controls, independent
 timers, debugger controls and filter-free playback remain available.
-[Measurements and limits](doc/makoto-owned-core-experiment.md) ·
-[Setup](doc/makoto.md) · [Hardware results](doc/makoto-review-2026-09-29.md).
+[Measurements and limits](doc/makoto-owned-core-experiment.md) Â·
+[Setup](doc/makoto.md) Â· [Hardware results](doc/makoto-review-2026-09-29.md).
 Analogue clipping and headphone-load response remain uncalibrated.
 
 The October 2 update cleans up device lifetime handling and uses native

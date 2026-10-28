@@ -255,7 +255,9 @@ void DebuggableBitmapViewer::paint(MSXMotherBoard* motherBoard)
 
 		if (valid) {
 			const auto* vdp = dynamic_cast<const VDP*>(motherBoard->findDevice("VDP"));
-			drawImage(*debuggable, memSize, offset, *resolved, manager.palette->getPalette(vdp));
+			// The generic decoder uses 16 colors; V9968 palettes contain 256.
+			auto palette = manager.palette->getPalette(vdp);
+			drawImage(*debuggable, memSize, offset, *resolved, std::span{palette}.first<16>());
 		} else {
 			drawErrors(offsetError, resolved);
 		}

@@ -15,5 +15,7 @@ Use the complete package and its launchers. It includes its matching resources, 
 
 Compared with the October 24 combined build, this includes the generic bitmap viewer for debuggables, the I/O read-watchpoint lifetime fix, Franky/SMS VDP viewers and frameskip, updated audio-analysis FFT, and the restored `cputrace` setting name.
 
+The generic bitmap viewer uses the first 16 entries of the fork's 256-entry V9968 palette, matching the upstream decoder's indexed-color formats. Existing V9968 viewers retain the full palette.
+
 The portable package includes VALIDATION.json with the checks run against this build.
 V9968 remains experimental; these checks do not establish full hardware conformance.
