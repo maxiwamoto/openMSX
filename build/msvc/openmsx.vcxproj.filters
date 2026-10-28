@@ -540,6 +540,15 @@
     <ClCompile Include="$(OpenMSXSrcDir)\ide\WD33C93.cc">
       <Filter>ide</Filter>
     </ClCompile>
+    <ClCompile Include="$(OpenMSXSrcDir)\imgui\BitmapDecoder.cc">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OpenMSXSrcDir)\imgui\BitmapDecoderSettings.cc">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OpenMSXSrcDir)\imgui\DebuggableBitmapViewer.cc">
+      <Filter>imgui</Filter>
+    </ClCompile>
     <ClCompile Include="$(OpenMSXSrcDir)\imgui\DebuggableEditor.cc">
       <Filter>imgui</Filter>
     </ClCompile>
@@ -625,6 +634,15 @@
       <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="$(OpenMSXSrcDir)\imgui\ImGuiSlotMap.cc">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OpenMSXSrcDir)\imgui\ImGuiSMSVDPRegs.cc">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OpenMSXSrcDir)\imgui\ImGuiSMSVDPSprites.cc">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OpenMSXSrcDir)\imgui\ImGuiSMSVDPTiles.cc">
       <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="$(OpenMSXSrcDir)\imgui\ImGuiSoundChip.cc">
@@ -2129,6 +2147,15 @@
     <None Include="$(OpenMSXSrcDir)\ide\WD33C93.hh">
       <Filter>ide</Filter>
     </None>
+    <None Include="$(OpenMSXSrcDir)\imgui\BitmapDecoder.hh">
+      <Filter>imgui</Filter>
+    </None>
+    <None Include="$(OpenMSXSrcDir)\imgui\BitmapDecoderSettings.hh">
+      <Filter>imgui</Filter>
+    </None>
+    <None Include="$(OpenMSXSrcDir)\imgui\DebuggableBitmapViewer.hh">
+      <Filter>imgui</Filter>
+    </None>
     <None Include="$(OpenMSXSrcDir)\imgui\DebuggableEditor.hh">
       <Filter>imgui</Filter>
     </None>
@@ -2220,6 +2247,15 @@
       <Filter>imgui</Filter>
     </None>
     <None Include="$(OpenMSXSrcDir)\imgui\ImGuiSlotMap.hh">
+      <Filter>imgui</Filter>
+    </None>
+    <None Include="$(OpenMSXSrcDir)\imgui\ImGuiSMSVDPRegs.hh">
+      <Filter>imgui</Filter>
+    </None>
+    <None Include="$(OpenMSXSrcDir)\imgui\ImGuiSMSVDPSprites.hh">
+      <Filter>imgui</Filter>
+    </None>
+    <None Include="$(OpenMSXSrcDir)\imgui\ImGuiSMSVDPTiles.hh">
       <Filter>imgui</Filter>
     </None>
     <None Include="$(OpenMSXSrcDir)\imgui\ImGuiSoundChip.hh">

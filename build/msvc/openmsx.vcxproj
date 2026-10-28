@@ -330,6 +330,12 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="$(OpenMSXSrcDir)\imgui\BitmapDecoder.cc" />
+    <ClCompile Include="$(OpenMSXSrcDir)\imgui\BitmapDecoderSettings.cc" />
+    <ClCompile Include="$(OpenMSXSrcDir)\imgui\DebuggableBitmapViewer.cc" />
+    <ClCompile Include="$(OpenMSXSrcDir)\imgui\ImGuiSMSVDPRegs.cc" />
+    <ClCompile Include="$(OpenMSXSrcDir)\imgui\ImGuiSMSVDPSprites.cc" />
+    <ClCompile Include="$(OpenMSXSrcDir)\imgui\ImGuiSMSVDPTiles.cc" />
     <ClCompile Include="$(OpenMSXSrcDir)\3rdparty\ImGuiFileDialog\ImGuiFileDialog.cc" />
     <ClCompile Include="$(OpenMSXSrcDir)\3rdparty\imgui\imgui.cc" />
     <ClCompile Include="$(OpenMSXSrcDir)\3rdparty\imgui\imgui_demo.cc" />

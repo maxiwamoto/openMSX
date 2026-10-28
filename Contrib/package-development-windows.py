@@ -76,7 +76,7 @@ def main():
         elif filename.startswith('doc/manual/') and path.suffix in ('.html', '.css', '.png'):
             target = filename
         elif filename in ('doc/GPL.txt', 'doc/authors.txt', 'doc/release-notes.txt',
-                          'doc/release-history.txt', 'doc/all-additions-2026-10-24.md', 'doc/flash-persistence.md',
+                          'doc/release-history.txt', 'doc/all-additions-2026-10-28.md', 'doc/flash-persistence.md',
                           'doc/windows-rom-replacement.md', 'doc/development-state-restore.md',
                           'doc/yamanooto-validation.md', 'doc/development-hard-reset.md',
                           'doc/v9968-integration.md', 'doc/v9968-upstream-readme.md', 'doc/smxwifi.md',

@@ -27,6 +27,15 @@ runs:
       if: ${{ contains(inputs.os, 'mingw') }}
       shell: bash
       run: sudo apt-get install mingw-w64 gcc make tcl
+    - name: Install dmgbuild for the styled Darwin disk image
+      if: ${{ inputs.os == 'darwin' }}
+      shell: bash
+      run: |
+        python3 -m venv "$RUNNER_TEMP/dmgbuild"
+        "$RUNNER_TEMP/dmgbuild/bin/pip" install --require-hashes --only-binary=:all: \
+          -r build/package-darwin/dmgbuild-requirements.txt
+        echo "$RUNNER_TEMP/dmgbuild/bin" >> "$GITHUB_PATH"
+        echo "REQUIRE_DMGBUILD=1" >> "$GITHUB_ENV"
     - name: Add NDK to PATH
       if: ${{ contains(inputs.os, 'android') }}
       shell: bash
@@ -160,6 +169,7 @@ runs:
       with:
         name: ${{ steps.openmsx.outputs.single_output_file }}
         path: ${{ steps.openmsx.outputs.derived_path }}/${{ steps.openmsx.outputs.single_output_file }}
+        if-no-files-found: error
     - name: Upload probe logging zip
       if: ${{ inputs.os != 'windows-vc' && inputs.flavour != 'unittest' && inputs.flavour != 'super-opt' && inputs.flavour != 'debug' }}
       uses: actions/upload-artifact@v6
@@ -172,15 +182,18 @@ runs:
       with:
         name: ${{ steps.openmsx.outputs.target_file_base }}.zip
         path: derived\x64-VC-Release\package-windows\*-bin.zip
+        if-no-files-found: error
     - name: Upload Windows VC MSI redistributable (zip)
       if: ${{ inputs.os == 'windows-vc' && inputs.flavour != 'unittest' }}
       uses: actions/upload-artifact@v6
       with:
         name: ${{ steps.openmsx.outputs.target_file_base }}-msi.zip
         path: derived\x64-VC-Release\package-windows\*-msi.zip
+        if-no-files-found: error
     - name: Upload Windows VC debug symbols
       if: ${{ inputs.os == 'windows-vc' && inputs.flavour != 'unittest' }}
       uses: actions/upload-artifact@v6
       with:
         name: ${{ steps.openmsx.outputs.target_file_pdb }}.zip
         path: derived\x64-VC-Release\package-windows\*-pdb.zip
+        if-no-files-found: error
